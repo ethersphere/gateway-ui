@@ -22,7 +22,7 @@ export default function VersionAlert(): ReactElement | null {
 
   if (isCreatingStamp) severity = 'info'
 
-  if (isConnected) severity = 'error'
+  if (!isConnected) severity = 'error'
 
   return (
     <Collapse in={open}>

@@ -35,7 +35,7 @@ export function Provider({ children }: Props): ReactElement {
     return bee.uploadFile(stamp, file)
   }
 
-  const purchaseStamp = async (amount = BigInt(1000), depth = 255) => {
+  const purchaseStamp = async (amount = BigInt(1000), depth = 16) => {
     const ps = await bee.createPostageBatch(amount, depth)
     setStamp(ps)
   }
