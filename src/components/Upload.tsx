@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react'
+import { ReactElement, useState, useContext } from 'react'
 import { DropzoneArea } from 'material-ui-dropzone'
 import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -6,20 +6,19 @@ import Container from '@material-ui/core/Container'
 import { useSnackbar } from 'notistack'
 
 import ClipboardCopy from './ClipboardCopy'
-import { bee, postageStamp } from '../constants'
+import { Context } from '../providers/bee'
 
 export default function Files(): ReactElement {
   const [file, setFile] = useState<File | null>(null)
   const [uploadReference, setUploadReference] = useState('')
   const [isUploadingFile, setIsUploadingFile] = useState(false)
-
+  const { upload } = useContext(Context)
   const { enqueueSnackbar } = useSnackbar()
 
   const uploadFile = () => {
     if (file === null) return
     setIsUploadingFile(true)
-    bee
-      .uploadFile(postageStamp, file)
+    upload(file)
       .then(hash => {
         setUploadReference(hash)
         setFile(null)
