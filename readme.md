@@ -1,88 +1,51 @@
-# Bee Dashboard
+# Bee Gateway
 
 [![](https://img.shields.io/badge/made%20by-Swarm-blue.svg?style=flat-square)](https://swarm.ethereum.org/)
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
 ![](https://img.shields.io/badge/npm-%3E%3D6.0.0-orange.svg?style=flat-square)
-![](https://img.shields.io/badge/Node.js-%3E%3D10.0.0-orange.svg?style=flat-square)
+![](https://img.shields.io/badge/Node.js-%3E%3D12.0.0-orange.svg?style=flat-square)
 
-> An app which helps users to setup their Bee node and do actions like cash out cheques, upload and download files or manage your postage stamps.
+> Swarm Gateway website .
 
 **Warning: This project is in alpha state. There might (and most probably will) be changes in the future to its API and working. Also, no guarantees can be made about its stability, efficiency, and security at this stage.**
 
-![Status page](/ui_samples/status.png)
-
-| Node Setup | Browse & Upload Files | Accounting | Peers | Settings |
-|-------|---------|-------|----------|------|
-| ![Setup](/ui_samples/node_setup.png) | ![Files](/ui_samples/file_upload.png) | ![Accounting](/ui_samples/accounting.png) | ![Peers](/ui_samples/peers.png) | ![Settings](/ui_samples/settings.png) |
-
-
 ## Table of Contents
 
-- [Install](#install)
-- [Usage](#usage)
-    - [Terminal](#terminal)
-    - [Docker](#docker)
-- [Contribute](#contribute)
 - [Development](#development)
+- [Contribute](#contribute)
 - [Maintainers](#maintainers)
 - [License](#license)
 
-## Install
-
-Install globally with npm. We require Node.js's version of at least 12.x and npm v6.x (or yarn v2.x).
+## Development
 
 ```sh
-npm install -g @ethersphere/bee-dashboard
-```
+git clone git@github.com:ethersphere/gateway.git
 
-## Usage
-
-:warning: To successfully connect to the Bee node, you will need to enable the Debug API and CORS. You can do so by setting `cors-allowed-origins: ['*']` and `debug-api-enable: true` in the Bee config file and then restart the Bee node. To see where the config file is, consult the [official Bee documentation](https://docs.ethswarm.org/docs/working-with-bee/configuration#configuring-bee-installed-using-a-package-manager)
-
-### Terminal
-
-To start use:
-```sh
-bee-dashboard
-```
-
-This should open the webpage on [`http://localhost:8080`](http://localhost:8080)
-
-### Docker
-
-To build Docker image and run it, execute the following from inside project directory:
-
-```sh
-docker build . -t bee-dashboard
-docker run --rm -p 127.0.0.1:8080:8080 bee-dashboard
-```
-
-Bee dashboard is now available on [`http://localhost:8080`](http://localhost:8080)
-
-### Development
-
-```sh
-git clone git@github.com:ethersphere/bee-dashboard.git
-
-cd  bee-dashboard
+cd  gateway
 
 npm start
 ```
 
-The Bee Dashboard runs in development mode on [http://localhost:3031/](http://localhost:3031/)
+The Gateway runs in development mode on [http://localhost:3030/](http://localhost:3030/). 
+
+:warn: Don't forget to provide postage stamp via environment variable or edit directly the `postageStamp` constant in [`.src/constants.ts`](./src/constants.ts)..
+
+### Environment variables
+- `REACT_APP_BEE_API` - Bee API URL (defaults to `http://localhost:1633`)
+- `REACT_APP_POSTAGE_STAMP` - Postage stamp batch ID to be used for uploading
 
 ## Contribute
 
 There are some ways you can make this module better:
 
-- Consult our [open issues](https://github.com/ethersphere/bee-dashboard/issues) and take on one of them
+- Consult our [open issues](https://github.com/ethersphere/gateway/issues) and take on one of them
 - Help our tests reach 100% coverage!
 - Join us in our [Discord chat](https://discord.gg/wdghaQsGq5) in the #develop-on-swarm channel if you have questions or want to give feedback
 
 ## Maintainers
 
-- [nugaon](https://github.com/nugaon)
+- [agazso](https://github.com/agazso)
 - [vojtechsimetka](https://github.com/vojtechsimetka)
 
 ## License
