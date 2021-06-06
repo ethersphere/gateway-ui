@@ -7,6 +7,7 @@ import { useSnackbar } from 'notistack'
 
 import ClipboardCopy from './ClipboardCopy'
 import { Context } from '../providers/bee'
+import { Collapse } from '@material-ui/core'
 
 export default function Files(): ReactElement {
   const [file, setFile] = useState<File | null>(null)
@@ -38,10 +39,22 @@ export default function Files(): ReactElement {
 
   return (
     <>
-      <DropzoneArea onChange={handleChange} filesLimit={1} />
-      <Button disabled={!file && isUploadingFile} onClick={() => uploadFile()}>
-        Upload
-      </Button>
+      <DropzoneArea onChange={handleChange} filesLimit={1} showPreviews showPreviewsInDropzone={false} />
+      {file && (
+        <code>
+          <ul>
+            <li>path:{(file as any)?.path}</li>
+            <li>filename: {file.name}</li>
+            <li>size: {file.size}</li>
+            <li>type: {file.type}</li>
+          </ul>
+        </code>
+      )}
+      {file && (
+        <Button disabled={isUploadingFile} variant="outlined" onClick={() => uploadFile()}>
+          Upload
+        </Button>
+      )}
       {isUploadingFile && (
         <Container>
           <CircularProgress />

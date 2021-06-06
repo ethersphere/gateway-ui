@@ -26,7 +26,7 @@ export default function VersionAlert(): ReactElement | null {
 
   return (
     <Collapse in={open}>
-      <div style={{ position: 'fixed', zIndex: 900, bottom: 0, width: '100%' }}>
+      <div style={{ zIndex: 900, width: '100%' }}>
         <Alert
           severity={severity}
           action={
