@@ -1,6 +1,6 @@
 import { createContext, ReactChild, ReactElement, useEffect, useState } from 'react'
-import { Bee, Reference } from '@ethersphere/bee-js'
-import { apiHost, postageStamp } from '../constants'
+import { Address, Bee, Reference } from '@ethersphere/bee-js'
+import { apiHost, META_FILE_NAME, postageStamp } from '../constants'
 
 const bee = new Bee(apiHost)
 
@@ -32,7 +32,22 @@ export function Provider({ children }: Props): ReactElement {
   const upload = (file: File) => {
     if (!stamp) return Promise.reject()
 
-    return bee.uploadFile(stamp, file)
+    const metadata = {
+      path: (file as any)?.path,
+      name: file.name,
+      type: file.type,
+      size: file.size,
+    }
+
+    const metafile = new File([JSON.stringify(metadata)], META_FILE_NAME, {
+      type: 'text/plain',
+    })
+
+    return bee.uploadFiles(stamp, [file, metafile], { indexDocument: metadata.path })
+  }
+
+  const getMetadata = (hash: Address) => {
+    return bee.downloadFile(hash, META_FILE_NAME)
   }
 
   const purchaseStamp = async (amount = BigInt(1000), depth = 16) => {
