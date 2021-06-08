@@ -38,7 +38,13 @@ export default function Files(): ReactElement {
 
   return (
     <>
-      <DropzoneArea onChange={handleChange} filesLimit={1} showPreviews showPreviewsInDropzone={false} />
+      <DropzoneArea
+        onChange={handleChange}
+        filesLimit={1}
+        showPreviews
+        showPreviewsInDropzone={false}
+        maxFileSize={10000000}
+      />
       {file && (
         <code>
           <ul>
