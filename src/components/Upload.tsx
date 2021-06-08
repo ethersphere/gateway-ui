@@ -9,7 +9,7 @@ import ClipboardCopy from './ClipboardCopy'
 import { Context } from '../providers/bee'
 
 export default function Files(): ReactElement {
-  const [file, setFile] = useState<File | null>(null)
+  const [file, setFile] = useState<FilePath | null>(null)
   const [uploadReference, setUploadReference] = useState('')
   const [isUploadingFile, setIsUploadingFile] = useState(false)
   const { upload } = useContext(Context)
@@ -29,7 +29,7 @@ export default function Files(): ReactElement {
       })
   }
 
-  const handleChange = (files?: File[]) => {
+  const handleChange = (files?: FilePath[]) => {
     if (files) {
       setFile(files[0])
       setUploadReference('')
@@ -42,7 +42,7 @@ export default function Files(): ReactElement {
       {file && (
         <code>
           <ul>
-            <li>path:{(file as any)?.path}</li>
+            <li>path:{file.path}</li>
             <li>filename: {file.name}</li>
             <li>size: {file.size}</li>
             <li>type: {file.type}</li>

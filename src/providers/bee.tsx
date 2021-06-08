@@ -31,11 +31,11 @@ export function Provider({ children }: Props): ReactElement {
   const [stamp, setStamp] = useState<Reference | undefined>(postageStamp)
   const [isConnected, setIsConnected] = useState<boolean>(false)
 
-  const upload = (file: File) => {
+  const upload = (file: FilePath) => {
     if (!stamp) return Promise.reject()
 
     const metadata = {
-      path: (file as any)?.path,
+      path: file.path,
       name: file.name,
       type: file.type,
       size: file.size,
