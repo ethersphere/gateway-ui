@@ -7,7 +7,6 @@ import { useSnackbar } from 'notistack'
 
 import ClipboardCopy from './ClipboardCopy'
 import { Context } from '../providers/bee'
-import { Collapse } from '@material-ui/core'
 
 export default function Files(): ReactElement {
   const [file, setFile] = useState<File | null>(null)

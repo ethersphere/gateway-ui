@@ -1,5 +1,5 @@
 import { createContext, ReactChild, ReactElement, useEffect, useState } from 'react'
-import { Address, Bee, Reference } from '@ethersphere/bee-js'
+import { Bee, Reference } from '@ethersphere/bee-js'
 import { apiHost, META_FILE_NAME, postageStamp } from '../constants'
 
 const bee = new Bee(apiHost)
@@ -9,6 +9,7 @@ interface ContextInterface {
   purchaseStamp: () => Promise<void> // FIXME: should not be exposed in final version
   isConnected: boolean
   upload: (file: File) => Promise<Reference>
+  getMetadata: (hash: Reference) => Promise<Metadata | undefined>
 }
 
 const initialValues: ContextInterface = {
@@ -16,6 +17,7 @@ const initialValues: ContextInterface = {
   isConnected: false,
   purchaseStamp: () => Promise.reject(),
   upload: () => Promise.reject(),
+  getMetadata: () => Promise.reject(),
 }
 
 export const Context = createContext<ContextInterface>(initialValues)
@@ -40,14 +42,20 @@ export function Provider({ children }: Props): ReactElement {
     }
 
     const metafile = new File([JSON.stringify(metadata)], META_FILE_NAME, {
-      type: 'text/plain',
+      type: 'application/json',
     })
 
     return bee.uploadFiles(stamp, [file, metafile], { indexDocument: metadata.path })
   }
 
-  const getMetadata = (hash: Address) => {
-    return bee.downloadFile(hash, META_FILE_NAME)
+  const getMetadata = async (hash: Reference): Promise<Metadata | undefined> => {
+    try {
+      const metadata = await bee.downloadFile(hash, META_FILE_NAME)
+
+      return JSON.parse(metadata.data.text()) as Metadata
+    } catch (e) {
+      console.error(e) //eslint-disable-line
+    }
   }
 
   const purchaseStamp = async (amount = BigInt(1000), depth = 16) => {
@@ -59,5 +67,7 @@ export function Provider({ children }: Props): ReactElement {
     bee.isConnected().then(setIsConnected)
   }, [])
 
-  return <Context.Provider value={{ isConnected, stamp, upload, purchaseStamp }}>{children}</Context.Provider>
+  return (
+    <Context.Provider value={{ getMetadata, isConnected, stamp, upload, purchaseStamp }}>{children}</Context.Provider>
+  )
 }

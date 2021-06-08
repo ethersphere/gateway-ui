@@ -1,9 +1,10 @@
-import { ReactElement, useState } from 'react'
+import { ReactElement, useState, useContext } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import { Paper, InputBase, IconButton, FormHelperText } from '@material-ui/core'
+import { Paper, InputBase, IconButton, FormHelperText, Button } from '@material-ui/core'
 import { Search } from '@material-ui/icons'
 import { apiHost } from '../constants'
-import { Utils } from '@ethersphere/bee-js'
+import { Reference, Utils } from '@ethersphere/bee-js'
+import { Context } from '../providers/bee'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,11 +33,26 @@ export default function Files(): ReactElement {
   const [referenceInput, setReferenceInput] = useState('')
   const [referenceError, setReferenceError] = useState<Error | null>(null)
 
+  const [isLoadingMetadata, setIsLoadingMetadata] = useState<boolean>(false)
+  const [metadata, setMetadata] = useState<Metadata | undefined>()
+
+  const { getMetadata } = useContext(Context)
+
   const handleReferenceChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setReferenceInput(e.target.value)
 
     if (Utils.Hex.isHexString(e.target.value, 64) || Utils.Hex.isHexString(e.target.value, 128)) setReferenceError(null)
     else setReferenceError(new Error('Incorrect format of swarm hash'))
+  }
+
+  const handleSearch = () => {
+    setIsLoadingMetadata(true)
+    getMetadata(referenceInput as Reference)
+      .then(setMetadata)
+      .catch(console.error) //eslint-disable-line
+      .finally(() => {
+        setIsLoadingMetadata(false)
+      })
   }
 
   return (
@@ -50,8 +66,7 @@ export default function Files(): ReactElement {
           onChange={handleReferenceChange}
         />
         <IconButton
-          href={`${apiHost}/bzz/${referenceInput}`}
-          target="_blank"
+          onClick={handleSearch}
           disabled={referenceError !== null || !referenceInput}
           className={classes.iconButton}
           aria-label="download"
@@ -59,6 +74,17 @@ export default function Files(): ReactElement {
           <Search />
         </IconButton>
       </Paper>
+      {isLoadingMetadata && <span>loading metadata...</span>}
+      <code>{metadata && JSON.stringify(metadata)}</code>
+      {metadata && (
+        <Button
+          href={`${apiHost}/bzz/${referenceInput}`}
+          target="_blank"
+          disabled={referenceError !== null || !referenceInput}
+        >
+          Download
+        </Button>
+      )}
       {referenceError && <FormHelperText error>{referenceError.message}</FormHelperText>}
     </>
   )
