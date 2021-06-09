@@ -7,6 +7,7 @@ import { useSnackbar } from 'notistack'
 
 import ClipboardCopy from './ClipboardCopy'
 import { Context } from '../providers/bee'
+import QRCodeModal from './QRCodeModal'
 
 export default function Files(): ReactElement {
   const [file, setFile] = useState<FilePath | null>(null)
@@ -66,10 +67,18 @@ export default function Files(): ReactElement {
         </Container>
       )}
       {uploadReference && (
-        <div>
-          <code>{uploadReference}</code>
-          <ClipboardCopy value={uploadReference} />
-        </div>
+        <>
+          <div>
+            <code>{uploadReference}</code>
+            <ClipboardCopy value={uploadReference} />
+            <QRCodeModal value={uploadReference} label="Swarm Hash Reference" />
+          </div>
+          <div>
+            <code>{`${window.location}/download/${uploadReference}`}</code>
+            <ClipboardCopy value={`${window.location}/download/${uploadReference}`} />
+            <QRCodeModal value={`${window.location}/download/${uploadReference}`} label="Gateway Share Link" />
+          </div>
+        </>
       )}
     </>
   )
