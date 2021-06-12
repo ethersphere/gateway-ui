@@ -7,7 +7,7 @@
 	<meta http-equiv="X-UA-Compatible" ww="chrome=1"/>
 	<link rel="icon" type="image/x-icon" href="favicon.ico"/>	
 <script type="text/javascript">
-let gatewayHost = location.host; 
+let gatewayHost = "https://"+location.host; 
 
 class SwarmProgressBar {
 	constructor(gateway){
@@ -37,7 +37,7 @@ class SwarmProgressBar {
 
 	upload(formData) {
 
-		let url = this.gateway+'/files';
+		let url = this.gateway+'/bzz';
 
 		return this.sendUploadRequest(url, 'POST', 'application/json', formData, formData.get('file').size).then((swarmHash) => {
 			this.setStatus({swarmHash: swarmHash});  
@@ -930,7 +930,7 @@ a{
 						Enter a hash.
 					</div>
 					<form id="downloadForm" spellcheck="false">
-						<input type="text" id="downloadHashField" name="downloadHash" placeholder="theswarm.eth"/>
+						<input type="text" id="downloadHashField" name="downloadHash" placeholder="swarm.eth"/>
 						<button type="submit" value="Go" class="orangeButton wideButton">
 							Go
 							<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
