@@ -6,9 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 	<meta http-equiv="X-UA-Compatible" ww="chrome=1"/>
 	<link rel="icon" type="image/x-icon" href="favicon.ico"/>	
-
 <script type="text/javascript">
-let gatewayHost = 'https://gateway.ethswarm.org'
+let gatewayHost = location.host; 
 
 class SwarmProgressBar {
 	constructor(gateway){
@@ -344,7 +343,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
 }, false);
 </script>
-
 
 <style type="text/css">
 .hidden{
@@ -769,7 +767,7 @@ a{
 }
 
 .footerItem a{
-	font-size: 13px;	
+	font-size: 13px;	
 	text-decoration: none;
 }
 
@@ -897,7 +895,7 @@ a{
 						</span>
 					</a>
 				</div>
-				<div id="controlHeaderUpload" class="controlHeaderItem">
+				<div id="controlHeaderUpload" class="controlHeaderItem" style="display:none">
 					<a>
 						<span>Upload</span>
 						<span class="controlHeaderItemIcon">
