@@ -1,23 +1,26 @@
 import { SnackbarProvider } from 'notistack'
 import type { ReactElement } from 'react'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import BasePage from './pages'
+import { ThemeProvider } from '@material-ui/styles'
+
+import Routes from './Routes'
 import { Provider } from './providers/bee'
 import DevAlertPostageStamp from './dev/AlertPostageStamp'
+import { theme } from './theme'
 
 function App(): ReactElement {
   return (
-    <div className="App">
+    <ThemeProvider theme={theme}>
       <SnackbarProvider>
         <Provider>
           <>
             <CssBaseline />
             <DevAlertPostageStamp />
-            <BasePage />
+            <Routes />
           </>
         </Provider>
       </SnackbarProvider>
-    </div>
+    </ThemeProvider>
   )
 }
 
