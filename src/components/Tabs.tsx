@@ -15,13 +15,7 @@ function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
+    <div role="tabpanel" hidden={value !== index} aria-labelledby={`tab-${index}`} {...other}>
       {value === index && (
         <Box p={3}>
           <Typography>{children}</Typography>
@@ -56,7 +50,7 @@ export default function SimpleTabs({ values }: Props): ReactElement {
 
   return (
     <div className={classes.root}>
-      <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+      <Tabs value={value} onChange={handleChange} aria-label="tabs" variant="fullWidth">
         {values.map(({ label }, index) => (
           <Tab key={index} label={label} />
         ))}

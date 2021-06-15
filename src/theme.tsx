@@ -1,12 +1,6 @@
 import { createMuiTheme, Theme } from '@material-ui/core/styles'
 import { orange } from '@material-ui/core/colors'
 
-declare module '@material-ui/core/styles/createPalette' {
-  interface TypeBackground {
-    appBar: string
-  }
-}
-
 // Overwriting default components styles
 const componentsOverrides = (theme: Theme) => ({
   MuiButton: {
@@ -46,6 +40,32 @@ const componentsOverrides = (theme: Theme) => ({
       },
     },
   },
+  MuiTab: {
+    root: {
+      backgroundColor: 'white',
+      borderLeft: `4px solid ${theme.palette.background.default}`,
+      borderRight: `4px solid ${theme.palette.background.default}`,
+      opacity: 1,
+      '&:hover': {},
+      '&$selected': {
+        fontWeight: theme.typography.fontWeightMedium,
+      },
+      '&:focus': {
+        color: theme.palette.secondary,
+      },
+    },
+  },
+  MuiTabs: {
+    root: {
+      backgroundColor: 'white',
+      borderBottom: 'none',
+    },
+    indicator: {
+      backgroundColor: theme.palette.primary.main,
+      paddingLeft: 4,
+      paddingRight: 4,
+    },
+  },
 })
 
 const propsOverrides = {
@@ -61,6 +81,11 @@ const propsOverrides = {
   },
   MuiPaper: {
     elevation: 0,
+  },
+  MuiTab: {
+    disableRipple: true,
+    disableFocusRipple: true,
+    disableElevation: true,
   },
 }
 

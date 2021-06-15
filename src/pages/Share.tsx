@@ -1,6 +1,5 @@
 import { ReactElement, useState, useContext, useEffect } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import IconButton from '@material-ui/core/IconButton'
@@ -10,25 +9,28 @@ import Button from '@material-ui/core/Button'
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
 import CloseIcon from '@material-ui/icons/Close'
 import Paper from '@material-ui/core/Paper'
-import { DropzoneArea } from 'material-ui-dropzone'
+import AddIcon from '@material-ui/icons/Add'
 
-import ClipboardCopy from '../components/ClipboardCopy'
+import Header from '../components/Header'
 import QRCodeModal from '../components/QRCodeModal'
+import Tabs from '../components/Tabs'
+import Footer from '../components/Footer'
 
 import * as ROUTES from '../Routes'
-import Upload from '../components/Upload'
 import { Context } from '../providers/bee'
+import { GATEWAY_URL } from '../constants'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       padding: theme.spacing(1),
+      paddingTop: theme.spacing(10),
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       textAlign: 'center',
       justifyContent: 'space-between',
-      minHeight: '100vh',
+      minHeight: `calc(100vh - ${theme.spacing(10)}px)`,
     },
     topNavigation: {
       width: '100%',
@@ -38,15 +40,13 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(1),
       alignItems: 'center',
     },
-    buttonContainer: {
+    fullWidth: {
       width: '100%',
     },
     button: {
       width: '100%',
       display: 'flex',
       justifyContent: 'space-between',
-      marginTop: theme.spacing(1),
-      marginBottom: theme.spacing(1),
     },
     imageWrapper: {
       padding: theme.spacing(2),
@@ -62,21 +62,21 @@ const SharePage = (): ReactElement => {
   const classes = useStyles()
   const history = useHistory()
 
-  const [files, setFiles] = useState<FilePath[]>([])
+  const [files, setFiles] = useState<FileList | null>(null)
   const [uploadReference, setUploadReference] = useState('')
   const [isUploadingFile, setIsUploadingFile] = useState(false)
   const [preview, setPreview] = useState<string | null>(null)
   const { upload } = useContext(Context)
   const { enqueueSnackbar } = useSnackbar()
-  const file = files[0]
+  const file = files && (files[0] as File)
 
   const uploadFile = () => {
-    if (file === null) return
+    if (!file) return
+
     setIsUploadingFile(true)
     upload(file)
       .then(hash => {
         setUploadReference(hash)
-        setFiles([])
       })
       .catch(e => enqueueSnackbar(`Error uploading: ${e.message}`, { variant: 'error' }))
       .finally(() => {
@@ -95,27 +95,102 @@ const SharePage = (): ReactElement => {
   if (!file) {
     return (
       <Container className={classes.root}>
-        <div style={{ width: '100%' }}>
+        <div className={classes.fullWidth}>
           <div className={classes.topNavigation}>
-            <IconButton
-              onClick={() => {
-                history.push(ROUTES.LANDING_PAGE)
-              }}
+            <Header
+              leftAction={
+                <IconButton
+                  onClick={() => {
+                    history.push(ROUTES.LANDING_PAGE)
+                  }}
+                >
+                  <ArrowBackIcon />
+                </IconButton>
+              }
             >
-              <ArrowBackIcon />
-            </IconButton>
-            <Typography variant="button">Share</Typography>
-            <IconButton style={{ opacity: 0 }}>
-              <ArrowBackIcon />
-            </IconButton>
+              Share
+            </Header>
           </div>
           <div>You can upload any single file. Some show preview.</div>
         </div>
-        <div>
-          <DropzoneArea onChange={setFiles} filesLimit={1} maxFileSize={10000000} />
+        <div className={classes.fullWidth}>
+          {/*<DropzoneArea onChange={setFiles} filesLimit={1} maxFileSize={10000000} />*/}
+          <Button component="label" size="large" startIcon={<AddIcon color="primary" />} className={classes.button}>
+            Upload File
+            <input
+              type="file"
+              hidden
+              onChange={event => {
+                setFiles(event.target.files) // eslint-disable-line
+              }}
+            />
+            <AddIcon style={{ opacity: 0 }} />
+          </Button>
         </div>
-        <div className={classes.buttonContainer}>
+        <div className={classes.fullWidth}>
           <span>Maximum size for upload is 10MB.</span>
+        </div>
+      </Container>
+    )
+  }
+
+  if (uploadReference) {
+    return (
+      <Container className={classes.root}>
+        <div className={classes.fullWidth}>
+          <Header
+            leftAction={
+              <IconButton
+                onClick={() => {
+                  history.push(ROUTES.LANDING_PAGE)
+                }}
+              >
+                <ArrowBackIcon />
+              </IconButton>
+            }
+          >
+            Share
+          </Header>
+          <small>Share with a Swarm hash (a.k.a. ‘bzzhash’) or a web link.</small>
+        </div>
+        <div className={classes.fullWidth}>
+          <Tabs
+            values={[
+              {
+                label: 'Swarm hash',
+                component: (
+                  <div style={{ overflowWrap: 'break-word', textAlign: 'left' }}>
+                    <Paper>{uploadReference}</Paper>
+                  </div>
+                ),
+              },
+              {
+                label: 'Web link',
+                component: (
+                  <div style={{ overflowWrap: 'break-word', textAlign: 'left' }}>
+                    <Paper>{`${GATEWAY_URL}${uploadReference}`}</Paper>
+                  </div>
+                ),
+              },
+            ]}
+          />
+          <QRCodeModal value={`${window.location}/download/${uploadReference}`} label="Gateway Share Link" />
+          <small>
+            Thundercats post-ironic messenger bag chartreuse, fam neutra cloud bread cray fingerstache microdosing
+            mlkshk iceland.
+          </small>
+        </div>
+        <div className={classes.fullWidth}>
+          <Button
+            className={classes.button}
+            onClick={uploadFile}
+            size="large"
+            startIcon={<ArrowUpwardIcon color="primary" />}
+          >
+            Copy
+            {/* Needed to properly align icon to the right and label to center */}
+            <ArrowUpwardIcon style={{ opacity: 0 }} />
+          </Button>
         </div>
       </Container>
     )
@@ -123,16 +198,16 @@ const SharePage = (): ReactElement => {
 
   return (
     <Container className={classes.root}>
-      <div style={{ width: '100%' }}>
-        <div className={classes.topNavigation}>
-          <IconButton style={{ opacity: 0 }}>
-            <CloseIcon />
-          </IconButton>
-          <Typography variant="button">File</Typography>
-          <IconButton onClick={() => setFiles([])}>
-            <CloseIcon />
-          </IconButton>
-        </div>
+      <div className={classes.fullWidth}>
+        <Header
+          rightAction={
+            <IconButton onClick={() => setFiles(null)}>
+              <CloseIcon />
+            </IconButton>
+          }
+        >
+          File
+        </Header>
         <div>Double-check before uploading. There is no undo.</div>
       </div>
       <div>
@@ -149,16 +224,18 @@ const SharePage = (): ReactElement => {
           </ul>
         </Paper>
       </div>
-      <div className={classes.buttonContainer}>
-        <Button
-          className={classes.button}
-          size="large"
-          startIcon={<ArrowUpwardIcon color="primary" onClick={() => uploadFile()} />}
-        >
-          Upload
-          {/* Needed to properly align icon to the right and label to center */}
-          <ArrowUpwardIcon style={{ opacity: 0 }} />
-        </Button>
+      <div className={classes.fullWidth}>
+        <Footer>
+          <Button
+            className={classes.button}
+            onClick={uploadFile}
+            size="large"
+            startIcon={<ArrowUpwardIcon color="primary" />}
+          >
+            Upload
+            <ArrowUpwardIcon style={{ opacity: 0 }} />
+          </Button>
+        </Footer>
       </div>
     </Container>
   )

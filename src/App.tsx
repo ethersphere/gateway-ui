@@ -15,8 +15,8 @@ function App(): ReactElement {
         <Provider>
           <>
             <CssBaseline />
-            <DevAlertPostageStamp />
             <Routes />
+            <DevAlertPostageStamp />
           </>
         </Provider>
       </SnackbarProvider>
