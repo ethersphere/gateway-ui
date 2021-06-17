@@ -1,7 +1,7 @@
 import { ReactElement, useState } from 'react'
 import QRCode from 'qrcode.react'
 import { IconButton, Dialog, DialogTitle } from '@material-ui/core'
-import { FilterCenterFocusSharp } from '@material-ui/icons'
+import { Menu } from 'react-feather'
 
 interface Props {
   value: string
@@ -22,7 +22,7 @@ export default function QRCodeModal(props: Props): ReactElement {
   return (
     <div>
       <IconButton color="primary" size="small" onClick={handleOpen}>
-        <FilterCenterFocusSharp />
+        <Menu />
       </IconButton>
       <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
         <div style={{ padding: '30px', textAlign: 'center' }}>

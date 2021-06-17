@@ -1,6 +1,5 @@
-import { ReactElement, ReactNode, useState } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
 
 interface Props {
   children: ReactNode

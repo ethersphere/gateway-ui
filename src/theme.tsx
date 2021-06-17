@@ -69,20 +69,7 @@ const componentsOverrides = (theme: Theme) => ({
 })
 
 const propsOverrides = {
-  MuiButton: {
-    disableRipple: true,
-    disableFocusRipple: true,
-    disableElevation: true,
-  },
-  MuiIconButton: {
-    disableRipple: true,
-    disableFocusRipple: true,
-    disableElevation: true,
-  },
-  MuiPaper: {
-    elevation: 0,
-  },
-  MuiTab: {
+  MuiButtonBase: {
     disableRipple: true,
     disableFocusRipple: true,
     disableElevation: true,

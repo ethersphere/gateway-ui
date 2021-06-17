@@ -1,20 +1,20 @@
 import { ReactElement, useState, useContext, useEffect } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import IconButton from '@material-ui/core/IconButton'
 import { useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import Button from '@material-ui/core/Button'
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
-import CloseIcon from '@material-ui/icons/Close'
+
+import { ArrowLeft, ArrowUp, X, Clipboard } from 'react-feather'
 import Paper from '@material-ui/core/Paper'
-import AddIcon from '@material-ui/icons/Add'
+import LinearProgress from '@material-ui/core/LinearProgress'
 
 import Header from '../components/Header'
 import QRCodeModal from '../components/QRCodeModal'
 import Tabs from '../components/Tabs'
 import Footer from '../components/Footer'
+import Upload from '../components/Upload'
 
 import * as ROUTES from '../Routes'
 import { Context } from '../providers/bee'
@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       textAlign: 'center',
       justifyContent: 'space-between',
+      minHeight: '100vh',
+    },
+    rootWithBottomNav: {
       minHeight: `calc(100vh - ${theme.spacing(10)}px)`,
     },
     topNavigation: {
@@ -62,13 +65,12 @@ const SharePage = (): ReactElement => {
   const classes = useStyles()
   const history = useHistory()
 
-  const [files, setFiles] = useState<FileList | null>(null)
+  const [file, setFile] = useState<File | null>(null)
   const [uploadReference, setUploadReference] = useState('')
   const [isUploadingFile, setIsUploadingFile] = useState(false)
   const [preview, setPreview] = useState<string | null>(null)
   const { upload } = useContext(Context)
   const { enqueueSnackbar } = useSnackbar()
-  const file = files && (files[0] as File)
 
   const uploadFile = () => {
     if (!file) return
@@ -78,13 +80,15 @@ const SharePage = (): ReactElement => {
       .then(hash => {
         setUploadReference(hash)
       })
-      .catch(e => enqueueSnackbar(`Error uploading: ${e.message}`, { variant: 'error' }))
+      .catch(e => enqueueSnackbar(`Error uploading: ${e?.message}`, { variant: 'error' }))
       .finally(() => {
         setIsUploadingFile(false)
       })
   }
 
   useEffect(() => {
+    setPreview(null)
+
     if (!file || !file.type.startsWith('image')) return
 
     const reader = new FileReader()
@@ -92,47 +96,7 @@ const SharePage = (): ReactElement => {
     reader.readAsDataURL(file)
   }, [file])
 
-  if (!file) {
-    return (
-      <Container className={classes.root}>
-        <div className={classes.fullWidth}>
-          <div className={classes.topNavigation}>
-            <Header
-              leftAction={
-                <IconButton
-                  onClick={() => {
-                    history.push(ROUTES.LANDING_PAGE)
-                  }}
-                >
-                  <ArrowBackIcon />
-                </IconButton>
-              }
-            >
-              Share
-            </Header>
-          </div>
-          <div>You can upload any single file. Some show preview.</div>
-        </div>
-        <div className={classes.fullWidth}>
-          {/*<DropzoneArea onChange={setFiles} filesLimit={1} maxFileSize={10000000} />*/}
-          <Button component="label" size="large" startIcon={<AddIcon color="primary" />} className={classes.button}>
-            Upload File
-            <input
-              type="file"
-              hidden
-              onChange={event => {
-                setFiles(event.target.files) // eslint-disable-line
-              }}
-            />
-            <AddIcon style={{ opacity: 0 }} />
-          </Button>
-        </div>
-        <div className={classes.fullWidth}>
-          <span>Maximum size for upload is 10MB.</span>
-        </div>
-      </Container>
-    )
-  }
+  if (!file) return <Upload setFile={setFile} />
 
   if (uploadReference) {
     return (
@@ -145,7 +109,7 @@ const SharePage = (): ReactElement => {
                   history.push(ROUTES.LANDING_PAGE)
                 }}
               >
-                <ArrowBackIcon />
+                <ArrowLeft />
               </IconButton>
             }
           >
@@ -157,39 +121,35 @@ const SharePage = (): ReactElement => {
           <Tabs
             values={[
               {
-                label: 'Swarm hash',
+                label: 'Web link',
                 component: (
-                  <div style={{ overflowWrap: 'break-word', textAlign: 'left' }}>
-                    <Paper>{uploadReference}</Paper>
-                  </div>
+                  <Paper square style={{ overflowWrap: 'break-word', textAlign: 'left', padding: 16, margin: 4 }}>
+                    {`${GATEWAY_URL}${ROUTES.ACCESS_HASH(uploadReference)}`}
+                  </Paper>
                 ),
               },
               {
-                label: 'Web link',
+                label: 'Swarm hash',
                 component: (
-                  <div style={{ overflowWrap: 'break-word', textAlign: 'left' }}>
-                    <Paper>{`${GATEWAY_URL}${uploadReference}`}</Paper>
-                  </div>
+                  <Paper square style={{ overflowWrap: 'break-word', textAlign: 'left', padding: 16, margin: 4 }}>
+                    {uploadReference}
+                  </Paper>
                 ),
               },
             ]}
           />
-          <QRCodeModal value={`${window.location}/download/${uploadReference}`} label="Gateway Share Link" />
+          <QRCodeModal value={`${GATEWAY_URL}${ROUTES.ACCESS_HASH(uploadReference)}`} label="Gateway Share Link" />
           <small>
             Thundercats post-ironic messenger bag chartreuse, fam neutra cloud bread cray fingerstache microdosing
             mlkshk iceland.
           </small>
         </div>
         <div className={classes.fullWidth}>
-          <Button
-            className={classes.button}
-            onClick={uploadFile}
-            size="large"
-            startIcon={<ArrowUpwardIcon color="primary" />}
-          >
+          <Button className={classes.button} onClick={uploadFile} size="large">
+            <Clipboard color="primary" />
             Copy
             {/* Needed to properly align icon to the right and label to center */}
-            <ArrowUpwardIcon style={{ opacity: 0 }} />
+            <Clipboard style={{ opacity: 0 }} />
           </Button>
         </div>
       </Container>
@@ -197,12 +157,12 @@ const SharePage = (): ReactElement => {
   }
 
   return (
-    <Container className={classes.root}>
+    <Container className={`${classes.root} ${classes.rootWithBottomNav}`}>
       <div className={classes.fullWidth}>
         <Header
           rightAction={
-            <IconButton onClick={() => setFiles(null)}>
-              <CloseIcon />
+            <IconButton onClick={() => setFile(null)}>
+              <X />
             </IconButton>
           }
         >
@@ -226,15 +186,12 @@ const SharePage = (): ReactElement => {
       </div>
       <div className={classes.fullWidth}>
         <Footer>
-          <Button
-            className={classes.button}
-            onClick={uploadFile}
-            size="large"
-            startIcon={<ArrowUpwardIcon color="primary" />}
-          >
+          <Button className={classes.button} onClick={uploadFile} size="large">
+            <ArrowUp />
             Upload
-            <ArrowUpwardIcon style={{ opacity: 0 }} />
+            <ArrowUp style={{ opacity: 0 }} />
           </Button>
+          {isUploadingFile && <LinearProgress />}
         </Footer>
       </div>
     </Container>
@@ -242,39 +199,3 @@ const SharePage = (): ReactElement => {
 }
 
 export default SharePage
-
-//   {file && (
-//     <code>
-//       <ul>
-//         <li>path:{file.path}</li>
-//         <li>filename: {file.name}</li>
-//         <li>size: {file.size}</li>
-//         <li>type: {file.type}</li>
-//       </ul>
-//     </code>
-//   )}
-//   {file && (
-//     <Button disabled={isUploadingFile} variant="outlined" onClick={() => uploadFile()}>
-//       Upload
-//     </Button>
-//   )}
-//   {isUploadingFile && (
-//     <Container>
-//       <CircularProgress />
-//     </Container>
-//   )}
-//   {uploadReference && (
-//     <>
-//       <div>
-//         <code>{uploadReference}</code>
-//         <ClipboardCopy value={uploadReference} />
-//         <QRCodeModal value={uploadReference} label="Swarm Hash Reference" />
-//       </div>
-//       <div>
-//         <code>{`${window.location}/download/${uploadReference}`}</code>
-//         <ClipboardCopy value={`${window.location}/download/${uploadReference}`} />
-//         <QRCodeModal value={`${window.location}/download/${uploadReference}`} label="Gateway Share Link" />
-//       </div>
-//     </>
-//   )}
-// </>

@@ -3,8 +3,7 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
 import Divider from '@material-ui/core/Divider'
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
+import { ArrowDown, ArrowUp } from 'react-feather'
 import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
 import * as ROUTES from '../Routes'
@@ -45,25 +44,17 @@ const LandingPage = (): ReactElement => {
     <Container className={classes.root}>
       <Typography variant="subtitle1">The easiest way to share and access files on the Swarm network</Typography>
       <div className={classes.buttonContainer}>
-        <Button
-          className={classes.button}
-          size="large"
-          startIcon={<ArrowUpwardIcon color="primary" />}
-          onClick={() => history.push(ROUTES.SHARE)}
-        >
+        <Button className={classes.button} size="large" onClick={() => history.push(ROUTES.SHARE)}>
+          <ArrowUp />
           Share
           {/* Needed to properly align icon to the right and label to center */}
-          <ArrowUpwardIcon style={{ opacity: 0 }} />
+          <ArrowUp style={{ opacity: 0 }} />
         </Button>
-        <Button
-          className={classes.button}
-          size="large"
-          startIcon={<ArrowDownwardIcon color="primary" />}
-          onClick={() => history.push(ROUTES.ACCESS)}
-        >
+        <Button className={classes.button} size="large" onClick={() => history.push(ROUTES.ACCESS)}>
+          <ArrowDown />
           Acccess
           {/* Needed to properly align icon to the right and label to center */}
-          <ArrowDownwardIcon style={{ opacity: 0 }} />
+          <ArrowDown style={{ opacity: 0 }} />
         </Button>
       </div>
       <div>

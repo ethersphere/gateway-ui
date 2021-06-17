@@ -2,7 +2,7 @@ import { ReactElement, useState, useContext } from 'react'
 import { Alert, AlertTitle, Color } from '@material-ui/lab'
 import Collapse from '@material-ui/core/Collapse'
 import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
+import { X } from 'react-feather'
 import { Button } from '@material-ui/core'
 import { Context } from '../providers/bee'
 
@@ -38,7 +38,7 @@ export default function VersionAlert(): ReactElement | null {
                 setOpen(false)
               }}
             >
-              <CloseIcon fontSize="inherit" />
+              <X fontSize="inherit" />
             </IconButton>
           }
         >

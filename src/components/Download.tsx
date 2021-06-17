@@ -1,7 +1,7 @@
 import { ReactElement, useState, useContext } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { Paper, InputBase, IconButton, FormHelperText, Button } from '@material-ui/core'
-import { Search } from '@material-ui/icons'
+import { Search } from 'react-feather'
 import { apiHost } from '../constants'
 import { Reference, Utils } from '@ethersphere/bee-js'
 import { Context } from '../providers/bee'
