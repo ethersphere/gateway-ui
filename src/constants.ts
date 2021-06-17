@@ -1,6 +1,7 @@
 import { Reference } from '@ethersphere/bee-js'
 
-export const apiHost = process.env.REACT_APP_BEE_API || 'http://localhost:1633'
+export const DOWNLOAD_HOST = process.env.REACT_APP_BEE_DOWNLOAD_API || 'http://localhost:1633'
+export const UPLOAD_HOSTS: string[] = process.env.REACT_APP_BEE_UPLOAD_APIS?.split(',') || ['http://localhost:1633']
 export const postageStamp = process.env.REACT_APP_POSTAGE_STAMP as Reference | undefined
 export const META_FILE_NAME = '.swarmgatewaymeta.json'
 

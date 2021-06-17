@@ -11,7 +11,6 @@ import Paper from '@material-ui/core/Paper'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
 import Header from '../components/Header'
-import QRCodeModal from '../components/QRCodeModal'
 import Tabs from '../components/Tabs'
 import Footer from '../components/Footer'
 import Upload from '../components/Upload'
@@ -138,7 +137,6 @@ const SharePage = (): ReactElement => {
               },
             ]}
           />
-          <QRCodeModal value={`${GATEWAY_URL}${ROUTES.ACCESS_HASH(uploadReference)}`} label="Gateway Share Link" />
           <small>
             Thundercats post-ironic messenger bag chartreuse, fam neutra cloud bread cray fingerstache microdosing
             mlkshk iceland.

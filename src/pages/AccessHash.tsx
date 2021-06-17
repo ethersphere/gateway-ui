@@ -2,27 +2,22 @@ import { ReactElement, useState, useContext, useEffect } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import IconButton from '@material-ui/core/IconButton'
-import { useHistory } from 'react-router-dom'
-import { useSnackbar } from 'notistack'
-import Button from '@material-ui/core/Button'
-import { Code, ArrowLeft } from 'react-feather'
 import Paper from '@material-ui/core/Paper'
-import LinearProgress from '@material-ui/core/LinearProgress'
+import { useHistory, useParams } from 'react-router-dom'
+import Button from '@material-ui/core/Button'
+import { ArrowLeft, ArrowDown } from 'react-feather'
 
 import Header from '../components/Header'
-import QRCodeModal from '../components/QRCodeModal'
-import Tabs from '../components/Tabs'
-import Footer from '../components/Footer'
-import Upload from '../components/Upload'
+
+import { Context } from '../providers/bee'
+import { DOWNLOAD_HOST } from '../constants'
 
 import * as ROUTES from '../Routes'
-import { Context } from '../providers/bee'
-import { GATEWAY_URL } from '../constants'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      padding: theme.spacing(1),
+      padding: theme.spacing(2),
       paddingTop: theme.spacing(10),
       display: 'flex',
       flexDirection: 'column',
@@ -60,6 +55,66 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 )
 
-const SharePage = (): ReactElement => <div />
+const SharePage = (): ReactElement => {
+  const classes = useStyles()
+  const history = useHistory()
+
+  const { hash } = useParams<{ hash: string }>()
+  const { getMetadata } = useContext(Context)
+  const [metadata, setMetadata] = useState<Metadata | undefined>()
+  const [preview, setPreview] = useState<string | undefined>(undefined)
+  const [error, setError] = useState<Error | null>(null)
+
+  useEffect(() => {
+    getMetadata(hash).then(setMetadata).catch(setError)
+  }, [hash])
+
+  return (
+    <Container className={classes.root}>
+      <div className={classes.fullWidth}>
+        <Header
+          leftAction={
+            <IconButton
+              onClick={() => {
+                history.push(ROUTES.LANDING_PAGE)
+              }}
+            >
+              <ArrowLeft />
+            </IconButton>
+          }
+        >
+          File
+        </Header>
+        <div>Use the button below to download this file.</div>
+      </div>
+      <div className={classes.fullWidth}>
+        <Paper square elevation={0}>
+          {preview && (
+            <div className={classes.imageWrapper}>
+              <img src={preview} className={classes.image} />
+            </div>
+          )}
+          {metadata && (
+            <ul>
+              <li>Filename: {metadata.name}</li>
+              <li>Size: {metadata.size} Bytes</li>
+              <li>Type: {metadata.type}</li>
+            </ul>
+          )}
+        </Paper>
+      </div>
+      <div className={classes.fullWidth}>
+        <small style={{ opacity: hash ? 0 : 1 }}>
+          Please note that we can’t guarantee availability or access to a specific file.
+        </small>
+        <Button className={classes.button} size="large" href={`${DOWNLOAD_HOST}/bzz/${hash}`} target="_blank">
+          <ArrowDown />
+          Download
+          <ArrowDown style={{ opacity: 0 }} />
+        </Button>
+      </div>
+    </Container>
+  )
+}
 
 export default SharePage

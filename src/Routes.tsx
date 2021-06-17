@@ -3,7 +3,7 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom'
 
 export const LANDING_PAGE = '/'
 export const ACCESS = '/access'
-export const ACCESS_HASH = (hash = ':hash') => `/access/${hash}`
+export const ACCESS_HASH = (hash = ':hash'): string => `/access/${hash}`
 export const SHARE = '/share'
 
 // pages

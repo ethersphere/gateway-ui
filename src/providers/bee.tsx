@@ -1,15 +1,16 @@
 import { createContext, ReactChild, ReactElement, useEffect, useState } from 'react'
 import { Bee, Reference } from '@ethersphere/bee-js'
-import { apiHost, META_FILE_NAME, postageStamp } from '../constants'
+import { UPLOAD_HOSTS, META_FILE_NAME, postageStamp } from '../constants'
 
-const bee = new Bee(apiHost)
+const randomHost = UPLOAD_HOSTS[Math.floor(Math.random() * UPLOAD_HOSTS.length)]
+const bee = new Bee(randomHost)
 
 interface ContextInterface {
   stamp: Reference | undefined // FIXME: should not be exposed in final version
   purchaseStamp: () => Promise<void> // FIXME: should not be exposed in final version
   isConnected: boolean
   upload: (file: File) => Promise<Reference>
-  getMetadata: (hash: Reference) => Promise<Metadata | undefined>
+  getMetadata: (hash: Reference | string) => Promise<Metadata | undefined>
 }
 
 const initialValues: ContextInterface = {
@@ -45,16 +46,16 @@ export function Provider({ children }: Props): ReactElement {
       type: 'application/json',
     })
 
-    return bee.uploadFiles(stamp, [file, metafile], { indexDocument: metadata.path })
+    return bee.uploadFiles(stamp, [file, metafile], { indexDocument: metadata.name })
   }
 
-  const getMetadata = async (hash: Reference): Promise<Metadata | undefined> => {
+  const getMetadata = async (hash: Reference | string): Promise<Metadata | undefined> => {
     try {
       const metadata = await bee.downloadFile(hash, META_FILE_NAME)
 
       return JSON.parse(metadata.data.text()) as Metadata
     } catch (e) {
-      console.error(e) //eslint-disable-line
+      throw e
     }
   }
 

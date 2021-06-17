@@ -3,8 +3,6 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 
 interface Props {
   children: ReactNode
-  leftAction?: ReactElement
-  rightAction?: ReactElement
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -24,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 )
 
-export default function Header({ children, leftAction, rightAction }: Props): ReactElement {
+export default function Header({ children }: Props): ReactElement {
   const classes = useStyles()
 
   return (

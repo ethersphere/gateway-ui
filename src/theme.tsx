@@ -10,10 +10,6 @@ const componentsOverrides = (theme: Theme) => ({
         backgroundColor: theme.palette.primary.main,
         color: 'white',
       },
-      '&$selected': {
-        backgroundColor: theme.palette.primary.main,
-        color: 'white',
-      },
       '&:focus': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
@@ -27,10 +23,6 @@ const componentsOverrides = (theme: Theme) => ({
     root: {
       backgroundColor: 'white',
       '&:hover': {
-        backgroundColor: theme.palette.primary.main,
-        color: 'white',
-      },
-      '&$selected': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
       },
@@ -71,8 +63,6 @@ const componentsOverrides = (theme: Theme) => ({
 const propsOverrides = {
   MuiButtonBase: {
     disableRipple: true,
-    disableFocusRipple: true,
-    disableElevation: true,
   },
 }
 
