@@ -1,5 +1,6 @@
 import type { ReactElement, ReactNode } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import Container from '@material-ui/core/Container'
 
 interface Props {
   children: ReactNode
@@ -8,6 +9,10 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      width: '100%',
+      height: theme.spacing(10),
+    },
+    float: {
       zIndex: 100,
       width: '100%',
       position: 'fixed',
@@ -27,7 +32,11 @@ export default function Header({ children }: Props): ReactElement {
 
   return (
     <div className={classes.root}>
-      <div className={classes.wrapper}>{children}</div>
+      <div className={classes.float}>
+        <Container className={classes.wrapper}>
+          <>{children}</>
+        </Container>
+      </div>
     </div>
   )
 }

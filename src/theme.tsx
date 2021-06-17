@@ -88,6 +88,13 @@ export const theme = createMuiTheme({
       fontStretch: 'normal',
       fontStyle: 'normal',
     },
+    caption: {
+      fontFamily: '"IBM Plex Mono", monospace',
+      fontWeight: 500,
+      fontSize: '1rem',
+      fontStretch: 'normal',
+      fontStyle: 'normal',
+    },
     fontFamily: ['Work Sans', 'Montserrat', 'Nunito', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'].join(','),
   },
 })

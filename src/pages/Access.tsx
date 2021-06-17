@@ -15,7 +15,7 @@ import * as ROUTES from '../Routes'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      padding: theme.spacing(2),
+      padding: 0,
       paddingTop: theme.spacing(10),
       display: 'flex',
       flexDirection: 'column',
@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
       minHeight: '100vh',
     },
     fullWidth: {
+      padding: theme.spacing(2),
       width: '100%',
     },
     button: {

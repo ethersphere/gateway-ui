@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react'
+import { ReactElement, useState, DragEvent } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import IconButton from '@material-ui/core/IconButton'
@@ -60,47 +60,46 @@ export default function Upload({ setFile }: Props): ReactElement | null {
   const history = useHistory()
   const [isDragging, setIsDragging] = useState<boolean>(false)
 
-  return (
-    <Container
-      className={classes.root}
-      onDragOver={ev => {
-        setIsDragging(true)
+  const onDragOver = (ev: DragEvent<HTMLDivElement>) => {
+    setIsDragging(true)
 
-        ev.preventDefault()
-      }}
-      onDrop={ev => {
-        // Prevent default behavior (Prevent file from being opened)
-        ev.preventDefault()
+    ev.preventDefault()
+  }
 
-        if (ev.dataTransfer.items) {
-          const fls = []
-          // Use DataTransferItemList interface to access the file(s)
-          for (let i = 0; i < ev.dataTransfer.items.length; i++) {
-            // If dropped items aren't files, reject them
-            if (ev.dataTransfer.items[i].kind === 'file') {
-              const fl = ev.dataTransfer.items[i].getAsFile()
+  const onDrop = (ev: DragEvent<HTMLDivElement>) => {
+    // Prevent default behavior (Prevent file from being opened)
+    ev.preventDefault()
 
-              if (fl) fls.push(fl)
-            }
-          }
+    if (ev.dataTransfer.items) {
+      const fls = []
+      // Use DataTransferItemList interface to access the file(s)
+      for (let i = 0; i < ev.dataTransfer.items.length; i++) {
+        // If dropped items aren't files, reject them
+        if (ev.dataTransfer.items[i].kind === 'file') {
+          const fl = ev.dataTransfer.items[i].getAsFile()
 
-          if (fls.length === 1) setFile(fls[0])
-        } else {
-          // Use DataTransfer interface to access the file(s)
-          if (ev.dataTransfer.files.length === 1) setFile(ev.dataTransfer.files[0])
+          if (fl) fls.push(fl)
         }
-        setIsDragging(false)
-      }}
-    >
-      {isDragging && (
-        <div
-          onDragLeave={ev => {
-            setIsDragging(false)
+      }
 
-            ev.preventDefault()
-          }}
-          className={classes.dragOverlay}
-        >
+      if (fls.length === 1) setFile(fls[0])
+    } else {
+      // Use DataTransfer interface to access the file(s)
+      if (ev.dataTransfer.files.length === 1) setFile(ev.dataTransfer.files[0])
+    }
+    setIsDragging(false)
+  }
+
+  const onDragLeave = (ev: DragEvent<HTMLDivElement>) => {
+    setIsDragging(false)
+
+    ev.preventDefault()
+  }
+
+  return (
+    <Container className={classes.root} onDragOver={onDragOver} onDrop={onDrop}>
+      {isDragging && (
+        <div onDragLeave={onDragLeave} className={classes.dragOverlay}>
           <Typography className={classes.dragOverlayChildren} variant="button">
             Drop it
           </Typography>

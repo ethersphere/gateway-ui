@@ -9,11 +9,13 @@ import Button from '@material-ui/core/Button'
 import { ArrowLeft, ArrowUp, X, Clipboard } from 'react-feather'
 import Paper from '@material-ui/core/Paper'
 import LinearProgress from '@material-ui/core/LinearProgress'
+import Typography from '@material-ui/core/Typography'
 
 import Header from '../components/Header'
 import Tabs from '../components/Tabs'
 import Footer from '../components/Footer'
 import Upload from '../components/Upload'
+import Preview from '../components/Preview'
 
 import * as ROUTES from '../Routes'
 import { Context } from '../providers/bee'
@@ -22,7 +24,7 @@ import { GATEWAY_URL } from '../constants'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      padding: theme.spacing(1),
+      padding: theme.spacing(0),
       paddingTop: theme.spacing(10),
       display: 'flex',
       flexDirection: 'column',
@@ -30,9 +32,6 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
       justifyContent: 'space-between',
       minHeight: '100vh',
-    },
-    rootWithBottomNav: {
-      minHeight: `calc(100vh - ${theme.spacing(10)}px)`,
     },
     topNavigation: {
       width: '100%',
@@ -44,6 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     fullWidth: {
       width: '100%',
+      padding: theme.spacing(2),
     },
     button: {
       width: '100%',
@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme: Theme) =>
       maxWidth: '100%',
       maxHeight: '100%',
     },
+    hash: {},
   }),
 )
 
@@ -67,7 +68,7 @@ const SharePage = (): ReactElement => {
   const [file, setFile] = useState<File | null>(null)
   const [uploadReference, setUploadReference] = useState('')
   const [isUploadingFile, setIsUploadingFile] = useState(false)
-  const [preview, setPreview] = useState<string | null>(null)
+  const [preview, setPreview] = useState<string | undefined>(undefined)
   const { upload } = useContext(Context)
   const { enqueueSnackbar } = useSnackbar()
 
@@ -86,12 +87,12 @@ const SharePage = (): ReactElement => {
   }
 
   useEffect(() => {
-    setPreview(null)
+    setPreview(undefined)
 
     if (!file || !file.type.startsWith('image')) return
 
     const reader = new FileReader()
-    reader.addEventListener('load', () => setPreview(reader.result?.toString() || null), false)
+    reader.addEventListener('load', () => setPreview(reader.result?.toString()), false)
     reader.readAsDataURL(file)
   }, [file])
 
@@ -122,16 +123,28 @@ const SharePage = (): ReactElement => {
               {
                 label: 'Web link',
                 component: (
-                  <Paper square style={{ overflowWrap: 'break-word', textAlign: 'left', padding: 16, margin: 4 }}>
-                    {`${GATEWAY_URL}${ROUTES.ACCESS_HASH(uploadReference)}`}
+                  <Paper
+                    square
+                    elevation={0}
+                    style={{ overflowWrap: 'break-word', textAlign: 'left', padding: 16, margin: 4 }}
+                  >
+                    <Typography variant="caption" className={classes.hash}>{`${GATEWAY_URL}${ROUTES.ACCESS_HASH(
+                      uploadReference,
+                    )}`}</Typography>
                   </Paper>
                 ),
               },
               {
                 label: 'Swarm hash',
                 component: (
-                  <Paper square style={{ overflowWrap: 'break-word', textAlign: 'left', padding: 16, margin: 4 }}>
-                    {uploadReference}
+                  <Paper
+                    square
+                    elevation={0}
+                    style={{ overflowWrap: 'break-word', textAlign: 'left', padding: 16, margin: 4 }}
+                  >
+                    <Typography variant="caption" className={classes.hash}>
+                      {uploadReference}
+                    </Typography>
                   </Paper>
                 ),
               },
@@ -144,7 +157,7 @@ const SharePage = (): ReactElement => {
         </div>
         <div className={classes.fullWidth}>
           <Button className={classes.button} onClick={uploadFile} size="large">
-            <Clipboard color="primary" />
+            <Clipboard />
             Copy
             {/* Needed to properly align icon to the right and label to center */}
             <Clipboard style={{ opacity: 0 }} />
@@ -155,7 +168,7 @@ const SharePage = (): ReactElement => {
   }
 
   return (
-    <Container className={`${classes.root} ${classes.rootWithBottomNav}`}>
+    <Container className={classes.root}>
       <div className={classes.fullWidth}>
         <Header
           rightAction={
@@ -168,19 +181,8 @@ const SharePage = (): ReactElement => {
         </Header>
         <div>Double-check before uploading. There is no undo.</div>
       </div>
-      <div>
-        <Paper>
-          {preview && (
-            <div className={classes.imageWrapper}>
-              <img src={preview} className={classes.image} />
-            </div>
-          )}
-          <ul>
-            <li>Filename: {file.name}</li>
-            <li>Size: {file.size} Bytes</li>
-            <li>Type: {file.type}</li>
-          </ul>
-        </Paper>
+      <div className={classes.fullWidth}>
+        <Preview file={file} preview={preview} />
       </div>
       <div className={classes.fullWidth}>
         <Footer>

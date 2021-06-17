@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button'
 import { ArrowLeft, ArrowDown } from 'react-feather'
 
 import Header from '../components/Header'
+import Preview from '../components/Preview'
 
 import { Context } from '../providers/bee'
 import { DOWNLOAD_HOST } from '../constants'
@@ -17,7 +18,7 @@ import * as ROUTES from '../Routes'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      padding: theme.spacing(2),
+      padding: 0,
       paddingTop: theme.spacing(10),
       display: 'flex',
       flexDirection: 'column',
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
     },
     fullWidth: {
+      padding: theme.spacing(2),
       width: '100%',
     },
     button: {
@@ -88,20 +90,7 @@ const SharePage = (): ReactElement => {
         <div>Use the button below to download this file.</div>
       </div>
       <div className={classes.fullWidth}>
-        <Paper square elevation={0}>
-          {preview && (
-            <div className={classes.imageWrapper}>
-              <img src={preview} className={classes.image} />
-            </div>
-          )}
-          {metadata && (
-            <ul>
-              <li>Filename: {metadata.name}</li>
-              <li>Size: {metadata.size} Bytes</li>
-              <li>Type: {metadata.type}</li>
-            </ul>
-          )}
-        </Paper>
+        <Preview file={metadata} preview={preview} />
       </div>
       <div className={classes.fullWidth}>
         <small style={{ opacity: hash ? 0 : 1 }}>
