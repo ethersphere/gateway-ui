@@ -97,7 +97,7 @@ export default function Upload({ setFile }: Props): ReactElement | null {
   }
 
   return (
-    <Container className={classes.root} onDragOver={onDragOver} onDrop={onDrop}>
+    <Container maxWidth="md" className={classes.root} onDragOver={onDragOver} onDrop={onDrop}>
       {isDragging && (
         <div onDragLeave={onDragLeave} className={classes.dragOverlay}>
           <Typography className={classes.dragOverlayChildren} variant="button">
@@ -127,7 +127,7 @@ export default function Upload({ setFile }: Props): ReactElement | null {
       <div className={classes.fullWidth}>
         <Button component="label" size="large" className={classes.button}>
           <Plus />
-          Upload File
+          Add file
           <input
             type="file"
             hidden

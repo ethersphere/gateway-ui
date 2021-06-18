@@ -1,19 +1,8 @@
-import { ReactElement, useState, useContext, useEffect } from 'react'
+import { ReactElement } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
-import IconButton from '@material-ui/core/IconButton'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import { useHistory, useParams } from 'react-router-dom'
-import Button from '@material-ui/core/Button'
-import { ArrowLeft, ArrowDown } from 'react-feather'
-
-import Header from '../components/Header'
-
-import { Context } from '../providers/bee'
-import { DOWNLOAD_HOST } from '../constants'
-
-import * as ROUTES from '../Routes'
+import { shortenBytes, mimeToKind } from '../utils'
 
 interface Props {
   file?: File | Metadata
@@ -46,7 +35,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Preview = ({ file, preview }: Props): ReactElement => {
   const classes = useStyles()
-  const history = useHistory()
 
   return (
     <Paper square elevation={0} className={classes.root}>
@@ -64,12 +52,12 @@ const Preview = ({ file, preview }: Props): ReactElement => {
           </li>
           <li>
             <Typography variant={'caption'}>
-              <span className={classes.name}>Size:</span> {file.size}
+              <span className={classes.name}>Size:</span> {shortenBytes(file.size)}
             </Typography>
           </li>
           <li>
             <Typography variant={'caption'}>
-              <span className={classes.name}>Type:</span> {file.type}
+              <span className={classes.name}>Type:</span> {mimeToKind(file.type)}
             </Typography>
           </li>
         </ul>

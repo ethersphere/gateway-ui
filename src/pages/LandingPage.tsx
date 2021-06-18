@@ -41,7 +41,7 @@ const LandingPage = (): ReactElement => {
   const history = useHistory()
 
   return (
-    <Container className={classes.root}>
+    <Container maxWidth="md" className={classes.root}>
       <Typography variant="subtitle1">The easiest way to share and access files on the Swarm network</Typography>
       <div className={classes.buttonContainer}>
         <Button className={classes.button} size="large" onClick={() => history.push(ROUTES.SHARE)}>
@@ -52,7 +52,7 @@ const LandingPage = (): ReactElement => {
         </Button>
         <Button className={classes.button} size="large" onClick={() => history.push(ROUTES.ACCESS)}>
           <ArrowDown />
-          Acccess
+          Access
           {/* Needed to properly align icon to the right and label to center */}
           <ArrowDown style={{ opacity: 0 }} />
         </Button>

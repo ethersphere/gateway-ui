@@ -33,7 +33,7 @@ export default function Header({ children }: Props): ReactElement {
   return (
     <div className={classes.root}>
       <div className={classes.float}>
-        <Container className={classes.wrapper}>
+        <Container maxWidth="md" className={classes.wrapper}>
           <>{children}</>
         </Container>
       </div>

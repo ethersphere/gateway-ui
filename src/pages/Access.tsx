@@ -43,7 +43,7 @@ export default function AccessPage(): ReactElement {
   const [hash, setHash] = useState<string>('')
 
   return (
-    <Container className={classes.root}>
+    <Container maxWidth="md" className={classes.root}>
       <div className={classes.fullWidth}>
         <Header
           leftAction={

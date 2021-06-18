@@ -20,7 +20,7 @@ const Page404 = (): ReactElement => {
   const classes = useStyles()
 
   return (
-    <Container className={classes.root}>
+    <Container maxWidth="md" className={classes.root}>
       <Typography>There is nothing to see here.</Typography>
     </Container>
   )

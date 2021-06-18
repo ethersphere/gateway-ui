@@ -16,6 +16,7 @@ import Tabs from '../components/Tabs'
 import Footer from '../components/Footer'
 import Upload from '../components/Upload'
 import Preview from '../components/Preview'
+import { readAndCompressImage } from 'browser-image-resizer'
 
 import * as ROUTES from '../Routes'
 import { Context } from '../providers/bee'
@@ -69,6 +70,7 @@ const SharePage = (): ReactElement => {
   const [uploadReference, setUploadReference] = useState('')
   const [isUploadingFile, setIsUploadingFile] = useState(false)
   const [preview, setPreview] = useState<string | undefined>(undefined)
+  const [previewBlob, setPreviewBlob] = useState<Blob | undefined>(undefined)
   const { upload } = useContext(Context)
   const { enqueueSnackbar } = useSnackbar()
 
@@ -76,7 +78,7 @@ const SharePage = (): ReactElement => {
     if (!file) return
 
     setIsUploadingFile(true)
-    upload(file)
+    upload(file, previewBlob)
       .then(hash => {
         setUploadReference(hash)
       })
@@ -87,20 +89,31 @@ const SharePage = (): ReactElement => {
   }
 
   useEffect(() => {
-    setPreview(undefined)
+    if (preview) {
+      URL.revokeObjectURL(preview) // Clear the preview from memory
+      setPreview(undefined)
+      setPreviewBlob(undefined)
+    }
 
     if (!file || !file.type.startsWith('image')) return
 
-    const reader = new FileReader()
-    reader.addEventListener('load', () => setPreview(reader.result?.toString()), false)
-    reader.readAsDataURL(file)
+    readAndCompressImage(file, { maxWidth: 896, maxHeight: 672, autoRotate: false }).then(blob => {
+      setPreview(URL.createObjectURL(blob)) // NOTE: Until it is cleared with URL.revokeObjectURL, the file stays allocated in memory
+      setPreviewBlob(blob)
+    })
+
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview)
+      }
+    }
   }, [file])
 
   if (!file) return <Upload setFile={setFile} />
 
   if (uploadReference) {
     return (
-      <Container className={classes.root}>
+      <Container maxWidth="md" className={classes.root}>
         <div className={classes.fullWidth}>
           <Header
             leftAction={
@@ -168,7 +181,7 @@ const SharePage = (): ReactElement => {
   }
 
   return (
-    <Container className={classes.root}>
+    <Container maxWidth="md" className={classes.root}>
       <div className={classes.fullWidth}>
         <Header
           rightAction={

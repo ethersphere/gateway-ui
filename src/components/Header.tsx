@@ -17,8 +17,10 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 0,
       left: 0,
       backgroundColor: theme.palette.background.default,
+      opacity: 0.75,
     },
     wrapper: {
+      opacity: 1,
       margin: theme.spacing(2),
       height: theme.spacing(6),
       display: 'flex',

@@ -2,7 +2,6 @@ import { ReactElement, useState, useContext, useEffect } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import IconButton from '@material-ui/core/IconButton'
-import Paper from '@material-ui/core/Paper'
 import { useHistory, useParams } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import { ArrowLeft, ArrowDown } from 'react-feather'
@@ -14,6 +13,7 @@ import { Context } from '../providers/bee'
 import { DOWNLOAD_HOST } from '../constants'
 
 import * as ROUTES from '../Routes'
+import Footer from '../components/Footer'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -62,7 +62,7 @@ const SharePage = (): ReactElement => {
   const history = useHistory()
 
   const { hash } = useParams<{ hash: string }>()
-  const { getMetadata } = useContext(Context)
+  const { getMetadata, getPreview } = useContext(Context)
   const [metadata, setMetadata] = useState<Metadata | undefined>()
   const [preview, setPreview] = useState<string | undefined>(undefined)
   const [error, setError] = useState<Error | null>(null)
@@ -71,8 +71,22 @@ const SharePage = (): ReactElement => {
     getMetadata(hash).then(setMetadata).catch(setError)
   }, [hash])
 
+  useEffect(() => {
+    if (metadata && metadata.type.startsWith('image')) {
+      getPreview(hash).then(dt => {
+        setPreview(URL.createObjectURL(new Blob([dt.data.buffer])))
+      })
+    }
+
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview)
+      }
+    }
+  }, [metadata, hash])
+
   return (
-    <Container className={classes.root}>
+    <Container maxWidth="md" className={classes.root}>
       <div className={classes.fullWidth}>
         <Header
           leftAction={
@@ -93,14 +107,13 @@ const SharePage = (): ReactElement => {
         <Preview file={metadata} preview={preview} />
       </div>
       <div className={classes.fullWidth}>
-        <small style={{ opacity: hash ? 0 : 1 }}>
-          Please note that we can’t guarantee availability or access to a specific file.
-        </small>
-        <Button className={classes.button} size="large" href={`${DOWNLOAD_HOST}/bzz/${hash}`} target="_blank">
-          <ArrowDown />
-          Download
-          <ArrowDown style={{ opacity: 0 }} />
-        </Button>
+        <Footer>
+          <Button className={classes.button} size="large" href={`${DOWNLOAD_HOST}/bzz/${hash}`} target="_blank">
+            <ArrowDown />
+            Download
+            <ArrowDown style={{ opacity: 0 }} />
+          </Button>
+        </Footer>
       </div>
     </Container>
   )
