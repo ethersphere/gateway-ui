@@ -19,10 +19,12 @@ const useStyles = makeStyles((theme: Theme) =>
       bottom: 0,
       left: 0,
       backgroundColor: theme.palette.background.default,
+      opacity: 0.75,
     },
     wrapper: {
       width: '100%',
       padding: theme.spacing(2),
+      opacity: 1,
     },
   }),
 )

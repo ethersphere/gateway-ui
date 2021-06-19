@@ -1,14 +1,12 @@
 import { createContext, ReactChild, ReactElement, useEffect, useState } from 'react'
 import { Bee, Data, FileData, Reference } from '@ethersphere/bee-js'
-import { UPLOAD_HOSTS, META_FILE_NAME, postageStamp, DOWNLOAD_HOST, PREVIEW_FILE_NAME } from '../constants'
+import { UPLOAD_HOSTS, META_FILE_NAME, POSTAGE_STAMP, DOWNLOAD_HOST, PREVIEW_FILE_NAME } from '../constants'
 
 const randomHost = UPLOAD_HOSTS[Math.floor(Math.random() * UPLOAD_HOSTS.length)]
 const bee = new Bee(randomHost)
 const beeGateway = new Bee(DOWNLOAD_HOST)
 
 interface ContextInterface {
-  stamp: Reference | undefined // FIXME: should not be exposed in final version
-  purchaseStamp: () => Promise<void> // FIXME: should not be exposed in final version
   isConnected: boolean
   upload: (file: File, preview?: Blob) => Promise<Reference>
   getMetadata: (hash: Reference | string) => Promise<Metadata | undefined>
@@ -16,9 +14,7 @@ interface ContextInterface {
 }
 
 const initialValues: ContextInterface = {
-  stamp: undefined,
   isConnected: false,
-  purchaseStamp: () => Promise.reject(),
   upload: () => Promise.reject(),
   getMetadata: () => Promise.reject(),
   getPreview: () => Promise.reject(),
@@ -32,12 +28,9 @@ interface Props {
 }
 
 export function Provider({ children }: Props): ReactElement {
-  const [stamp, setStamp] = useState<Reference | undefined>(postageStamp)
   const [isConnected, setIsConnected] = useState<boolean>(false)
 
   const upload = (file: File, preview?: Blob) => {
-    if (!stamp) return Promise.reject()
-
     const metadata = {
       name: file.name,
       type: file.type,
@@ -52,7 +45,7 @@ export function Provider({ children }: Props): ReactElement {
 
     if (preview) files.push(new File([preview], PREVIEW_FILE_NAME))
 
-    return bee.uploadFiles(stamp, files, { indexDocument: metadata.name, encrypt: true })
+    return bee.uploadFiles(POSTAGE_STAMP, files, { indexDocument: metadata.name, encrypt: true })
   }
 
   const getMetadata = async (hash: Reference | string): Promise<Metadata | undefined> => {
@@ -68,18 +61,9 @@ export function Provider({ children }: Props): ReactElement {
   const getPreview = (hash: Reference | string): Promise<FileData<Data>> =>
     beeGateway.downloadFile(hash, PREVIEW_FILE_NAME)
 
-  const purchaseStamp = async (amount = BigInt(10000), depth = 25) => {
-    const ps = await bee.createPostageBatch(amount, depth)
-    setStamp(ps)
-  }
-
   useEffect(() => {
     bee.isConnected().then(setIsConnected)
   }, [])
 
-  return (
-    <Context.Provider value={{ getMetadata, isConnected, stamp, upload, purchaseStamp, getPreview }}>
-      {children}
-    </Context.Provider>
-  )
+  return <Context.Provider value={{ getMetadata, isConnected, upload, getPreview }}>{children}</Context.Provider>
 }

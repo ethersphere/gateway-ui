@@ -3,7 +3,6 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import IconButton from '@material-ui/core/IconButton'
 import { useHistory } from 'react-router-dom'
-import { useSnackbar } from 'notistack'
 import Button from '@material-ui/core/Button'
 
 import { ArrowLeft, ArrowUp, X, Clipboard } from 'react-feather'
@@ -72,7 +71,6 @@ const SharePage = (): ReactElement => {
   const [preview, setPreview] = useState<string | undefined>(undefined)
   const [previewBlob, setPreviewBlob] = useState<Blob | undefined>(undefined)
   const { upload } = useContext(Context)
-  const { enqueueSnackbar } = useSnackbar()
 
   const uploadFile = () => {
     if (!file) return
@@ -82,7 +80,7 @@ const SharePage = (): ReactElement => {
       .then(hash => {
         setUploadReference(hash)
       })
-      .catch(e => enqueueSnackbar(`Error uploading: ${e?.message}`, { variant: 'error' }))
+      .catch(e => console.error) // eslint-disable-line
       .finally(() => {
         setIsUploadingFile(false)
       })
