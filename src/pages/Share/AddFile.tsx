@@ -1,15 +1,15 @@
 import { ReactElement, useState, DragEvent } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import { ArrowLeft, Plus } from 'react-feather'
 import { useHistory } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
 
-import Header from '../components/Header'
+import Header from '../../components/Header'
+import Layout from '../../components/Layout'
 
-import * as ROUTES from '../Routes'
+import * as ROUTES from '../../Routes'
 
 interface Props {
   setFile: (file: File | null) => void
@@ -17,19 +17,6 @@ interface Props {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      padding: theme.spacing(1),
-      paddingTop: theme.spacing(10),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      textAlign: 'center',
-      justifyContent: 'space-between',
-      minHeight: '100vh',
-    },
-    fullWidth: {
-      width: '100%',
-    },
     button: {
       width: '100%',
       display: 'flex',
@@ -97,50 +84,53 @@ export default function Upload({ setFile }: Props): ReactElement | null {
   }
 
   return (
-    <Container maxWidth="md" className={classes.root} onDragOver={onDragOver} onDrop={onDrop}>
-      {isDragging && (
-        <div onDragLeave={onDragLeave} className={classes.dragOverlay}>
-          <Typography className={classes.dragOverlayChildren} variant="button">
-            Drop it
-          </Typography>
-          <Typography className={classes.dragOverlayChildren}>
-            Add a file by dropping it anywhere on this window.
-          </Typography>
-        </div>
-      )}
-      <div className={classes.fullWidth}>
-        <Header
-          leftAction={
-            <IconButton
-              onClick={() => {
-                history.push(ROUTES.LANDING_PAGE)
+    <div onDragOver={onDragOver} onDrop={onDrop}>
+      <>
+        {isDragging && (
+          <div onDragLeave={onDragLeave} className={classes.dragOverlay}>
+            <Typography className={classes.dragOverlayChildren} variant="button">
+              Drop it
+            </Typography>
+            <Typography className={classes.dragOverlayChildren}>
+              Add a file by dropping it anywhere on this window.
+            </Typography>
+          </div>
+        )}
+      </>
+      <Layout
+        top={[
+          <Header
+            key="top1"
+            leftAction={
+              <IconButton
+                onClick={() => {
+                  history.push(ROUTES.LANDING_PAGE)
+                }}
+              >
+                <ArrowLeft />
+              </IconButton>
+            }
+          >
+            Share
+          </Header>,
+          <div key="top2">You can upload any single file. Some show preview.</div>,
+        ]}
+        center={[
+          <Button key="center1" component="label" size="large" className={classes.button}>
+            <Plus />
+            Add file
+            <input
+              type="file"
+              hidden
+              onChange={event => {
+                if (event.target?.files?.length === 1) setFile(event.target.files[0]) // eslint-disable-line
               }}
-            >
-              <ArrowLeft />
-            </IconButton>
-          }
-        >
-          Share
-        </Header>
-        <div>You can upload any single file. Some show preview.</div>
-      </div>
-      <div className={classes.fullWidth}>
-        <Button component="label" size="large" className={classes.button}>
-          <Plus />
-          Add file
-          <input
-            type="file"
-            hidden
-            onChange={event => {
-              if (event.target?.files?.length === 1) setFile(event.target.files[0]) // eslint-disable-line
-            }}
-          />
-          <Plus style={{ opacity: 0 }} />
-        </Button>
-      </div>
-      <div className={classes.fullWidth}>
-        <span>Maximum size for upload is 10MB.</span>
-      </div>
-    </Container>
+            />
+            <Plus style={{ opacity: 0 }} />
+          </Button>,
+        ]}
+        bottom={[<span key="bottom">Maximum size for upload is 10MB.</span>]}
+      />
+    </div>
   )
 }

@@ -11,6 +11,10 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      width: '100%',
+      height: theme.spacing(10),
+    },
+    float: {
       zIndex: 100,
       width: '100%',
       position: 'fixed',
@@ -42,10 +46,12 @@ export default function Header({ children, leftAction, rightAction }: Props): Re
 
   return (
     <div className={classes.root}>
-      <div className={classes.wrapper}>
-        <div className={classes.action}>{leftAction}</div>
-        <Typography variant="button">{children}</Typography>
-        <div className={classes.action}>{rightAction}</div>
+      <div className={classes.float}>
+        <div className={classes.wrapper}>
+          <div className={classes.action}>{leftAction}</div>
+          <Typography variant="button">{children}</Typography>
+          <div className={classes.action}>{rightAction}</div>
+        </div>
       </div>
     </div>
   )

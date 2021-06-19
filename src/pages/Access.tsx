@@ -1,6 +1,5 @@
 import { ReactElement, useState } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
+import { makeStyles, createStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import { useHistory } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
@@ -9,25 +8,12 @@ import TextField from '@material-ui/core/TextField'
 
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import Layout from '../components/Layout'
 
 import * as ROUTES from '../Routes'
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
-    root: {
-      padding: 0,
-      paddingTop: theme.spacing(10),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      textAlign: 'center',
-      justifyContent: 'space-between',
-      minHeight: '100vh',
-    },
-    fullWidth: {
-      padding: theme.spacing(2),
-      width: '100%',
-    },
     button: {
       width: '100%',
       display: 'flex',
@@ -43,9 +29,10 @@ export default function AccessPage(): ReactElement {
   const [hash, setHash] = useState<string>('')
 
   return (
-    <Container maxWidth="md" className={classes.root}>
-      <div className={classes.fullWidth}>
+    <Layout
+      top={[
         <Header
+          key="top1"
           leftAction={
             <IconButton
               onClick={() => {
@@ -57,11 +44,12 @@ export default function AccessPage(): ReactElement {
           }
         >
           Access
-        </Header>
-        <div>You can access files on the Swarm network by pasting a Swarm hash (or ‘bzzhash’) below.</div>
-      </div>
-      <div className={classes.fullWidth}>
+        </Header>,
+        <div key="top2">You can access files on the Swarm network by pasting a Swarm hash (or ‘bzzhash’) below.</div>,
+      ]}
+      center={[
         <TextField
+          key="center1"
           className={classes.button}
           placeholder="Paste Swarm Hash Here"
           variant="filled"
@@ -69,8 +57,9 @@ export default function AccessPage(): ReactElement {
           value={hash}
           multiline
           style={{ backgroundColor: 'white' }}
-        />
+        />,
         <Button
+          key="center2"
           className={classes.button}
           size="small"
           style={{ marginTop: 2, paddingLeft: 16, paddingRight: 16, opacity: hash ? 1 : 0 }}
@@ -79,22 +68,24 @@ export default function AccessPage(): ReactElement {
           <CornerUpLeft />
           back
           <CornerUpLeft style={{ opacity: 0 }} />
-        </Button>
-      </div>
-      <div className={classes.fullWidth}>
-        {hash && (
-          <Footer>
-            <Button className={classes.button} onClick={() => history.push(ROUTES.ACCESS_HASH(hash))} size="large">
-              <Search />
-              Find
-              <Search style={{ opacity: 0 }} />
-            </Button>
-          </Footer>
-        )}
-        <small style={{ opacity: hash ? 0 : 1 }}>
+        </Button>,
+      ]}
+      bottom={[
+        <div key="bottom1">
+          {hash && (
+            <Footer>
+              <Button className={classes.button} onClick={() => history.push(ROUTES.ACCESS_HASH(hash))} size="large">
+                <Search />
+                Find
+                <Search style={{ opacity: 0 }} />
+              </Button>
+            </Footer>
+          )}
+        </div>,
+        <small key="bottom2" style={{ opacity: hash ? 0 : 1 }}>
           Please note that we can’t guarantee availability or access to a specific file.
-        </small>
-      </div>
-    </Container>
+        </small>,
+      ]}
+    />
   )
 }
