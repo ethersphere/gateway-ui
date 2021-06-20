@@ -26,9 +26,9 @@ export default function UnknownFile() {
   return (
     <Paper square elevation={0} className={classes.root}>
       <AlertOctagon size={48} strokeWidth={0.5} />
-      <Typography variant="subtitle1">Not ile.</Typography>
+      <Typography variant="subtitle1">Found your file.</Typography>
       <Typography variant="body2">
-        However, due to the way it was uploaded, we can not provide you more information about it. You can still try and
+        However, due to the way it was uploaded, there is not too much information about it. You can still try and
         download.
       </Typography>
     </Paper>
