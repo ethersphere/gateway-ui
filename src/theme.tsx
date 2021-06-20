@@ -14,6 +14,10 @@ const componentsOverrides = (theme: Theme) => ({
         backgroundColor: theme.palette.primary.main,
         color: 'white',
       },
+      '&:active': {
+        backgroundColor: `${theme.palette.primary.main} !important`,
+        color: 'white',
+      },
     },
     textSizeLarge: {
       padding: theme.spacing(2),
@@ -56,6 +60,34 @@ const componentsOverrides = (theme: Theme) => ({
       backgroundColor: theme.palette.primary.main,
       paddingLeft: 4,
       paddingRight: 4,
+    },
+  },
+  MuiTooltip: {
+    tooltip: {
+      backgroundColor: '#242424',
+      padding: theme.spacing(2),
+      fontSize: theme.typography.body2.fontSize,
+      fontStyle: 'italic',
+      maxWidth: '100%',
+    },
+    arrow: {
+      color: '#242424',
+    },
+  },
+  MuiInputBase: {
+    root: {
+      padding: theme.spacing(2),
+      margin: 0,
+      '&:hover': { backgroundColor: theme.palette.primary.main, fontStyle: 'white' },
+    },
+    multiline: {
+      padding: theme.spacing(2),
+      margin: 0,
+      '&:hover': { color: 'white', backgroundColor: `${theme.palette.primary.main} !important`, fontStyle: 'white' },
+    },
+    focused: {
+      color: 'white',
+      backgroundColor: `${theme.palette.primary.main} !important`,
     },
   },
 })

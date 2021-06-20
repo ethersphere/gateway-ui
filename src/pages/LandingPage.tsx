@@ -12,6 +12,8 @@ import Layout from '../components/Layout'
 import Logo from '../components/Logo'
 import Header from '../components/Header'
 
+import text from '../translations'
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
@@ -40,27 +42,26 @@ const LandingPage = (): ReactElement => {
           <Logo />
         </Header>,
         <Typography key="top2" variant="subtitle1">
-          The easiest way to share & access files on the Swarm network.
+          {text.langingPage.tagline}
         </Typography>,
       ]}
       center={[
         <Button key="center1" className={classes.button} size="large" onClick={() => history.push(ROUTES.SHARE)}>
           <ArrowUp />
-          Share
+          {text.langingPage.shareAction}
           {/* Needed to properly align icon to the right and label to center */}
           <ArrowUp style={{ opacity: 0 }} />
         </Button>,
         <Button key="center2" className={classes.button} size="large" onClick={() => history.push(ROUTES.ACCESS)}>
           <ArrowDown />
-          Access
+          {text.langingPage.accessAction}
           {/* Needed to properly align icon to the right and label to center */}
           <ArrowDown style={{ opacity: 0 }} />
         </Button>,
       ]}
       bottom={[
         <Typography key="bottom1" variant="subtitle2">
-          The Swarm Gateway is operated by the Swarm Foundation. This service is under development and provided for
-          testing purposes only. For unlimited use of the Swarm network consider running your own node.
+          {text.langingPage.disclaimer}
         </Typography>,
         <Divider key="bottom2" variant="middle" />,
         <small key="bottom3" className={classes.spread}>

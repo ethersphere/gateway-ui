@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react'
+import { ReactElement, useState } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import { useHistory } from 'react-router-dom'
@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button'
 import { ArrowLeft, Clipboard } from 'react-feather'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
@@ -15,6 +16,8 @@ import Layout from '../../components/Layout'
 
 import * as ROUTES from '../../Routes'
 import { GATEWAY_URL } from '../../constants'
+
+import text from '../../translations'
 
 interface Props {
   uploadReference: string
@@ -34,6 +37,8 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
   const classes = useStyles()
   const history = useHistory()
 
+  const [activeValue, setActiveValue] = useState<string>(uploadReference)
+
   return (
     <Layout
       top={[
@@ -49,13 +54,14 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
             </IconButton>
           }
         >
-          Share
+          {text.shareHashPage.header}
         </Header>,
-        <small key="top2">Share with a Swarm hash (a.k.a. ‘bzzhash’) or a web link.</small>,
+        <small key="top2">{text.shareHashPage.tagline}</small>,
       ]}
       center={[
         <Tabs
           key="center2"
+          onChange={setActiveValue}
           values={[
             {
               label: 'Web link',
@@ -68,6 +74,7 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
                   <Typography variant="caption">{`${GATEWAY_URL}${ROUTES.ACCESS_HASH(uploadReference)}`}</Typography>
                 </Paper>
               ),
+              value: `${GATEWAY_URL}${ROUTES.ACCESS_HASH(uploadReference)}`,
             },
             {
               label: 'Swarm hash',
@@ -80,22 +87,22 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
                   <Typography variant="caption">{uploadReference}</Typography>
                 </Paper>
               ),
+              value: uploadReference,
             },
           ]}
         />,
-        <small key="center2">
-          Thundercats post-ironic messenger bag chartreuse, fam neutra cloud bread cray fingerstache microdosing mlkshk
-          iceland.
-        </small>,
       ]}
       bottom={[
-        <Footer key="bottom">
-          <Button className={classes.button} size="large">
-            <Clipboard />
-            Copy
-            {/* Needed to properly align icon to the right and label to center */}
-            <Clipboard style={{ opacity: 0 }} />
-          </Button>
+        <small key="bottom1">{text.shareHashPage.disclaimer}</small>,
+        <Footer key="bottom2">
+          <CopyToClipboard text={activeValue}>
+            <Button className={classes.button} size="large">
+              <Clipboard />
+              {text.shareHashPage.copyLinkAction}
+              {/* Needed to properly align icon to the right and label to center */}
+              <Clipboard style={{ opacity: 0 }} />
+            </Button>
+          </CopyToClipboard>
         </Footer>,
       ]}
     />

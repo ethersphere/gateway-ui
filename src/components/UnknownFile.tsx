@@ -1,7 +1,9 @@
+import type { ReactElement } from 'react'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { AlertOctagon } from 'react-feather'
+import text from '../translations'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,17 +22,14 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 )
 
-export default function UnknownFile() {
+export default function UnknownFile(): ReactElement {
   const classes = useStyles()
 
   return (
     <Paper square elevation={0} className={classes.root}>
       <AlertOctagon size={48} strokeWidth={0.5} />
-      <Typography variant="subtitle1">Found your file.</Typography>
-      <Typography variant="body2">
-        However, due to the way it was uploaded, there is not too much information about it. You can still try and
-        download.
-      </Typography>
+      <Typography variant="subtitle1">{text.unknownFile.header}</Typography>
+      <Typography variant="body2">{text.unknownFile.description}</Typography>
     </Paper>
   )
 }

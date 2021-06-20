@@ -1,7 +1,10 @@
+import type { ReactElement } from 'react'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { Loader } from 'react-feather'
+
+import text from '../translations'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,14 +23,14 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 )
 
-export default function LoadingFile() {
+export default function LoadingFile(): ReactElement {
   const classes = useStyles()
 
   return (
     <Paper square elevation={0} className={classes.root}>
       <Loader size={48} strokeWidth={0.5} />
-      <Typography variant="subtitle1">Loading...</Typography>
-      <Typography variant="body2">Retrieving the file data from the Swarm network, please wait.</Typography>
+      <Typography variant="subtitle1">{text.loadingFile.header}</Typography>
+      <Typography variant="body2">{text.loadingFile.description}</Typography>
     </Paper>
   )
 }

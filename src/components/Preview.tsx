@@ -4,6 +4,8 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import { shortenBytes, mimeToKind } from '../utils'
 
+import text from '../translations'
+
 interface Props {
   file?: File | Metadata
   preview?: string
@@ -47,17 +49,17 @@ const Preview = ({ file, preview }: Props): ReactElement => {
         <ul className={classes.list}>
           <li>
             <Typography variant={'caption'}>
-              <span className={classes.name}>Filename:</span> {file.name}
+              <span className={classes.name}>{text.previewDetails.fileName}:</span> {file.name}
             </Typography>
           </li>
           <li>
             <Typography variant={'caption'}>
-              <span className={classes.name}>Size:</span> {shortenBytes(file.size)}
+              <span className={classes.name}>{text.previewDetails.fileSize}:</span> {shortenBytes(file.size)}
             </Typography>
           </li>
           <li>
             <Typography variant={'caption'}>
-              <span className={classes.name}>Type:</span> {mimeToKind(file.type)}
+              <span className={classes.name}>{text.previewDetails.fileType}:</span> {mimeToKind(file.type)}
             </Typography>
           </li>
         </ul>

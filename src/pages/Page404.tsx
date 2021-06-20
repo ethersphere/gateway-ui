@@ -1,28 +1,76 @@
 import type { ReactElement } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import Container from '@material-ui/core/Container'
+import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button'
+import { ArrowLeft, AlertOctagon } from 'react-feather'
+import { useHistory } from 'react-router-dom'
+
+import Layout from '../components/Layout'
+import Logo from '../components/Logo'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
+
+import * as ROUTES from '../Routes'
+
+import text from '../translations'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      padding: theme.spacing(1),
+      width: '100%',
+      padding: theme.spacing(2),
+      paddingTop: theme.spacing(6),
+      paddingBottom: theme.spacing(6),
       display: 'flex',
       flexDirection: 'column',
+      rowGap: theme.spacing(2),
       alignItems: 'center',
+      textAlign: 'center',
       justifyContent: 'space-between',
-      height: '100vh',
+    },
+    button: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'space-between',
     },
   }),
 )
 
 const Page404 = (): ReactElement => {
   const classes = useStyles()
+  const history = useHistory()
 
   return (
-    <Container maxWidth="md" className={classes.root}>
-      <Typography>There is nothing to see here.</Typography>
-    </Container>
+    <Layout
+      top={[
+        <Header key="top1">
+          <Logo />
+        </Header>,
+      ]}
+      center={[
+        <Paper key="center" square elevation={0} className={classes.root}>
+          <AlertOctagon size={48} strokeWidth={0.5} />
+          <Typography variant="subtitle1">{text.page404.header}</Typography>
+          <Typography variant="body2">{text.page404.description}</Typography>
+        </Paper>,
+      ]}
+      bottom={[
+        <Footer key="bottom">
+          <Button
+            className={classes.button}
+            onClick={() => {
+              history.push(ROUTES.LANDING_PAGE)
+            }}
+            size="large"
+          >
+            <ArrowLeft />
+            {text.page404.goBackAction}
+            <ArrowLeft style={{ opacity: 0 }} />
+          </Button>
+        </Footer>,
+      ]}
+    />
   )
 }
 

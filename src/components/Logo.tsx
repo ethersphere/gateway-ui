@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react'
 import { Link } from 'react-router-dom'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 )
 
-export default function LogoComponent() {
+export default function LogoComponent(): ReactElement {
   const classes = useStyles()
 
   return (

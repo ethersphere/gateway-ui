@@ -10,6 +10,7 @@ import Header from '../../components/Header'
 import Layout from '../../components/Layout'
 
 import * as ROUTES from '../../Routes'
+import text from '../../translations'
 
 interface Props {
   setFile: (file: File | null) => void
@@ -89,11 +90,9 @@ export default function Upload({ setFile }: Props): ReactElement | null {
         {isDragging && (
           <div onDragLeave={onDragLeave} className={classes.dragOverlay}>
             <Typography className={classes.dragOverlayChildren} variant="button">
-              Drop it
+              {text.addFile.dragHeader}
             </Typography>
-            <Typography className={classes.dragOverlayChildren}>
-              Add a file by dropping it anywhere on this window.
-            </Typography>
+            <Typography className={classes.dragOverlayChildren}>{text.addFile.dragTagline}</Typography>
           </div>
         )}
       </>
@@ -111,16 +110,14 @@ export default function Upload({ setFile }: Props): ReactElement | null {
               </IconButton>
             }
           >
-            Share
+            {text.addFile.header}
           </Header>,
-          <div key="top2">
-            Use the button below, or drag and drop, to select a file you would like to share on the Swarm network.
-          </div>,
+          <div key="top2">{text.addFile.tagline}</div>,
         ]}
         center={[
           <Button key="center1" component="label" size="large" className={classes.button}>
             <Plus strokeWidth={1} />
-            Add a file
+            {text.addFile.addFileAction}
             <input
               type="file"
               hidden
@@ -131,7 +128,7 @@ export default function Upload({ setFile }: Props): ReactElement | null {
             <Plus style={{ opacity: 0 }} />
           </Button>,
         ]}
-        bottom={[<span key="bottom">Maximum file size is 10MB. You can upload only one file at a time.</span>]}
+        bottom={[<span key="bottom">{text.addFile.disclaimer}</span>]}
       />
     </div>
   )

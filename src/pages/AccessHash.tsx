@@ -1,6 +1,5 @@
 import { ReactElement, useState, useContext, useEffect } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
-import IconButton from '@material-ui/core/IconButton'
 import { useParams } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import { RefreshCw, ArrowDown } from 'react-feather'

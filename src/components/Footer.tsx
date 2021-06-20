@@ -10,7 +10,10 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      height: theme.spacing(7),
+      height: theme.spacing(11),
+      [theme.breakpoints.down('sm')]: {
+        height: theme.spacing(7),
+      },
     },
     float: {
       zIndex: 100,
@@ -33,17 +36,21 @@ const useStyles = makeStyles((theme: Theme) =>
     content: {
       width: '100%',
       padding: theme.spacing(2),
+      paddingBottom: theme.spacing(6),
+      [theme.breakpoints.down('sm')]: {
+        paddingBottom: theme.spacing(2),
+      },
     },
   }),
 )
 
-export default function Header({ children }: Props): ReactElement {
+export default function Footer({ children }: Props): ReactElement {
   const classes = useStyles()
 
   return (
     <div className={classes.root}>
       <div className={classes.float}>
-        <Container maxWidth="md" className={classes.content}>
+        <Container maxWidth="sm" className={classes.content}>
           <>{children}</>
         </Container>
       </div>

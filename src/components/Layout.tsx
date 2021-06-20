@@ -12,6 +12,11 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
       justifyContent: 'space-between',
       minHeight: '100vh',
+
+      /* mobile viewport bug fix */
+      ['@supports (-webkit-fill-available)']: {
+        minHeight: '-webkit-fill-available',
+      },
     },
     section: {
       width: '100%',
@@ -33,7 +38,7 @@ export default function Layout({ top, center, bottom }: Props): ReactElement {
   const classes = useStyles()
 
   return (
-    <Container maxWidth="md" className={classes.root}>
+    <Container maxWidth="sm" className={classes.root}>
       <div className={classes.section}>
         {top.map((el, i) => (
           <div key={i} className={classes.margin}>

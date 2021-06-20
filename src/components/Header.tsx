@@ -12,9 +12,12 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      height: theme.spacing(6), // FIXME: The component is actually 4 theme spacing bigger (so spacing(10) ), but the Layout component adds 2x2 theme spacings and this was simplest way to do it
+      height: theme.spacing(10),
       margin: 0,
       padding: 0,
+      [theme.breakpoints.down('sm')]: {
+        height: theme.spacing(6), // FIXME: The component is actually 4 theme spacing bigger (so spacing(10) ), but the Layout component adds 2x2 theme spacings and this was simplest way to do it
+      },
     },
     float: {
       zIndex: 100,
@@ -24,6 +27,9 @@ const useStyles = makeStyles((theme: Theme) =>
       left: 0,
       margin: 0,
       padding: theme.spacing(2),
+      paddingTop: theme.spacing(6),
+      paddingLeft: theme.spacing(6),
+      paddingRight: theme.spacing(6),
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -37,6 +43,11 @@ const useStyles = makeStyles((theme: Theme) =>
         top: 0,
         left: 0,
         zIndex: -1,
+      },
+      [theme.breakpoints.down('sm')]: {
+        paddingTop: theme.spacing(2),
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
       },
     },
     action: {
