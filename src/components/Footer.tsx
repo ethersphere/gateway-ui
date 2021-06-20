@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      height: theme.spacing(10),
+      height: theme.spacing(7),
     },
     float: {
       zIndex: 100,
@@ -18,13 +18,21 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'fixed',
       bottom: 0,
       left: 0,
-      backgroundColor: theme.palette.background.default,
-      opacity: 0.75,
+      '&::after': {
+        content: '""',
+        width: '100%',
+        height: '100%',
+        opacity: 0.75,
+        position: 'absolute',
+        backgroundColor: theme.palette.background.default,
+        top: 0,
+        left: 0,
+        zIndex: -1,
+      },
     },
-    wrapper: {
+    content: {
       width: '100%',
       padding: theme.spacing(2),
-      opacity: 1,
     },
   }),
 )
@@ -35,7 +43,7 @@ export default function Header({ children }: Props): ReactElement {
   return (
     <div className={classes.root}>
       <div className={classes.float}>
-        <Container maxWidth="md" className={classes.wrapper}>
+        <Container maxWidth="md" className={classes.content}>
           <>{children}</>
         </Container>
       </div>

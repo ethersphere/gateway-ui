@@ -107,18 +107,20 @@ export default function Upload({ setFile }: Props): ReactElement | null {
                   history.push(ROUTES.LANDING_PAGE)
                 }}
               >
-                <ArrowLeft />
+                <ArrowLeft strokeWidth={1} />
               </IconButton>
             }
           >
             Share
           </Header>,
-          <div key="top2">You can upload any single file. Some show preview.</div>,
+          <div key="top2">
+            Use the button below, or drag and drop, to select a file you would like to share on the Swarm network.
+          </div>,
         ]}
         center={[
           <Button key="center1" component="label" size="large" className={classes.button}>
-            <Plus />
-            Add file
+            <Plus strokeWidth={1} />
+            Add a file
             <input
               type="file"
               hidden
@@ -129,7 +131,7 @@ export default function Upload({ setFile }: Props): ReactElement | null {
             <Plus style={{ opacity: 0 }} />
           </Button>,
         ]}
-        bottom={[<span key="bottom">Maximum size for upload is 10MB.</span>]}
+        bottom={[<span key="bottom">Maximum file size is 10MB. You can upload only one file at a time.</span>]}
       />
     </div>
   )

@@ -22,18 +22,22 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'fixed',
       top: 0,
       left: 0,
-      backgroundColor: theme.palette.background.default,
-      opacity: 0.75,
       margin: 0,
-      padding: 0,
-    },
-    wrapper: {
-      opacity: 1,
-      margin: theme.spacing(2),
-      height: theme.spacing(6),
+      padding: theme.spacing(2),
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
+      '&::after': {
+        content: '""',
+        width: '100%',
+        height: '100%',
+        opacity: 0.75,
+        position: 'absolute',
+        backgroundColor: theme.palette.background.default,
+        top: 0,
+        left: 0,
+        zIndex: -1,
+      },
     },
     action: {
       width: theme.spacing(6),
@@ -51,11 +55,9 @@ export default function Header({ children, leftAction, rightAction }: Props): Re
   return (
     <div className={classes.root}>
       <div className={classes.float}>
-        <div className={classes.wrapper}>
-          <div className={classes.action}>{leftAction}</div>
-          <Typography variant="button">{children}</Typography>
-          <div className={classes.action}>{rightAction}</div>
-        </div>
+        <div className={classes.action}>{leftAction}</div>
+        <Typography variant="button">{children}</Typography>
+        <div className={classes.action}>{rightAction}</div>
       </div>
     </div>
   )

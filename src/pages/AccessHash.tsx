@@ -1,19 +1,21 @@
 import { ReactElement, useState, useContext, useEffect } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
-import { ArrowLeft, ArrowDown } from 'react-feather'
+import { RefreshCw, ArrowDown } from 'react-feather'
 import { Utils } from '@ethersphere/bee-js'
 
 import Header from '../components/Header'
 import Preview from '../components/Preview'
 import Layout from '../components/Layout'
+import FileNotFound from '../components/FileNotFound'
+import UnknownFile from '../components/UnknownFile'
+import LoadingFile from '../components/LoadingFile'
 
 import { Context } from '../providers/bee'
 import { DOWNLOAD_HOST } from '../constants'
 
-import * as ROUTES from '../Routes'
 import Footer from '../components/Footer'
 import Logo from '../components/Logo'
 
@@ -29,13 +31,12 @@ const useStyles = makeStyles(() =>
 
 const SharePage = (): ReactElement => {
   const classes = useStyles()
-  const history = useHistory()
 
   const { hash } = useParams<{ hash: string }>()
   const { getMetadata, getPreview, getChunk } = useContext(Context)
   const [metadata, setMetadata] = useState<Metadata | undefined>()
   const [preview, setPreview] = useState<string | undefined>(undefined)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [chunkExists, setChunkExists] = useState<boolean>(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
@@ -55,18 +56,20 @@ const SharePage = (): ReactElement => {
       })
       .catch(() => {
         // There are no metadata, but maybe there is a retrievable file
-        setChunkExists(false)
         getChunk(hash)
           .then(() => setChunkExists(true))
+          .catch(() => setChunkExists(false))
           .finally(() => setIsLoading(false))
       })
   }, [hash])
 
   useEffect(() => {
     if (metadata && metadata.type.startsWith('image')) {
-      getPreview(hash).then(dt => {
-        setPreview(URL.createObjectURL(new Blob([dt.data.buffer])))
-      })
+      getPreview(hash)
+        .then(dt => {
+          setPreview(URL.createObjectURL(new Blob([dt.data.buffer])))
+        })
+        .catch() // We don't care preview does not exist
     }
 
     return () => {
@@ -84,7 +87,11 @@ const SharePage = (): ReactElement => {
             <Logo />
           </Header>,
         ]}
-        center={[<div key="middle1">Loading information about the file....</div>]}
+        center={[
+          <div key="middle1">
+            <LoadingFile />
+          </div>,
+        ]}
         bottom={[<div key="bottom1" />]}
       />
     )
@@ -124,7 +131,7 @@ const SharePage = (): ReactElement => {
           </Header>,
           <div key="top2">Use the button below to download this file.</div>,
         ]}
-        center={[<Preview key="center1" file={metadata} preview={preview} />]}
+        center={[<UnknownFile key="center1" />]}
         bottom={[
           <Footer key="bottom1">
             <Button className={classes.button} size="large" href={`${DOWNLOAD_HOST}/bzz/${hash}`} target="_blank">
@@ -169,15 +176,15 @@ const SharePage = (): ReactElement => {
         <Header key="top1">
           <Logo />
         </Header>,
-        <div key="top2">Use the button below to download this file.</div>,
+        <div key="top2">The easiest way to share & access files on the Swarm network.</div>,
       ]}
-      center={[<Preview key="center1" file={metadata} preview={preview} />]}
+      center={[<FileNotFound key="center" />]}
       bottom={[
         <Footer key="bottom1">
-          <Button className={classes.button} size="large" href={`${DOWNLOAD_HOST}/bzz/${hash}`} target="_blank">
-            <ArrowDown />
-            Download
-            <ArrowDown style={{ opacity: 0 }} />
+          <Button className={classes.button} size="large" onClick={() => window.location.reload()}>
+            <RefreshCw />
+            Retry
+            <RefreshCw style={{ opacity: 0 }} />
           </Button>
         </Footer>,
       ]}

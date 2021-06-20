@@ -10,9 +10,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   tabs: {
     marginBottom: theme.spacing(4),
   },
-  content: {
-    padding: theme.spacing,
-  },
 }))
 
 interface TabsValues {
@@ -28,7 +25,7 @@ export default function SimpleTabs({ values }: Props): ReactElement {
   const classes = useStyles()
   const [value, setValue] = React.useState<number>(0)
 
-  const handleChange = (event: React.ChangeEvent<Record<string, never>>, newValue: number) => {
+  const handleChange = (_event: React.ChangeEvent<Record<string, never>>, newValue: number) => {
     setValue(newValue)
   }
 
