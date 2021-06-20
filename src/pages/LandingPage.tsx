@@ -9,6 +9,8 @@ import { useHistory } from 'react-router-dom'
 import * as ROUTES from '../Routes'
 
 import Layout from '../components/Layout'
+import Logo from '../components/Logo'
+import Header from '../components/Header'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,6 +36,9 @@ const LandingPage = (): ReactElement => {
   return (
     <Layout
       top={[
+        <Header key="top1">
+          <Logo />
+        </Header>,
         <Typography key="top2" variant="subtitle1">
           The easiest way to share & access files on the Swarm network.
         </Typography>,

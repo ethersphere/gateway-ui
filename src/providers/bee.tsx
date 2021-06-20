@@ -11,6 +11,7 @@ interface ContextInterface {
   upload: (file: File, preview?: Blob) => Promise<Reference>
   getMetadata: (hash: Reference | string) => Promise<Metadata | undefined>
   getPreview: (hash: Reference | string) => Promise<FileData<Data>>
+  getChunk: (hash: Reference | string) => Promise<Data>
 }
 
 const initialValues: ContextInterface = {
@@ -18,6 +19,7 @@ const initialValues: ContextInterface = {
   upload: () => Promise.reject(),
   getMetadata: () => Promise.reject(),
   getPreview: () => Promise.reject(),
+  getChunk: () => Promise.reject(),
 }
 
 export const Context = createContext<ContextInterface>(initialValues)
@@ -61,9 +63,13 @@ export function Provider({ children }: Props): ReactElement {
   const getPreview = (hash: Reference | string): Promise<FileData<Data>> =>
     beeGateway.downloadFile(hash, PREVIEW_FILE_NAME)
 
+  const getChunk = (hash: Reference | string): Promise<Data> => beeGateway.downloadData(hash)
+
   useEffect(() => {
     bee.isConnected().then(setIsConnected)
   }, [])
 
-  return <Context.Provider value={{ getMetadata, isConnected, upload, getPreview }}>{children}</Context.Provider>
+  return (
+    <Context.Provider value={{ getMetadata, isConnected, upload, getPreview, getChunk }}>{children}</Context.Provider>
+  )
 }

@@ -1,5 +1,5 @@
 import { ReactElement, useState } from 'react'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import { useHistory } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
@@ -12,12 +12,15 @@ import Layout from '../components/Layout'
 
 import * as ROUTES from '../Routes'
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
       width: '100%',
       display: 'flex',
       justifyContent: 'space-between',
+    },
+    footerReservedSpace: {
+      height: theme.spacing(10), // Filler space so that the layout of the page does not change as users write text
     },
   }),
 )
@@ -71,7 +74,7 @@ export default function AccessPage(): ReactElement {
         </Button>,
       ]}
       bottom={[
-        <div key="bottom1">
+        <div key="bottom1" className={classes.footerReservedSpace}>
           {hash && (
             <Footer>
               <Button className={classes.button} onClick={() => history.push(ROUTES.ACCESS_HASH(hash))} size="large">

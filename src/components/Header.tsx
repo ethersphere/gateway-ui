@@ -12,7 +12,9 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      height: theme.spacing(10),
+      height: theme.spacing(6), // FIXME: The component is actually 4 theme spacing bigger (so spacing(10) ), but the Layout component adds 2x2 theme spacings and this was simplest way to do it
+      margin: 0,
+      padding: 0,
     },
     float: {
       zIndex: 100,
@@ -22,6 +24,8 @@ const useStyles = makeStyles((theme: Theme) =>
       left: 0,
       backgroundColor: theme.palette.background.default,
       opacity: 0.75,
+      margin: 0,
+      padding: 0,
     },
     wrapper: {
       opacity: 1,
