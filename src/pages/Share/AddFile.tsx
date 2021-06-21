@@ -44,10 +44,16 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 )
 
-export default function Upload({ setFile }: Props): ReactElement | null {
+export default function Upload({ setFile }: Props): ReactElement {
   const classes = useStyles()
   const history = useHistory()
   const [isDragging, setIsDragging] = useState<boolean>(false)
+  const [agreedToTerms, setAgreedToTerms] = useState(Boolean(window.localStorage.getItem('agreedToTerms')))
+
+  const handleAgree = () => {
+    setAgreedToTerms(true)
+    window.localStorage.setItem('agreedToTerms', Date.now().toString())
+  }
 
   const onDragOver = (ev: DragEvent<HTMLDivElement>) => {
     setIsDragging(true)
@@ -85,63 +91,62 @@ export default function Upload({ setFile }: Props): ReactElement | null {
     ev.preventDefault()
   }
 
+  if (!agreedToTerms) return <TermsAndConditionsPopup handleAgree={handleAgree} />
+
   return (
-    <div>
-      <TermsAndConditionsPopup />
-      <div onDragOver={onDragOver} onDrop={onDrop}>
-        <>
-          {isDragging && (
-            <div onDragLeave={onDragLeave} className={classes.dragOverlay}>
-              <Typography className={classes.dragOverlayChildren} variant="button">
-                {text.addFile.dragHeader}
-              </Typography>
-              <Typography variant="body1" className={classes.dragOverlayChildren}>
-                {text.addFile.dragTagline}
-              </Typography>
-            </div>
-          )}
-        </>
-        <Layout
-          top={[
-            <Header
-              key="top1"
-              leftAction={
-                <IconButton
-                  onClick={() => {
-                    history.push(ROUTES.LANDING_PAGE)
-                  }}
-                >
-                  <ArrowLeft strokeWidth={1} />
-                </IconButton>
-              }
-            >
-              {text.addFile.header}
-            </Header>,
-            <Typography key="top2" variant="body1">
-              {text.addFile.tagline}
-            </Typography>,
-          ]}
-          center={[
-            <Button key="center1" component="label" size="large" className={classes.button}>
-              <Plus strokeWidth={1} />
-              {text.addFile.addFileAction}
-              <input
-                type="file"
-                hidden
-                onChange={event => {
-                  if (event.target?.files?.length === 1) setFile(event.target.files[0]) // eslint-disable-line
+    <div onDragOver={onDragOver} onDrop={onDrop}>
+      <>
+        {isDragging && (
+          <div onDragLeave={onDragLeave} className={classes.dragOverlay}>
+            <Typography className={classes.dragOverlayChildren} variant="button">
+              {text.addFile.dragHeader}
+            </Typography>
+            <Typography variant="body1" className={classes.dragOverlayChildren}>
+              {text.addFile.dragTagline}
+            </Typography>
+          </div>
+        )}
+      </>
+      <Layout
+        top={[
+          <Header
+            key="top1"
+            leftAction={
+              <IconButton
+                onClick={() => {
+                  history.push(ROUTES.LANDING_PAGE)
                 }}
-              />
-              <Plus style={{ opacity: 0 }} />
-            </Button>,
-          ]}
-          bottom={[
-            <Typography key="bottom" variant="body2">
-              {text.addFile.disclaimer}
-            </Typography>,
-          ]}
-        />
-      </div>
+              >
+                <ArrowLeft strokeWidth={1} />
+              </IconButton>
+            }
+          >
+            {text.addFile.header}
+          </Header>,
+          <Typography key="top2" variant="body1">
+            {text.addFile.tagline}
+          </Typography>,
+        ]}
+        center={[
+          <Button key="center1" component="label" size="large" className={classes.button}>
+            <Plus strokeWidth={1} />
+            {text.addFile.addFileAction}
+            <input
+              type="file"
+              hidden
+              onChange={event => {
+                if (event.target?.files?.length === 1) setFile(event.target.files[0]) // eslint-disable-line
+              }}
+            />
+            <Plus style={{ opacity: 0 }} />
+          </Button>,
+        ]}
+        bottom={[
+          <Typography key="bottom" variant="body2">
+            {text.addFile.disclaimer}
+          </Typography>,
+        ]}
+      />
     </div>
   )
 }

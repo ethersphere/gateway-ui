@@ -6,7 +6,6 @@ import Button from '@material-ui/core/Button'
 import { ArrowLeft, Clipboard, Check } from 'react-feather'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import Tooltip from '@material-ui/core/Tooltip'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import Header from '../../components/Header'
