@@ -142,7 +142,7 @@ export default function Upload({ setFile }: Props): ReactElement {
           </Button>,
         ]}
         bottom={[
-          <Typography key="bottom" variant="body2">
+          <Typography key="bottom" variant="body1">
             {text.addFile.disclaimer}
           </Typography>,
         ]}

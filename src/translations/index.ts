@@ -7,7 +7,7 @@ export default {
     shareAction: 'share',
     accessAction: 'access',
     disclaimer:
-      'The Swarm Gateway is operated by the Swarm Foundation. This service is under development and provided for testing purposes only. For unlimited use of the Swarm network consider running your own node.',
+      'The Swarm Gateway is graciously provided by the Swarm Foundation. This service is under development and provided for testing purposes only. For unlimited use of the Swarm network consider running your own node.',
     links: [
       { label: 'Swarm Website', link: 'https://www.ethswarm.org/' },
       { label: 'FAQ', link: 'https://www.ethswarm.org/faqs.html' },
@@ -31,11 +31,12 @@ export default {
 
   uploadFile: {
     header: 'file',
-    disclaimer: 'Please double-check before uploading, there is no undo. By uploading you agree to the Swarm Gateway',
+    tagline: 'Please double-check before uploading, there is no undo.',
+    disclaimer: 'By uploading you agree to the Swarm Gateway',
     termsAndCondition: 'Terms & Conditions',
     uploadAction: 'upload',
     uploadingText: 'uploading...',
-    uploadError: 'Failed to upload file. Please try again later.',
+    uploadError: 'Failed to upload the file. Please try again later.',
   },
 
   shareHashPage: {
