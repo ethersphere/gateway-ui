@@ -9,9 +9,6 @@ export const POSTAGE_STAMP =
 export const META_FILE_NAME = '.swarmgatewaymeta.json'
 export const PREVIEW_FILE_NAME = '.swarmgatewaypreview.jpeg'
 
-const pathArray = window.location.href.split('/')
-const protocol = pathArray[0]
-const host = pathArray[2]
-const url = `${protocol}//${host}`
+const url = window.location.origin
 
 export const GATEWAY_URL = process.env.REACT_APP_GATEWAY_URL || url

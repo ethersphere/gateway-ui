@@ -32,8 +32,10 @@ The Gateway runs in development mode on [http://localhost:3030/](http://localhos
 :warn: Don't forget to provide postage stamp via environment variable or edit directly the `postageStamp` constant in [`.src/constants.ts`](./src/constants.ts)..
 
 ### Environment variables
-- `REACT_APP_BEE_API` - Bee API URL (defaults to `http://localhost:1633`)
-- `REACT_APP_POSTAGE_STAMP` - Postage stamp batch ID to be used for uploading
+- `REACT_APP_BEE_DOWNLOAD_API` - Bee API URL from which the gateway downloads (defaults to `http://localhost:1633`)
+- `REACT_APP_BEE_UPLOAD_APIS` - comma separated bee API URLs through which the gateway uploads. The api to upload is selected at random (defaults to `[http://localhost:1633]`)
+- `REACT_APP_POSTAGE_STAMP` - Postage stamp batch ID to be used for uploading (defaults to `00000...00000`
+- `REACT_APP_GATEWAY_URL` - URL on which the gateway is hosted (defaults to current window location)
 
 ## Contribute
 
