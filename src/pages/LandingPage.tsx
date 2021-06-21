@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
       columnGap: theme.spacing(2),
       flexWrap: 'wrap',
-      textDecoration: 'underline',
     },
   }),
 )
@@ -68,16 +67,16 @@ const LandingPage = (): ReactElement => {
           <Link href="#" color="inherit">
             Swarm Website
           </Link>
-          <Link href="#" color="inherit">
+          <Link href="#" color="inherit" underline="always">
             FAQ
           </Link>
-          <Link href="#" color="inherit">
+          <Link href="#" color="inherit" underline="always">
             Discord
           </Link>
-          <Link href="#" color="inherit">
+          <Link href="#" color="inherit" underline="always">
             Github
           </Link>
-          <Link href="#" color="inherit">
+          <Link href="#" color="inherit" underline="always">
             Terms & Conditions
           </Link>
         </small>,

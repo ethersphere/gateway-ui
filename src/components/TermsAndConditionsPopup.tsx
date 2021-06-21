@@ -1,9 +1,8 @@
 import { ReactElement, useState } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
-import Divider from '@material-ui/core/Divider'
 import IconButton from '@material-ui/core/IconButton'
-import { X, ArrowUp, Check, CornerUpLeft } from 'react-feather'
+import { X, Check, CornerUpLeft } from 'react-feather'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Link from '@material-ui/core/Link'
@@ -11,7 +10,6 @@ import { useHistory } from 'react-router-dom'
 import * as ROUTES from '../Routes'
 
 import Layout from './Layout'
-import Logo from './Logo'
 import Header from './Header'
 import Footer from './Footer'
 
@@ -46,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
     li: {
       textAlign: 'left',
       paddingLeft: '1.3rem',
-      textIndent: '-1.2rem',
+      textIndent: '-1.25rem',
       '&::before': {
         content: '"🐝"',
       },
@@ -87,7 +85,9 @@ export default function TermsAndConditionsPopup(): ReactElement | null {
           </Header>,
           <Typography key="top2" variant="subtitle1">
             {text.termsAndConditions.tagline1}{' '}
-            <Link href={ROUTES.TERMS_AND_CONDITIONS}>{text.termsAndConditions.termsAndConditions}</Link>{' '}
+            <Link href={ROUTES.TERMS_AND_CONDITIONS} color="inherit" underline="always">
+              {text.termsAndConditions.termsAndConditions}
+            </Link>{' '}
             {text.termsAndConditions.tagline2}
           </Typography>,
         ]}
@@ -97,15 +97,17 @@ export default function TermsAndConditionsPopup(): ReactElement | null {
               <Typography variant="subtitle1">{text.termsAndConditions.featuresAndLimitationsHeader}</Typography>
               <div className={classes.ul}>
                 {text.termsAndConditions.featuresAndLimitations.map(t => (
-                  <Typography key={t} className={classes.li} variant="body2">
+                  <Typography key={t} className={classes.li} variant="body1">
                     {t}
                   </Typography>
                 ))}
               </div>
-              <small>
+              <Typography variant="body2">
                 {text.termsAndConditions.disclaimer1}{' '}
-                <Link href={ROUTES.TERMS_AND_CONDITIONS}>{text.termsAndConditions.disclaimer2}</Link>
-              </small>
+                <Link href={ROUTES.TERMS_AND_CONDITIONS} color="inherit" underline="always">
+                  {text.termsAndConditions.disclaimer2}
+                </Link>
+              </Typography>
             </Paper>
             <Button
               className={classes.button}

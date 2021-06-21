@@ -42,6 +42,7 @@ const componentsOverrides = (theme: Theme) => ({
       borderLeft: `4px solid ${theme.palette.background.default}`,
       borderRight: `4px solid ${theme.palette.background.default}`,
       opacity: 1,
+      color: `${theme.palette.text.primary} !important`,
       '&:hover': {},
       '&$selected': {
         fontWeight: theme.typography.fontWeightMedium,
@@ -112,6 +113,10 @@ export const theme = createMuiTheme({
     secondary: {
       main: '#242424',
     },
+    text: {
+      primary: '#242424',
+      secondary: '#999999',
+    },
   },
   typography: {
     button: {
@@ -119,6 +124,7 @@ export const theme = createMuiTheme({
       fontWeight: 500,
       fontStretch: 'normal',
       fontStyle: 'normal',
+      color: '#242424',
     },
     caption: {
       fontFamily: '"IBM Plex Mono", monospace',
@@ -126,6 +132,15 @@ export const theme = createMuiTheme({
       fontSize: '1rem',
       fontStretch: 'normal',
       fontStyle: 'normal',
+    },
+    body1: {
+      color: '#242424',
+    },
+    body2: {
+      color: '#999999',
+    },
+    subtitle1: {
+      color: '#242424',
     },
     fontFamily: ['Work Sans', 'Montserrat', 'Nunito', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'].join(','),
   },

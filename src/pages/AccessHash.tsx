@@ -2,6 +2,7 @@ import { ReactElement, useState, useContext, useEffect } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import { useParams } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
 import { RefreshCw, ArrowDown } from 'react-feather'
 import { Utils } from '@ethersphere/bee-js'
 
@@ -107,7 +108,9 @@ const SharePage = (): ReactElement => {
           <Header key="top1">
             <Logo />
           </Header>,
-          <div key="top2">{text.accessHashPage.useButtonToDownload}</div>,
+          <Typography key="top2" variant="subtitle1">
+            {text.accessHashPage.useButtonToDownload}
+          </Typography>,
         ]}
         center={[<Preview key="center1" file={metadata} preview={preview} />]}
         bottom={[
@@ -131,7 +134,9 @@ const SharePage = (): ReactElement => {
           <Header key="top1">
             <Logo />
           </Header>,
-          <div key="top2">{text.accessHashPage.useButtonToDownload}</div>,
+          <Typography key="top2" variant="subtitle1">
+            {text.accessHashPage.useButtonToDownload}
+          </Typography>,
         ]}
         center={[<UnknownFile key="center1" />]}
         bottom={[
@@ -169,7 +174,9 @@ const SharePage = (): ReactElement => {
         <Header key="top1">
           <Logo />
         </Header>,
-        <div key="top2">{text.accessHashPage.tagline}</div>,
+        <Typography key="top2" variant="subtitle1">
+          {text.accessHashPage.tagline}
+        </Typography>,
       ]}
       center={[<FileNotFound key="center" />]}
       bottom={[

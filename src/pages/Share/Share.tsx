@@ -55,7 +55,9 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
         >
           {text.shareHashPage.header}
         </Header>,
-        <small key="top2">{text.shareHashPage.tagline}</small>,
+        <Typography key="top2" variant="subtitle1">
+          {text.shareHashPage.tagline}
+        </Typography>,
       ]}
       center={[
         <Tabs
@@ -92,7 +94,9 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
         />,
       ]}
       bottom={[
-        <small key="bottom1">{text.shareHashPage.disclaimer}</small>,
+        <Typography key="bottom1" variant="body2">
+          {text.shareHashPage.disclaimer}
+        </Typography>,
         <Footer key="bottom2">
           <CopyToClipboard text={activeValue}>
             <Button className={classes.button} size="large">

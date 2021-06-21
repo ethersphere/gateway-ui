@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button'
 import { ArrowLeft, CornerUpLeft, Search } from 'react-feather'
 import Tooltip from '@material-ui/core/Tooltip'
 import InputBase from '@material-ui/core/InputBase'
+import Typography from '@material-ui/core/Typography'
 import { Utils } from '@ethersphere/bee-js'
 
 import Header from '../components/Header'
@@ -58,7 +59,9 @@ export default function AccessPage(): ReactElement {
         >
           {text.accessPage.header}
         </Header>,
-        <div key="top2">{text.accessPage.tagline}</div>,
+        <Typography key="top2" variant="subtitle1">
+          {text.accessPage.tagline}
+        </Typography>,
       ]}
       center={[
         <div key="center1">
@@ -110,9 +113,9 @@ export default function AccessPage(): ReactElement {
             )}
           </div>
         </Footer>,
-        <small key="bottom2" style={{ opacity: hash ? 0 : 1 }}>
+        <Typography key="bottom2" variant="body2" style={{ opacity: hash ? 0 : 1 }}>
           {text.accessPage.disclaimer}
-        </small>,
+        </Typography>,
       ]}
     />
   )

@@ -47,7 +47,7 @@ export default {
     disclaimer: 'Please note that there’s no guarantee for a file availability on the network.',
     textfieldPlaceholder: 'paste swarm hash here',
     findAction: 'find',
-    backAction: 'back',
+    backAction: 'no thanks',
     hashLengthWarning: 'Should be 64 or 128 hex characters',
   },
 

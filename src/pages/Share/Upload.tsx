@@ -2,10 +2,11 @@ import type { ReactElement } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
 
 import { ArrowUp, X } from 'react-feather'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { Link } from 'react-router-dom'
+import Link from '@material-ui/core/Link'
 
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
@@ -53,10 +54,12 @@ const SharePage = ({ setFile, file, preview, uploadFile, isUploadingFile }: Prop
       ]}
       center={[<Preview key="center" file={file} preview={preview} />]}
       bottom={[
-        <div key="top2">
+        <Typography key="top2" variant="body2">
           {text.uploadFile.disclaimer}{' '}
-          <Link to={ROUTES.TERMS_AND_CONDITIONS}>{text.uploadFile.termsAndCondition}.</Link>
-        </div>,
+          <Link href={ROUTES.TERMS_AND_CONDITIONS} color="inherit" underline="always">
+            {text.uploadFile.termsAndCondition}.
+          </Link>
+        </Typography>,
         <Footer key="bottom">
           <Button className={classes.button} onClick={uploadFile} size="large">
             {isUploadingFile ? <CircularProgress size={24} color="secondary" /> : <ArrowUp />}

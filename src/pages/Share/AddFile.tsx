@@ -95,7 +95,9 @@ export default function Upload({ setFile }: Props): ReactElement | null {
               <Typography className={classes.dragOverlayChildren} variant="button">
                 {text.addFile.dragHeader}
               </Typography>
-              <Typography className={classes.dragOverlayChildren}>{text.addFile.dragTagline}</Typography>
+              <Typography variant="body1" className={classes.dragOverlayChildren}>
+                {text.addFile.dragTagline}
+              </Typography>
             </div>
           )}
         </>
@@ -115,7 +117,9 @@ export default function Upload({ setFile }: Props): ReactElement | null {
             >
               {text.addFile.header}
             </Header>,
-            <div key="top2">{text.addFile.tagline}</div>,
+            <Typography key="top2" variant="body1">
+              {text.addFile.tagline}
+            </Typography>,
           ]}
           center={[
             <Button key="center1" component="label" size="large" className={classes.button}>
@@ -131,7 +135,11 @@ export default function Upload({ setFile }: Props): ReactElement | null {
               <Plus style={{ opacity: 0 }} />
             </Button>,
           ]}
-          bottom={[<span key="bottom">{text.addFile.disclaimer}</span>]}
+          bottom={[
+            <Typography key="bottom" variant="body2">
+              {text.addFile.disclaimer}
+            </Typography>,
+          ]}
         />
       </div>
     </div>
