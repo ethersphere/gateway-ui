@@ -41,7 +41,7 @@ const LandingPage = (): ReactElement => {
           </Typography>
           <Typography className={classes.para}>
             Welcome to the Swarm Gateway (“<strong>Gateway</strong>”), currently being developed and graciously provided
-            by the Swarm Association (“<strong>We</strong>”). Swarm is a peer-to-peer network of nodes that collectively
+            by the Swarm Foundation (“<strong>We</strong>”). Swarm is a peer-to-peer network of nodes that collectively
             provide a decentralized storage and communication service. Gateway is currently provided for testing
             purposes only.
           </Typography>
@@ -80,11 +80,6 @@ const LandingPage = (): ReactElement => {
             and our affiliates a worldwide, perpetual, irrevocable, royalty-free license to use and incorporate into our
             services any suggestion, enhancement request, recommendation, correction or other feedback provided by you
             relating to the operation of our services.
-          </Typography>
-          <Typography className={classes.para}>
-            We, and our licensors and content providers, reserve all of our rights, titles and interests in and to
-            Gateway, including all of our related intellectual property rights. No rights are granted to you under any
-            contractual document other than the rights necessary for testing Gateway.
           </Typography>
           <Typography className={classes.para}>
             We reserve the right to modify these User Testing Terms and Conditions at any time. These User Testing Terms
