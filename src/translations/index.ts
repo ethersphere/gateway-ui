@@ -47,6 +47,7 @@ export default {
     disclaimer:
       'It may take some time for your file to become available on the Swarm network. Please keep in mind that this service is provided for testing purposes only. There’s no guarantee of availability.',
     copyLinkAction: 'copy link',
+    copyLinkActionSuccess: 'copied',
   },
 
   accessPage: {

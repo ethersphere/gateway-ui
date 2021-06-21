@@ -3,9 +3,10 @@ import { makeStyles, createStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import { useHistory } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
-import { ArrowLeft, Clipboard } from 'react-feather'
+import { ArrowLeft, Clipboard, Check } from 'react-feather'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import Tooltip from '@material-ui/core/Tooltip'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import Header from '../../components/Header'
@@ -36,6 +37,7 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
   const classes = useStyles()
   const history = useHistory()
 
+  const [copiedToClipboard, setCopiedToClipboard] = useState<boolean>(false)
   const [activeValue, setActiveValue] = useState<string>(uploadReference)
 
   return (
@@ -61,8 +63,11 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
       ]}
       center={[
         <Tabs
-          key="center2"
-          onChange={setActiveValue}
+          key="center1"
+          onChange={reference => {
+            setActiveValue(reference)
+            setCopiedToClipboard(false)
+          }}
           values={[
             {
               label: 'Web link',
@@ -99,9 +104,16 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
         </Typography>,
         <Footer key="bottom2">
           <CopyToClipboard text={activeValue}>
-            <Button className={classes.button} size="large">
-              <Clipboard />
-              {text.shareHashPage.copyLinkAction}
+            <Button
+              className={classes.button}
+              size="large"
+              onClick={e => {
+                setCopiedToClipboard(true)
+                e.stopPropagation()
+              }}
+            >
+              {copiedToClipboard ? <Check /> : <Clipboard />}
+              {copiedToClipboard ? text.shareHashPage.copyLinkActionSuccess : text.shareHashPage.copyLinkAction}
               {/* Needed to properly align icon to the right and label to center */}
               <Clipboard style={{ opacity: 0 }} />
             </Button>
