@@ -53,10 +53,13 @@ const SharePage = ({ uploadError, setFile, file, preview, uploadFile, isUploadin
         >
           {text.uploadFile.header}
         </Header>,
+        <Typography key="top2" variant="body1">
+          {text.uploadFile.tagline}
+        </Typography>,
       ]}
       center={[<Preview key="center" file={file} preview={preview} />]}
       bottom={[
-        <Typography key="top2" variant="body2">
+        <Typography key="top2" variant="body1">
           {text.uploadFile.disclaimer}{' '}
           <Link href={ROUTES.TERMS_AND_CONDITIONS} color="inherit" underline="always" target="blank">
             {text.uploadFile.termsAndCondition}.
