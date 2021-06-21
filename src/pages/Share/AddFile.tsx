@@ -86,52 +86,54 @@ export default function Upload({ setFile }: Props): ReactElement | null {
   }
 
   return (
-    <div onDragOver={onDragOver} onDrop={onDrop}>
+    <div>
       <TermsAndConditionsPopup />
-      <>
-        {isDragging && (
-          <div onDragLeave={onDragLeave} className={classes.dragOverlay}>
-            <Typography className={classes.dragOverlayChildren} variant="button">
-              {text.addFile.dragHeader}
-            </Typography>
-            <Typography className={classes.dragOverlayChildren}>{text.addFile.dragTagline}</Typography>
-          </div>
-        )}
-      </>
-      <Layout
-        top={[
-          <Header
-            key="top1"
-            leftAction={
-              <IconButton
-                onClick={() => {
-                  history.push(ROUTES.LANDING_PAGE)
+      <div onDragOver={onDragOver} onDrop={onDrop}>
+        <>
+          {isDragging && (
+            <div onDragLeave={onDragLeave} className={classes.dragOverlay}>
+              <Typography className={classes.dragOverlayChildren} variant="button">
+                {text.addFile.dragHeader}
+              </Typography>
+              <Typography className={classes.dragOverlayChildren}>{text.addFile.dragTagline}</Typography>
+            </div>
+          )}
+        </>
+        <Layout
+          top={[
+            <Header
+              key="top1"
+              leftAction={
+                <IconButton
+                  onClick={() => {
+                    history.push(ROUTES.LANDING_PAGE)
+                  }}
+                >
+                  <ArrowLeft strokeWidth={1} />
+                </IconButton>
+              }
+            >
+              {text.addFile.header}
+            </Header>,
+            <div key="top2">{text.addFile.tagline}</div>,
+          ]}
+          center={[
+            <Button key="center1" component="label" size="large" className={classes.button}>
+              <Plus strokeWidth={1} />
+              {text.addFile.addFileAction}
+              <input
+                type="file"
+                hidden
+                onChange={event => {
+                  if (event.target?.files?.length === 1) setFile(event.target.files[0]) // eslint-disable-line
                 }}
-              >
-                <ArrowLeft strokeWidth={1} />
-              </IconButton>
-            }
-          >
-            {text.addFile.header}
-          </Header>,
-          <div key="top2">{text.addFile.tagline}</div>,
-        ]}
-        center={[
-          <Button key="center1" component="label" size="large" className={classes.button}>
-            <Plus strokeWidth={1} />
-            {text.addFile.addFileAction}
-            <input
-              type="file"
-              hidden
-              onChange={event => {
-                if (event.target?.files?.length === 1) setFile(event.target.files[0]) // eslint-disable-line
-              }}
-            />
-            <Plus style={{ opacity: 0 }} />
-          </Button>,
-        ]}
-        bottom={[<span key="bottom">{text.addFile.disclaimer}</span>]}
-      />
+              />
+              <Plus style={{ opacity: 0 }} />
+            </Button>,
+          ]}
+          bottom={[<span key="bottom">{text.addFile.disclaimer}</span>]}
+        />
+      </div>
     </div>
   )
 }

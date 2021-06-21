@@ -34,11 +34,11 @@ export default function AccessPage(): ReactElement {
   const history = useHistory()
 
   const [hash, setHash] = useState<string>('')
-  const [displayHashError, setDisplayHashError] = useState<boolean>(false)
+  const [hashError, setHashError] = useState<boolean>(false)
 
   useEffect(() => {
-    if (!hash || Utils.Hex.isHexString(hash, 64) || Utils.Hex.isHexString(hash, 128)) setDisplayHashError(false)
-    else setDisplayHashError(true)
+    if (!hash || Utils.Hex.isHexString(hash, 64) || Utils.Hex.isHexString(hash, 128)) setHashError(false)
+    else setHashError(true)
   }, [hash])
 
   return (
@@ -65,7 +65,7 @@ export default function AccessPage(): ReactElement {
           <Tooltip
             title={text.accessPage.hashLengthWarning}
             placement="top"
-            open={displayHashError}
+            open={hashError}
             arrow
             disableFocusListener
             disableHoverListener
@@ -97,7 +97,12 @@ export default function AccessPage(): ReactElement {
         <Footer key="bottom1">
           <div>
             {hash && (
-              <Button className={classes.button} onClick={() => history.push(ROUTES.ACCESS_HASH(hash))} size="large">
+              <Button
+                className={classes.button}
+                disabled={hashError}
+                onClick={() => history.push(ROUTES.ACCESS_HASH(hash))}
+                size="large"
+              >
                 <Search />
                 {text.accessPage.findAction}
                 <Search style={{ opacity: 0 }} />

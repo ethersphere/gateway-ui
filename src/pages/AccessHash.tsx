@@ -6,17 +6,19 @@ import { RefreshCw, ArrowDown } from 'react-feather'
 import { Utils } from '@ethersphere/bee-js'
 
 import Header from '../components/Header'
+import Footer from '../components/Footer'
+import Logo from '../components/Logo'
 import Preview from '../components/Preview'
 import Layout from '../components/Layout'
 import FileNotFound from '../components/FileNotFound'
 import UnknownFile from '../components/UnknownFile'
 import LoadingFile from '../components/LoadingFile'
+import InvalidSwarmHash from '../components/InvalidSwarmHash'
 
 import { Context } from '../providers/bee'
 import { DOWNLOAD_HOST } from '../constants'
 
-import Footer from '../components/Footer'
-import Logo from '../components/Logo'
+import text from '../translations'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -42,6 +44,7 @@ const SharePage = (): ReactElement => {
   useEffect(() => {
     if (!(Utils.Hex.isHexString(hash, 64) || Utils.Hex.isHexString(hash, 128))) {
       setErrorMsg('Not a valid Swarm Reference')
+      setIsLoading(false)
 
       return
     }
@@ -104,14 +107,14 @@ const SharePage = (): ReactElement => {
           <Header key="top1">
             <Logo />
           </Header>,
-          <div key="top2">Use the button below to download this file.</div>,
+          <div key="top2">{text.accessHashPage.useButtonToDownload}</div>,
         ]}
         center={[<Preview key="center1" file={metadata} preview={preview} />]}
         bottom={[
           <Footer key="bottom1">
             <Button className={classes.button} size="large" href={`${DOWNLOAD_HOST}/bzz/${hash}`} target="_blank">
               <ArrowDown />
-              Download
+              {text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
             </Button>
           </Footer>,
@@ -128,14 +131,14 @@ const SharePage = (): ReactElement => {
           <Header key="top1">
             <Logo />
           </Header>,
-          <div key="top2">Use the button below to download this file.</div>,
+          <div key="top2">{text.accessHashPage.useButtonToDownload}</div>,
         ]}
         center={[<UnknownFile key="center1" />]}
         bottom={[
           <Footer key="bottom1">
             <Button className={classes.button} size="large" href={`${DOWNLOAD_HOST}/bzz/${hash}`} target="_blank">
               <ArrowDown />
-              Download
+              {text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
             </Button>
           </Footer>,
@@ -152,18 +155,9 @@ const SharePage = (): ReactElement => {
           <Header key="top1">
             <Logo />
           </Header>,
-          <div key="top2">Use the button below to download this file.</div>,
         ]}
-        center={[<Preview key="center1" file={metadata} preview={preview} />]}
-        bottom={[
-          <Footer key="bottom1">
-            <Button className={classes.button} size="large" href={`${DOWNLOAD_HOST}/bzz/${hash}`} target="_blank">
-              <ArrowDown />
-              Download
-              <ArrowDown style={{ opacity: 0 }} />
-            </Button>
-          </Footer>,
-        ]}
+        center={[<InvalidSwarmHash key="center" />]}
+        bottom={[]}
       />
     )
   }
@@ -175,14 +169,14 @@ const SharePage = (): ReactElement => {
         <Header key="top1">
           <Logo />
         </Header>,
-        <div key="top2">The easiest way to share & access files on the Swarm network.</div>,
+        <div key="top2">{text.accessHashPage.tagline}</div>,
       ]}
       center={[<FileNotFound key="center" />]}
       bottom={[
         <Footer key="bottom1">
           <Button className={classes.button} size="large" onClick={() => window.location.reload()}>
             <RefreshCw />
-            Retry
+            {text.accessHashPage.retryAction}
             <RefreshCw style={{ opacity: 0 }} />
           </Button>
         </Footer>,

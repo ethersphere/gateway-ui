@@ -24,7 +24,7 @@ export default {
 
   uploadFile: {
     header: 'file',
-    disclaimer: 'Please double-check before uploading, there’s no undo. By uploading you agree to the Swarm Gateway',
+    disclaimer: 'Please double-check before uploading, there is no undo. By uploading you agree to the Swarm Gateway',
     termsAndCondition: 'Terms & Conditions',
     uploadAction: 'upload',
     uploadingText: 'uploading...',
@@ -93,6 +93,18 @@ export default {
 
   termsAndConditionsPage: {
     header: 'Gateway User Testing Terms and Conditions (June 2021)',
+  },
+
+  invalidSwarmHash: {
+    header: 'Invalid Swarm Hash',
+    description: 'The swarm hash in the link is wrong or incomplete. Please check you have coppied the full link.',
+  },
+
+  accessHashPage: {
+    tagline: 'The easiest way to share & access files on the Swarm network.',
+    retryAction: 'retry',
+    downloadAction: 'download',
+    useButtonToDownload: 'Use the button below to download this file.',
   },
 
   previewDetails: {
