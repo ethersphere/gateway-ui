@@ -11,7 +11,8 @@ import { Context } from '../../providers/bee'
 export default function ShareGeneral(): ReactElement {
   const [file, setFile] = useState<File | null>(null)
   const [uploadReference, setUploadReference] = useState('')
-  const [isUploadingFile, setIsUploadingFile] = useState(false)
+  const [isUploadingFile, setIsUploadingFile] = useState<boolean>(false)
+  const [uploadError, setUploadError] = useState<boolean>(false)
   const [preview, setPreview] = useState<string | undefined>(undefined)
   const [previewBlob, setPreviewBlob] = useState<Blob | undefined>(undefined)
   const { upload } = useContext(Context)
@@ -20,11 +21,12 @@ export default function ShareGeneral(): ReactElement {
     if (!file) return
 
     setIsUploadingFile(true)
+    setUploadError(false)
     upload(file, previewBlob)
       .then(hash => {
         setUploadReference(hash)
       })
-      .catch(e => console.error) // eslint-disable-line
+      .catch(e => setUploadError(true)) // eslint-disable-line
       .finally(() => {
         setIsUploadingFile(false)
       })
@@ -56,6 +58,13 @@ export default function ShareGeneral(): ReactElement {
   if (uploadReference) return <SharePage uploadReference={uploadReference} />
 
   return (
-    <Upload setFile={setFile} file={file} preview={preview} uploadFile={uploadFile} isUploadingFile={isUploadingFile} />
+    <Upload
+      uploadError={uploadError}
+      setFile={setFile}
+      file={file}
+      preview={preview}
+      uploadFile={uploadFile}
+      isUploadingFile={isUploadingFile}
+    />
   )
 }

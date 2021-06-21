@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 
 import { ArrowUp, X } from 'react-feather'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import Tooltip from '@material-ui/core/Tooltip'
 import Link from '@material-ui/core/Link'
 
 import Header from '../../components/Header'
@@ -33,9 +34,10 @@ interface Props {
   preview: string | undefined
   uploadFile: () => void
   isUploadingFile: boolean
+  uploadError: boolean
 }
 
-const SharePage = ({ setFile, file, preview, uploadFile, isUploadingFile }: Props): ReactElement => {
+const SharePage = ({ uploadError, setFile, file, preview, uploadFile, isUploadingFile }: Props): ReactElement => {
   const classes = useStyles()
 
   return (
@@ -56,16 +58,26 @@ const SharePage = ({ setFile, file, preview, uploadFile, isUploadingFile }: Prop
       bottom={[
         <Typography key="top2" variant="body2">
           {text.uploadFile.disclaimer}{' '}
-          <Link href={ROUTES.TERMS_AND_CONDITIONS} color="inherit" underline="always">
+          <Link href={ROUTES.TERMS_AND_CONDITIONS} color="inherit" underline="always" target="blank">
             {text.uploadFile.termsAndCondition}.
           </Link>
         </Typography>,
         <Footer key="bottom">
-          <Button className={classes.button} onClick={uploadFile} size="large">
-            {isUploadingFile ? <CircularProgress size={24} color="secondary" /> : <ArrowUp />}
-            {isUploadingFile ? text.uploadFile.uploadingText : text.uploadFile.uploadAction}
-            <ArrowUp style={{ opacity: 0 }} />
-          </Button>
+          <Tooltip
+            title={text.uploadFile.uploadError}
+            placement="top"
+            open={uploadError}
+            arrow
+            disableFocusListener
+            disableHoverListener
+            disableTouchListener
+          >
+            <Button className={classes.button} onClick={uploadFile} size="large">
+              {isUploadingFile ? <CircularProgress size={24} color="secondary" /> : <ArrowUp />}
+              {isUploadingFile ? text.uploadFile.uploadingText : text.uploadFile.uploadAction}
+              <ArrowUp style={{ opacity: 0 }} />
+            </Button>
+          </Tooltip>
         </Footer>,
       ]}
     />
