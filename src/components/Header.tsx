@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
         content: '""',
         width: '100%',
         height: '100%',
-        opacity: 0.75,
+        opacity: 0.9,
         position: 'absolute',
         backgroundColor: theme.palette.background.default,
         top: 0,
