@@ -16,7 +16,10 @@ const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'column',
       textAlign: 'left',
       padding: theme.spacing(3),
-      rowGap: theme.spacing(1),
+    },
+    para: {
+      paddingTop: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
     },
   }),
 )
@@ -36,7 +39,7 @@ const LandingPage = (): ReactElement => {
           <Typography key="top2" variant="button">
             {text.termsAndConditionsPage.header}
           </Typography>
-          <Typography>
+          <Typography className={classes.para}>
             Welcome to the Swarm Gateway (“<strong>Gateway</strong>”), currently being developed and graciously provided
             by the Swarm Association (“<strong>We</strong>”). Swarm is a peer-to-peer network of nodes that collectively
             provide a decentralized storage and communication service. Gateway is currently provided for testing
@@ -45,18 +48,18 @@ const LandingPage = (): ReactElement => {
           <Typography>
             <strong>By testing Gateway, you accept the following terms:</strong>
           </Typography>
-          <Typography>
+          <Typography className={classes.para}>
             We make, at our sole discretion, Gateway available to you at no charge. You may choose to try Gateway at
             your sole discretion. Gateway testing is intended for evaluation purposes only and not for production use.
             It is currently <strong>not</strong> supported.
           </Typography>
-          <Typography>
+          <Typography className={classes.para}>
             Data storage and transfer through Gateway is <strong>not</strong> encrypted. Data storage through Gateway is
             not guaranteed in time and data may thus disappear, respectively be erased, at any time. Data storage
             through Gateway is decentralized and data can thus be stored in any jurisdiction by any peer user (node
             operator).
           </Typography>
-          <Typography>
+          <Typography className={classes.para}>
             In addition, for the testing of Gateway, you agree to <strong>not</strong> upload and transfer personal data
             and data that contain legally protected contents (including professional secrets). You agree to{' '}
             <strong>not</strong> use Gateway in a way that threatens the security, integrity or availability of the
@@ -69,7 +72,7 @@ const LandingPage = (): ReactElement => {
             and all persons involved in the provision of Gateway with respect to all claims, demands, liabilities, costs
             and/or expenses resulting from an illegal use of Gateway or its content.
           </Typography>
-          <Typography>
+          <Typography className={classes.para}>
             You acknowledge that Gateway is <strong>not</strong> free from bugs or errors and that Swarm bears{' '}
             <strong>no</strong> liability for any harm or damage arising out of or in connection with Gateway. We may
             discontinue Gateway at any time at our sole discretion. When testing Gateway, you acknowledge that we
@@ -78,12 +81,12 @@ const LandingPage = (): ReactElement => {
             services any suggestion, enhancement request, recommendation, correction or other feedback provided by you
             relating to the operation of our services.
           </Typography>
-          <Typography>
+          <Typography className={classes.para}>
             We, and our licensors and content providers, reserve all of our rights, titles and interests in and to
             Gateway, including all of our related intellectual property rights. No rights are granted to you under any
             contractual document other than the rights necessary for testing Gateway.
           </Typography>
-          <Typography>
+          <Typography className={classes.para}>
             We reserve the right to modify these User Testing Terms and Conditions at any time. These User Testing Terms
             and Conditions are governed by and construed in accordance with Swiss law, without giving effect to its
             conflict of laws provisions. Regular courts and tribunals of the State of Neuchâtel, Switzerland, shall be
