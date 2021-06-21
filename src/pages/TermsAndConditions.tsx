@@ -2,7 +2,6 @@ import { ReactElement } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
-import { useHistory } from 'react-router-dom'
 
 import Layout from '../components/Layout'
 import Logo from '../components/Logo'
@@ -24,7 +23,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LandingPage = (): ReactElement => {
   const classes = useStyles()
-  const history = useHistory()
 
   return (
     <Layout

@@ -85,7 +85,7 @@ export default function TermsAndConditionsPopup(): ReactElement | null {
           </Header>,
           <Typography key="top2" variant="subtitle1">
             {text.termsAndConditions.tagline1}{' '}
-            <Link href={ROUTES.TERMS_AND_CONDITIONS} color="inherit" underline="always">
+            <Link href={ROUTES.TERMS_AND_CONDITIONS} color="inherit" underline="always" target="blank">
               {text.termsAndConditions.termsAndConditions}
             </Link>{' '}
             {text.termsAndConditions.tagline2}
@@ -104,7 +104,7 @@ export default function TermsAndConditionsPopup(): ReactElement | null {
               </div>
               <Typography variant="body2">
                 {text.termsAndConditions.disclaimer1}{' '}
-                <Link href={ROUTES.TERMS_AND_CONDITIONS} color="inherit" underline="always">
+                <Link href={ROUTES.TERMS_AND_CONDITIONS} color="inherit" underline="always" target="blank">
                   {text.termsAndConditions.disclaimer2}
                 </Link>
               </Typography>

@@ -2,12 +2,19 @@
 
 export default {
   // Main landng page
-  langingPage: {
+  landingPage: {
     tagline: 'The easiest way to share & access files on the Swarm network.',
     shareAction: 'share',
     accessAction: 'access',
     disclaimer:
       'The Swarm Gateway is operated by the Swarm Foundation. This service is under development and provided for testing purposes only. For unlimited use of the Swarm network consider running your own node.',
+    links: [
+      { label: 'Swarm Website', link: 'https://www.ethswarm.org/' },
+      { label: 'FAQ', link: 'https://www.ethswarm.org/faqs.html' },
+      { label: 'Discord', link: 'https://discord.gg/GU22h2utj6' },
+      { label: 'Github', link: 'https://github.com/ethersphere/' },
+      { label: 'Terms & Conditions', link: '/termsandconditions' },
+    ],
   },
 
   /** Access flow **/
@@ -28,6 +35,7 @@ export default {
     termsAndCondition: 'Terms & Conditions',
     uploadAction: 'upload',
     uploadingText: 'uploading...',
+    uploadError: 'Failed to upload file. Please try again later.',
   },
 
   shareHashPage: {

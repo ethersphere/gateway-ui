@@ -41,44 +41,34 @@ const LandingPage = (): ReactElement => {
           <Logo />
         </Header>,
         <Typography key="top2" variant="subtitle1">
-          {text.langingPage.tagline}
+          {text.landingPage.tagline}
         </Typography>,
       ]}
       center={[
         <Button key="center1" className={classes.button} size="large" onClick={() => history.push(ROUTES.SHARE)}>
           <ArrowUp />
-          {text.langingPage.shareAction}
+          {text.landingPage.shareAction}
           {/* Needed to properly align icon to the right and label to center */}
           <ArrowUp style={{ opacity: 0 }} />
         </Button>,
         <Button key="center2" className={classes.button} size="large" onClick={() => history.push(ROUTES.ACCESS)}>
           <ArrowDown />
-          {text.langingPage.accessAction}
+          {text.landingPage.accessAction}
           {/* Needed to properly align icon to the right and label to center */}
           <ArrowDown style={{ opacity: 0 }} />
         </Button>,
       ]}
       bottom={[
         <Typography key="bottom1" variant="subtitle2">
-          {text.langingPage.disclaimer}
+          {text.landingPage.disclaimer}
         </Typography>,
         <Divider key="bottom2" variant="middle" />,
         <small key="bottom3" className={classes.spread}>
-          <Link href="#" color="inherit">
-            Swarm Website
-          </Link>
-          <Link href="#" color="inherit" underline="always">
-            FAQ
-          </Link>
-          <Link href="#" color="inherit" underline="always">
-            Discord
-          </Link>
-          <Link href="#" color="inherit" underline="always">
-            Github
-          </Link>
-          <Link href="#" color="inherit" underline="always">
-            Terms & Conditions
-          </Link>
+          {text.landingPage.links.map(({ label, link }) => (
+            <Link key={label} href={link} color="inherit" underline="always" target="blank">
+              {label}
+            </Link>
+          ))}
         </small>,
       ]}
     />
