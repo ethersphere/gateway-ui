@@ -72,6 +72,29 @@ export default {
     description: 'However, due to the way it was uploaded, there are no metadata.',
   },
 
+  termsAndConditions: {
+    header: 'before you share',
+    tagline1: 'You need to agree to our',
+    tagline2: 'before uploading a file.',
+    termsAndConditions: 'Terms & Conditions',
+    featuresAndLimitationsHeader: 'In a nutshell, this is what you need to agree with:',
+    featuresAndLimitations: [
+      'This page is a free trial version of a gateway to Swarm',
+      'Max size per file: 10 megabytes',
+      'The file is kept on the Swarm network for a limited time and can disappear at any time',
+      'Your data is not encrypted. The file you upload is publicly available, the link is hidden.',
+      'No registration or signup required',
+      'Limited number of transfers per day',
+    ],
+    agreeAction: 'I agree',
+    disclaimer1: 'You can read the whole',
+    disclaimer2: 'Terms & Conditions here.',
+  },
+
+  termsAndConditionsPage: {
+    header: 'Gateway User Testing Terms and Conditions (June 2021)',
+  },
+
   previewDetails: {
     fileName: 'Filename',
     fileSize: 'Size',

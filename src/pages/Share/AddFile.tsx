@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography'
 
 import Header from '../../components/Header'
 import Layout from '../../components/Layout'
+import TermsAndConditionsPopup from '../../components/TermsAndConditionsPopup'
 
 import * as ROUTES from '../../Routes'
 import text from '../../translations'
@@ -86,6 +87,7 @@ export default function Upload({ setFile }: Props): ReactElement | null {
 
   return (
     <div onDragOver={onDragOver} onDrop={onDrop}>
+      <TermsAndConditionsPopup />
       <>
         {isDragging && (
           <div onDragLeave={onDragLeave} className={classes.dragOverlay}>
