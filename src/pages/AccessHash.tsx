@@ -60,7 +60,7 @@ const SharePage = (): ReactElement => {
       .catch(() => {
         // There are no metadata, but maybe there is a retrievable file
         getChunk(hash)
-          .then(() => setChunkExists(true))
+          .then(d => setChunkExists(Boolean(d.byteLength)))
           .catch(() => setChunkExists(false))
           .finally(() => setIsLoading(false))
       })
