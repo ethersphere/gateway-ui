@@ -2,7 +2,7 @@ import type { ReactElement } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
-import { X, Check, CornerUpLeft } from 'react-feather'
+import { X, Check, CornerUpLeft, ArrowRight } from 'react-feather'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Link from '@material-ui/core/Link'
@@ -45,10 +45,6 @@ const useStyles = makeStyles((theme: Theme) =>
     paper: {
       padding: theme.spacing(3),
     },
-    li: {
-      display: 'flex',
-      alignItems: 'center',
-    },
   }),
 )
 
@@ -86,15 +82,15 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
         </Typography>,
       ]}
       center={[
-        <div key="center" style={{ overflowY: 'scroll' }}>
+        <div key="center">
           <Paper square elevation={0} className={classes.paper}>
             <Typography variant="subtitle1">{text.termsAndConditions.featuresAndLimitationsHeader}</Typography>
             <div className={classes.ul}>
               {text.termsAndConditions.featuresAndLimitations.map(t => [
-                <Typography key={`${t}-bee`} className={classes.li} variant="body1">
-                  🐝
+                <Typography key={`${t}-bee`} variant="body1">
+                  <ArrowRight />
                 </Typography>,
-                <Typography key={`${t}-text`} className={classes.li} variant="body1">
+                <Typography key={`${t}-text`} variant="body1">
                   {t}
                 </Typography>,
               ])}
