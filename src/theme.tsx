@@ -4,33 +4,55 @@ import { orange } from '@material-ui/core/colors'
 // Overwriting default components styles
 const componentsOverrides = (theme: Theme) => ({
   MuiButton: {
-    root: {
+    textSizeLarge: {
+      padding: theme.spacing(2),
+    },
+    containedSizeLarge: {
+      padding: theme.spacing(2),
+    },
+    contained: {
       backgroundColor: 'white',
+      boxShadow: 'none',
       '&:hover': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
+        // https://github.com/mui-org/material-ui/issues/22543
+        '@media (hover: none)': {
+          backgroundColor: theme.palette.primary.main,
+          color: 'white',
+          boxShadow: 'none',
+        },
       },
       '&:focus': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
       },
       '&:active': {
-        backgroundColor: `${theme.palette.primary.main} !important`,
-        color: 'white',
-      },
-    },
-    textSizeLarge: {
-      padding: theme.spacing(2),
-    },
-  },
-  MuiIconButton: {
-    root: {
-      backgroundColor: 'white',
-      '&:hover': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
       },
+    },
+  },
+
+  MuiIconButton: {
+    root: {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+      '&:hover': {
+        backgroundColor: theme.palette.primary.main,
+        color: 'white',
+        // https://github.com/mui-org/material-ui/issues/22543
+        '@media (hover: none)': {
+          backgroundColor: theme.palette.primary.main,
+          color: 'white',
+          boxShadow: 'none',
+        },
+      },
       '&:focus': {
+        backgroundColor: theme.palette.primary.main,
+        color: 'white',
+      },
+      '&:active': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
       },

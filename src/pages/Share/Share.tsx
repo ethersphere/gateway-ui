@@ -104,6 +104,7 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
         <Footer key="bottom2">
           <CopyToClipboard text={activeValue}>
             <Button
+              variant="contained"
               className={classes.button}
               size="large"
               onClick={e => {

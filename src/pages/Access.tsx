@@ -84,6 +84,7 @@ export default function AccessPage(): ReactElement {
             />
           </Tooltip>
           <Button
+            variant="contained"
             key="center2"
             className={classes.button}
             size="small"
@@ -101,6 +102,7 @@ export default function AccessPage(): ReactElement {
           <div>
             {hash && (
               <Button
+                variant="contained"
                 className={classes.button}
                 disabled={hashError}
                 onClick={() => history.push(ROUTES.ACCESS_HASH(hash))}

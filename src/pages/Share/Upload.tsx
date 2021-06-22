@@ -75,7 +75,7 @@ const SharePage = ({ uploadError, setFile, file, preview, uploadFile, isUploadin
             disableHoverListener
             disableTouchListener
           >
-            <Button className={classes.button} onClick={uploadFile} size="large">
+            <Button variant="contained" className={classes.button} onClick={uploadFile} size="large">
               {isUploadingFile ? <CircularProgress size={24} color="secondary" /> : <ArrowUp />}
               {isUploadingFile ? text.uploadFile.uploadingText : text.uploadFile.uploadAction}
               <ArrowUp style={{ opacity: 0 }} />
