@@ -128,7 +128,7 @@ export default function Upload({ setFile }: Props): ReactElement {
           </Typography>,
         ]}
         center={[
-          <Button key="center1" component="label" size="large" className={classes.button}>
+          <Button variant="contained" key="center1" component="label" size="large" className={classes.button}>
             <Plus strokeWidth={1} />
             {text.addFile.addFileAction}
             <input

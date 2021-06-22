@@ -107,6 +107,7 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
             </Typography>
           </Paper>
           <Button
+            variant="contained"
             className={classes.button}
             size="small"
             style={{ marginTop: 2, paddingLeft: 16, paddingRight: 16 }}
@@ -121,7 +122,7 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
       bottom={[
         <div key="bottom1" style={{ zIndex: 1000 }}>
           <Footer>
-            <Button className={classes.button} size="large" onClick={handleAgree}>
+            <Button variant="contained" className={classes.button} size="large" onClick={handleAgree}>
               <Check />
               {text.termsAndConditions.agreeAction}
               <Check style={{ opacity: 0 }} />

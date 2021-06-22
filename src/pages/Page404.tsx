@@ -58,6 +58,7 @@ const Page404 = (): ReactElement => {
       bottom={[
         <Footer key="bottom">
           <Button
+            variant="contained"
             className={classes.button}
             onClick={() => {
               history.push(ROUTES.LANDING_PAGE)

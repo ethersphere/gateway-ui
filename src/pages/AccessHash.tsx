@@ -115,7 +115,13 @@ const SharePage = (): ReactElement => {
         center={[<Preview key="center1" file={metadata} preview={preview} />]}
         bottom={[
           <Footer key="bottom1">
-            <Button className={classes.button} size="large" href={`${DOWNLOAD_HOST}/bzz/${hash}`} target="_blank">
+            <Button
+              variant="contained"
+              className={classes.button}
+              size="large"
+              href={`${DOWNLOAD_HOST}/bzz/${hash}`}
+              target="_blank"
+            >
               <ArrowDown />
               {text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
@@ -141,7 +147,13 @@ const SharePage = (): ReactElement => {
         center={[<UnknownFile key="center1" />]}
         bottom={[
           <Footer key="bottom1">
-            <Button className={classes.button} size="large" href={`${DOWNLOAD_HOST}/bzz/${hash}`} target="_blank">
+            <Button
+              variant="contained"
+              className={classes.button}
+              size="large"
+              href={`${DOWNLOAD_HOST}/bzz/${hash}`}
+              target="_blank"
+            >
               <ArrowDown />
               {text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
@@ -181,7 +193,7 @@ const SharePage = (): ReactElement => {
       center={[<FileNotFound key="center" />]}
       bottom={[
         <Footer key="bottom1">
-          <Button className={classes.button} size="large" onClick={() => window.location.reload()}>
+          <Button variant="contained" className={classes.button} size="large" onClick={() => window.location.reload()}>
             <RefreshCw />
             {text.accessHashPage.retryAction}
             <RefreshCw style={{ opacity: 0 }} />

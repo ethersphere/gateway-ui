@@ -45,13 +45,25 @@ const LandingPage = (): ReactElement => {
         </Typography>,
       ]}
       center={[
-        <Button key="center1" className={classes.button} size="large" onClick={() => history.push(ROUTES.SHARE)}>
+        <Button
+          key="center1"
+          className={classes.button}
+          size="large"
+          variant="contained"
+          onClick={() => history.push(ROUTES.SHARE)}
+        >
           <ArrowUp />
           {text.landingPage.shareAction}
           {/* Needed to properly align icon to the right and label to center */}
           <ArrowUp style={{ opacity: 0 }} />
         </Button>,
-        <Button key="center2" className={classes.button} size="large" onClick={() => history.push(ROUTES.ACCESS)}>
+        <Button
+          key="center2"
+          className={classes.button}
+          size="large"
+          variant="contained"
+          onClick={() => history.push(ROUTES.ACCESS)}
+        >
           <ArrowDown />
           {text.landingPage.accessAction}
           {/* Needed to properly align icon to the right and label to center */}

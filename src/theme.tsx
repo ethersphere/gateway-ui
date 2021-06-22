@@ -15,14 +15,39 @@ const componentsOverrides = (theme: Theme) => ({
         color: 'white',
       },
       '&:active': {
-        backgroundColor: `${theme.palette.primary.main} !important`,
+        backgroundColor: theme.palette.primary.main,
         color: 'white',
       },
     },
     textSizeLarge: {
       padding: theme.spacing(2),
     },
+    containedSizeLarge: {
+      padding: theme.spacing(2),
+    },
+    contained: {
+      backgroundColor: 'white',
+      boxShadow: 'none',
+      '&:hover': {
+        backgroundColor: theme.palette.primary.main,
+        color: 'white',
+        '@media (hover: none)': {
+          backgroundColor: theme.palette.primary.main,
+          color: 'white',
+          boxShadow: 'none',
+        },
+      },
+      '&:focus': {
+        backgroundColor: theme.palette.primary.main,
+        color: 'white',
+      },
+      '&:active': {
+        backgroundColor: theme.palette.primary.main,
+        color: 'white',
+      },
+    },
   },
+
   MuiIconButton: {
     root: {
       backgroundColor: 'white',
