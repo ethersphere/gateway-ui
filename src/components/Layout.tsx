@@ -12,9 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
       justifyContent: 'space-between',
       minHeight: '100vh',
-
-      /* mobile viewport bug fix */
-      ['@supports (-webkit-fill-available)']: {
+      ['@supports (-webkit-overflow-scrolling: touch)']: {
         minHeight: '-webkit-fill-available',
       },
     },
