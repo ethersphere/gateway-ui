@@ -16,6 +16,7 @@ const componentsOverrides = (theme: Theme) => ({
       '&:hover': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
+        // https://github.com/mui-org/material-ui/issues/22543
         '@media (hover: none)': {
           backgroundColor: theme.palette.primary.main,
           color: 'white',
@@ -40,6 +41,7 @@ const componentsOverrides = (theme: Theme) => ({
       '&:hover': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
+        // https://github.com/mui-org/material-ui/issues/22543
         '@media (hover: none)': {
           backgroundColor: theme.palette.primary.main,
           color: 'white',
