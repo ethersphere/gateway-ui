@@ -53,11 +53,11 @@ export default {
 
   accessPage: {
     header: 'access',
-    tagline: 'You can access files on the Swarm network by pasting a Swarm hash (or ‘bzzhash’) below.',
+    tagline: 'The easiest way to share & access files on the Swarm network.',
     disclaimer: 'Please note that there’s no guarantee for a file availability on the network.',
     textfieldPlaceholder: 'paste swarm hash here',
     findAction: 'find',
-    backAction: 'no thanks',
+    backAction: 'back',
     hashLengthWarning: 'Should be 64 or 128 hex characters',
   },
 
@@ -107,7 +107,7 @@ export default {
 
   invalidSwarmHash: {
     header: 'Invalid Swarm Hash',
-    description: 'The swarm hash in the link is wrong or incomplete. Please check you have coppied the full link.',
+    description: 'The swarm hash in the link is wrong or incomplete. Please check you have copied the full link.',
   },
 
   accessHashPage: {
