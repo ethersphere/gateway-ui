@@ -4,21 +4,6 @@ import { orange } from '@material-ui/core/colors'
 // Overwriting default components styles
 const componentsOverrides = (theme: Theme) => ({
   MuiButton: {
-    root: {
-      backgroundColor: 'white',
-      '&:hover': {
-        backgroundColor: theme.palette.primary.main,
-        color: 'white',
-      },
-      '&:focus': {
-        backgroundColor: theme.palette.primary.main,
-        color: 'white',
-      },
-      '&:active': {
-        backgroundColor: theme.palette.primary.main,
-        color: 'white',
-      },
-    },
     textSizeLarge: {
       padding: theme.spacing(2),
     },
@@ -51,11 +36,21 @@ const componentsOverrides = (theme: Theme) => ({
   MuiIconButton: {
     root: {
       backgroundColor: 'white',
+      boxShadow: 'none',
       '&:hover': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
+        '@media (hover: none)': {
+          backgroundColor: theme.palette.primary.main,
+          color: 'white',
+          boxShadow: 'none',
+        },
       },
       '&:focus': {
+        backgroundColor: theme.palette.primary.main,
+        color: 'white',
+      },
+      '&:active': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
       },
