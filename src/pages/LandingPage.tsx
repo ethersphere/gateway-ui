@@ -24,8 +24,11 @@ const useStyles = makeStyles((theme: Theme) =>
     spread: {
       display: 'flex',
       justifyContent: 'center',
-      columnGap: theme.spacing(2),
       flexWrap: 'wrap',
+    },
+    spreadItems: {
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(1),
     },
   }),
 )
@@ -77,7 +80,14 @@ const LandingPage = (): ReactElement => {
         <Divider key="bottom2" variant="middle" />,
         <small key="bottom3" className={classes.spread}>
           {text.landingPage.links.map(({ label, link }) => (
-            <Link key={label} href={link} color="inherit" underline="always" target="blank">
+            <Link
+              key={label}
+              className={classes.spreadItems}
+              href={link}
+              color="inherit"
+              underline="always"
+              target="blank"
+            >
               {label}
             </Link>
           ))}
