@@ -47,7 +47,7 @@ export function Provider({ children }: Props): ReactElement {
 
     if (preview) files.push(new File([preview], PREVIEW_FILE_NAME))
 
-    return bee.uploadFiles(POSTAGE_STAMP, files, { indexDocument: metadata.name, encrypt: true })
+    return bee.uploadFiles(POSTAGE_STAMP, files, { indexDocument: metadata.name })
   }
 
   const getMetadata = async (hash: Reference | string): Promise<Metadata | undefined> => {
