@@ -41,8 +41,7 @@ export default {
 
   shareHashPage: {
     header: 'share',
-    tagline:
-      'Share your file with a simple web link, or a Swarm hash (a.k.a. ‘bzzhash’) if you’re familiar with the Swarm network.',
+    tagline: 'Share your file with a simple web link, or a Swarm hash.',
     tabWebLink: 'web link',
     tabSwarmHash: 'swarm hash',
     disclaimer:
