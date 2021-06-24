@@ -84,7 +84,6 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
       center={[
         <div key="center">
           <Paper square elevation={0} className={classes.paper}>
-            <Typography variant="subtitle1">{text.termsAndConditions.featuresAndLimitationsHeader}</Typography>
             <div className={classes.ul}>
               {text.termsAndConditions.featuresAndLimitations.map(t => [
                 <Typography key={`${t}-bee`} variant="body1">
