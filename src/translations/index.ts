@@ -11,7 +11,7 @@ export default {
     links: [
       { label: 'Swarm Website', link: 'https://www.ethswarm.org/' },
       { label: 'FAQ', link: 'https://www.ethswarm.org/faqs.html' },
-      { label: 'Discord', link: 'https://discord.gg/GU22h2utj6' },
+      { label: 'Ecosystem', link: 'https://www.ethswarm.org/ecosystem.html' },
       { label: 'Github', link: 'https://github.com/ethersphere/' },
       { label: 'Terms & Conditions', link: '/termsandconditions' },
     ],
