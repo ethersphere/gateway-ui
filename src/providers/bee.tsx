@@ -1,21 +1,11 @@
-import { createContext, ReactChild, ReactElement, useEffect, useState } from 'react'
+import { createContext, ReactChild, ReactElement } from 'react'
 import { Bee, Data, FileData, Reference } from '@ethersphere/bee-js'
-import {
-  UPLOAD_HOSTS,
-  META_FILE_NAME,
-  POSTAGE_STAMP,
-  DOWNLOAD_HOST,
-  PREVIEW_FILE_NAME,
-  DOWNLOAD_HOSTS,
-} from '../constants'
+import { BEE_HOSTS, META_FILE_NAME, POSTAGE_STAMP, PREVIEW_FILE_NAME } from '../constants'
 
-const randomHost = UPLOAD_HOSTS[Math.floor(Math.random() * UPLOAD_HOSTS.length)]
-const bee = new Bee(randomHost)
-const beeGateway = new Bee(DOWNLOAD_HOST)
-const downloadBees = DOWNLOAD_HOSTS.map(host => new Bee(host))
+const bees = BEE_HOSTS.map(host => new Bee(host))
+const randomBee = bees[Math.floor(Math.random() * bees.length)]
 
 interface ContextInterface {
-  isConnected: boolean
   upload: (file: File, preview?: Blob) => Promise<Reference>
   getMetadata: (hash: Reference | string) => Promise<Metadata | undefined>
   getPreview: (hash: Reference | string) => Promise<FileData<Data>>
@@ -23,7 +13,6 @@ interface ContextInterface {
 }
 
 const initialValues: ContextInterface = {
-  isConnected: false,
   upload: () => Promise.reject(),
   getMetadata: () => Promise.reject(),
   getPreview: () => Promise.reject(),
@@ -63,30 +52,24 @@ async function race<T>(promises: Promise<T>[]): Promise<T> {
 
   const result = await Promise.race(promises.map(safePromise))
 
-  if (!result) {
-    throw new Error('race failed')
-  }
+  if (!result) throw new Error('race failed')
 
   return result
 }
 
 function tryDownloadFileFromAll(hash: Reference | string, path?: string) {
-  const bees = downloadBees
   const actions = bees.map(bee => bee.downloadFile(hash, path))
 
   return race(actions)
 }
 
 function tryDownloadDataFromAll(hash: Reference | string) {
-  const bees = downloadBees
   const actions = bees.map(bee => bee.downloadData(hash))
 
   return race(actions)
 }
 
 export function Provider({ children }: Props): ReactElement {
-  const [isConnected, setIsConnected] = useState<boolean>(false)
-
   const upload = (file: File, preview?: Blob) => {
     const metadata = {
       name: file.name,
@@ -102,14 +85,14 @@ export function Provider({ children }: Props): ReactElement {
 
     if (preview) files.push(new File([preview], PREVIEW_FILE_NAME))
 
-    return bee.uploadFiles(POSTAGE_STAMP, files, { indexDocument: metadata.name })
+    return randomBee.uploadFiles(POSTAGE_STAMP, files, { indexDocument: metadata.name })
   }
 
   const getMetadata = async (hash: Reference | string): Promise<Metadata | undefined> => {
     try {
       const metadata = await tryDownloadFileFromAll(hash, META_FILE_NAME)
 
-      return JSON.parse(metadata.data.text()) as Metadata
+      return metadata.data.json() as unknown as Metadata
     } catch (e) {
       throw e
     }
@@ -120,11 +103,5 @@ export function Provider({ children }: Props): ReactElement {
 
   const getChunk = (hash: Reference | string): Promise<Data> => tryDownloadDataFromAll(hash)
 
-  useEffect(() => {
-    bee.isConnected().then(setIsConnected)
-  }, [])
-
-  return (
-    <Context.Provider value={{ getMetadata, isConnected, upload, getPreview, getChunk }}>{children}</Context.Provider>
-  )
+  return <Context.Provider value={{ getMetadata, upload, getPreview, getChunk }}>{children}</Context.Provider>
 }

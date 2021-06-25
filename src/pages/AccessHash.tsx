@@ -17,7 +17,7 @@ import LoadingFile from '../components/LoadingFile'
 import InvalidSwarmHash from '../components/InvalidSwarmHash'
 
 import { Context } from '../providers/bee'
-import { DOWNLOAD_HOST } from '../constants'
+import { BEE_HOSTS } from '../constants'
 
 import text from '../translations'
 
@@ -119,7 +119,7 @@ const SharePage = (): ReactElement => {
               variant="contained"
               className={classes.button}
               size="large"
-              href={`${DOWNLOAD_HOST}/bzz/${hash}`}
+              href={`${BEE_HOSTS[0]}/bzz/${hash}`}
               target="_blank"
             >
               <ArrowDown />
@@ -151,7 +151,7 @@ const SharePage = (): ReactElement => {
               variant="contained"
               className={classes.button}
               size="large"
-              href={`${DOWNLOAD_HOST}/bzz/${hash}`}
+              href={`${BEE_HOSTS[0]}/bzz/${hash}`}
               target="_blank"
             >
               <ArrowDown />
