@@ -1,12 +1,9 @@
-import { ReactElement, useState, useContext, useEffect } from 'react'
-
-import SharePage from './Share'
-import AddFile from './AddFile'
-import Upload from './Upload'
-
 import { readAndCompressImage } from 'browser-image-resizer'
-
+import { ReactElement, useContext, useEffect, useState } from 'react'
 import { Context } from '../../providers/bee'
+import AddFile from './AddFile'
+import SharePage from './Share'
+import Upload from './Upload'
 
 export default function ShareGeneral(): ReactElement {
   const [file, setFile] = useState<File | null>(null)
@@ -15,14 +12,21 @@ export default function ShareGeneral(): ReactElement {
   const [uploadError, setUploadError] = useState<boolean>(false)
   const [preview, setPreview] = useState<string | undefined>(undefined)
   const [previewBlob, setPreviewBlob] = useState<Blob | undefined>(undefined)
+  const [uploadProgress, setUploadProgress] = useState<number | undefined>(undefined)
   const { upload } = useContext(Context)
+  const progress = (progressEvent: AxiosProgressEvent) => {
+    const normalizeProgress = progressEvent.loaded / progressEvent.total
+    // eslint-disable-next-line no-console
+    console.log('normalizeProgress', normalizeProgress)
+    setUploadProgress(normalizeProgress)
+  }
 
   const uploadFile = () => {
     if (!file) return
 
     setIsUploadingFile(true)
     setUploadError(false)
-    upload(file, previewBlob)
+    upload(file, { preview: previewBlob, progress })
       .then(hash => {
         setUploadReference(hash)
       })
@@ -65,6 +69,7 @@ export default function ShareGeneral(): ReactElement {
       preview={preview}
       uploadFile={uploadFile}
       isUploadingFile={isUploadingFile}
+      uploadProgress={uploadProgress}
     />
   )
 }
