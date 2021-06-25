@@ -1,14 +1,19 @@
-import { createContext, ReactChild, ReactElement, useEffect, useState } from 'react'
 import { Bee, Data, FileData, Reference } from '@ethersphere/bee-js'
-import { UPLOAD_HOSTS, META_FILE_NAME, POSTAGE_STAMP, DOWNLOAD_HOST, PREVIEW_FILE_NAME } from '../constants'
+import { createContext, ReactChild, ReactElement, useEffect, useState } from 'react'
+import { DOWNLOAD_HOST, META_FILE_NAME, POSTAGE_STAMP, PREVIEW_FILE_NAME, UPLOAD_HOSTS } from '../constants'
 
 const randomHost = UPLOAD_HOSTS[Math.floor(Math.random() * UPLOAD_HOSTS.length)]
 const bee = new Bee(randomHost)
 const beeGateway = new Bee(DOWNLOAD_HOST)
 
+type uploadOptions = {
+  preview?: Blob
+  progress?: (progressEvent: AxiosProgressEvent) => void
+}
+
 interface ContextInterface {
   isConnected: boolean
-  upload: (file: File, preview?: Blob) => Promise<Reference>
+  upload: (file: File, options?: uploadOptions) => Promise<Reference>
   getMetadata: (hash: Reference | string) => Promise<Metadata | undefined>
   getPreview: (hash: Reference | string) => Promise<FileData<Data>>
   getChunk: (hash: Reference | string) => Promise<Data>
@@ -32,7 +37,10 @@ interface Props {
 export function Provider({ children }: Props): ReactElement {
   const [isConnected, setIsConnected] = useState<boolean>(false)
 
-  const upload = (file: File, preview?: Blob) => {
+  const upload = (file: File, options?: uploadOptions) => {
+    const preview = options?.preview
+    const progressCallback = options?.progress
+
     const metadata = {
       name: file.name,
       type: file.type,
@@ -47,7 +55,10 @@ export function Provider({ children }: Props): ReactElement {
 
     if (preview) files.push(new File([preview], PREVIEW_FILE_NAME))
 
-    return bee.uploadFiles(POSTAGE_STAMP, files, { indexDocument: metadata.name })
+    return bee.uploadFiles(POSTAGE_STAMP, files, {
+      indexDocument: metadata.name,
+      axiosOptions: { onUploadProgress: progressCallback },
+    })
   }
 
   const getMetadata = async (hash: Reference | string): Promise<Metadata | undefined> => {

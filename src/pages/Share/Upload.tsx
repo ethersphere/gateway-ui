@@ -1,21 +1,17 @@
-import type { ReactElement } from 'react'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
-import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-
-import { ArrowUp, X } from 'react-feather'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import Tooltip from '@material-ui/core/Tooltip'
+import IconButton from '@material-ui/core/IconButton'
 import Link from '@material-ui/core/Link'
-
-import Header from '../../components/Header'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
+import Tooltip from '@material-ui/core/Tooltip'
+import Typography from '@material-ui/core/Typography'
+import type { ReactElement } from 'react'
+import { ArrowUp, X } from 'react-feather'
 import Footer from '../../components/Footer'
-import Preview from '../../components/Preview'
+import Header from '../../components/Header'
 import Layout from '../../components/Layout'
-
+import Preview from '../../components/Preview'
 import * as ROUTES from '../../Routes'
-
 import text from '../../translations'
 
 const useStyles = makeStyles(() =>
@@ -35,6 +31,7 @@ interface Props {
   uploadFile: () => void
   isUploadingFile: boolean
   uploadError: boolean
+  uploadProgress: number | undefined
 }
 
 const SharePage = ({ uploadError, setFile, file, preview, uploadFile, isUploadingFile }: Props): ReactElement => {
