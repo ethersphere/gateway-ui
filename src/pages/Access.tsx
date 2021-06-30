@@ -1,9 +1,8 @@
 import { ReactElement, useState, useEffect } from 'react'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
-import IconButton from '@material-ui/core/IconButton'
 import { useHistory } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
-import { ArrowLeft, CornerUpLeft, Search } from 'react-feather'
+import { CornerUpLeft, Search } from 'react-feather'
 import Tooltip from '@material-ui/core/Tooltip'
 import InputBase from '@material-ui/core/InputBase'
 import Typography from '@material-ui/core/Typography'
@@ -12,6 +11,7 @@ import { Utils } from '@ethersphere/bee-js'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Layout from '../components/Layout'
+import { CircularButton } from '../components/CircularButton'
 
 import * as ROUTES from '../Routes'
 
@@ -48,13 +48,12 @@ export default function AccessPage(): ReactElement {
         <Header
           key="top1"
           leftAction={
-            <IconButton
+            <CircularButton
+              icon="ArrowLeft"
               onClick={() => {
                 history.push(ROUTES.LANDING_PAGE)
               }}
-            >
-              <ArrowLeft />
-            </IconButton>
+            />
           }
         >
           {text.accessPage.header}
@@ -91,7 +90,7 @@ export default function AccessPage(): ReactElement {
             style={{ marginTop: 2, paddingLeft: 16, paddingRight: 16, opacity: hash ? 1 : 0 }}
             onClick={() => setHash('')}
           >
-            <CornerUpLeft />
+            <CornerUpLeft size={16} strokeWidth={1} />
             {text.accessPage.backAction}
             <CornerUpLeft style={{ opacity: 0 }} />
           </Button>

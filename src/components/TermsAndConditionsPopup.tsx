@@ -1,8 +1,7 @@
 import type { ReactElement } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
-import { X, Check, CornerUpLeft, ArrowRight } from 'react-feather'
+import { Check, CornerUpLeft, ArrowRight } from 'react-feather'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Link from '@material-ui/core/Link'
@@ -12,6 +11,7 @@ import * as ROUTES from '../Routes'
 import Layout from './Layout'
 import Header from './Header'
 import Footer from './Footer'
+import { CircularButton } from './CircularButton'
 
 import text from '../translations'
 
@@ -62,13 +62,12 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
         <Header
           key="top1"
           rightAction={
-            <IconButton
+            <CircularButton
+              icon="X"
               onClick={() => {
                 history.push(ROUTES.LANDING_PAGE)
               }}
-            >
-              <X />
-            </IconButton>
+            />
           }
         >
           {text.termsAndConditions.header}

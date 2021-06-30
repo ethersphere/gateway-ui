@@ -1,10 +1,9 @@
 import type { ReactElement } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
-import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 
-import { ArrowUp, X } from 'react-feather'
+import { ArrowUp } from 'react-feather'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Tooltip from '@material-ui/core/Tooltip'
 import Link from '@material-ui/core/Link'
@@ -13,6 +12,7 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import Preview from '../../components/Preview'
 import Layout from '../../components/Layout'
+import { CircularButton } from '../../components/CircularButton'
 
 import * as ROUTES from '../../Routes'
 
@@ -43,14 +43,7 @@ const SharePage = ({ uploadError, setFile, file, preview, uploadFile, isUploadin
   return (
     <Layout
       top={[
-        <Header
-          key="top1"
-          rightAction={
-            <IconButton onClick={() => setFile(null)}>
-              <X />
-            </IconButton>
-          }
-        >
+        <Header key="top1" rightAction={<CircularButton icon="X" onClick={() => setFile(null)} />}>
           {text.uploadFile.header}
         </Header>,
         <Typography key="top2" variant="body1">

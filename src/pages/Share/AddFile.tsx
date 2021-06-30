@@ -1,6 +1,5 @@
 import { ReactElement, useState, DragEvent } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import { ArrowLeft, Plus } from 'react-feather'
 import { useHistory } from 'react-router-dom'
@@ -9,6 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import Header from '../../components/Header'
 import Layout from '../../components/Layout'
 import TermsAndConditionsPopup from '../../components/TermsAndConditionsPopup'
+import { CircularButton } from '../../components/CircularButton'
 
 import * as ROUTES from '../../Routes'
 import text from '../../translations'
@@ -112,13 +112,12 @@ export default function Upload({ setFile }: Props): ReactElement {
           <Header
             key="top1"
             leftAction={
-              <IconButton
+              <CircularButton
+                icon="ArrowLeft"
                 onClick={() => {
                   history.push(ROUTES.LANDING_PAGE)
                 }}
-              >
-                <ArrowLeft strokeWidth={1} />
-              </IconButton>
+              />
             }
           >
             {text.addFile.header}

@@ -1,6 +1,5 @@
 import { ReactElement, useState } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
-import IconButton from '@material-ui/core/IconButton'
 import { useHistory } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import { ArrowLeft, Clipboard, Check } from 'react-feather'
@@ -12,6 +11,7 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import Tabs from '../../components/Tabs'
 import Layout from '../../components/Layout'
+import { CircularButton } from '../../components/CircularButton'
 
 import * as ROUTES from '../../Routes'
 import { GATEWAY_URL } from '../../constants'
@@ -45,13 +45,12 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
         <Header
           key="top1"
           leftAction={
-            <IconButton
+            <CircularButton
+              icon="ArrowLeft"
               onClick={() => {
                 history.push(ROUTES.LANDING_PAGE)
               }}
-            >
-              <ArrowLeft />
-            </IconButton>
+            />
           }
         >
           {text.shareHashPage.header}
