@@ -36,6 +36,8 @@ function hashToIndex(hash: Reference | string) {
 
 export function Provider({ children }: Props): ReactElement {
   const upload = async (file: File, preview?: Blob) => {
+    const lastModified = file.lastModified
+
     const metadata = {
       name: file.name,
       type: file.type,
@@ -44,11 +46,20 @@ export function Provider({ children }: Props): ReactElement {
 
     const metafile = new File([JSON.stringify(metadata)], META_FILE_NAME, {
       type: 'application/json',
+      lastModified,
     })
 
     const files = [file, metafile]
 
-    if (preview) files.push(new File([preview], PREVIEW_FILE_NAME))
+    if (preview) {
+      const previewFile = new File([preview], PREVIEW_FILE_NAME, {
+        lastModified,
+      })
+      files.push(previewFile)
+    }
+
+    // eslint-disable-next-line no-console
+    console.debug({ files })
 
     const hash = await randomBee.uploadFiles(POSTAGE_STAMP, files, { indexDocument: metadata.name })
     const hashIndex = hashToIndex(hash)
