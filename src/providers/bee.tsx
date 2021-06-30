@@ -58,9 +58,6 @@ export function Provider({ children }: Props): ReactElement {
       files.push(previewFile)
     }
 
-    // eslint-disable-next-line no-console
-    console.debug({ files })
-
     const hash = await randomBee.uploadFiles(POSTAGE_STAMP, files, { indexDocument: metadata.name })
     const hashIndex = hashToIndex(hash)
 
