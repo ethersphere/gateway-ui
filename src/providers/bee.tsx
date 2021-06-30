@@ -6,7 +6,6 @@ const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
 const randomBee = new Bee(BEE_HOSTS[randomIndex])
 
 interface ContextInterface {
-  isConnected: boolean
   upload: (file: File, preview?: Blob) => Promise<Reference>
   getMetadata: (hash: Reference | string) => Promise<Metadata | undefined>
   getPreview: (hash: Reference | string) => Promise<FileData<Data>>
@@ -15,7 +14,6 @@ interface ContextInterface {
 }
 
 const initialValues: ContextInterface = {
-  isConnected: true,
   upload: () => Promise.reject(),
   getMetadata: () => Promise.reject(),
   getPreview: () => Promise.reject(),
@@ -95,10 +93,8 @@ export function Provider({ children }: Props): ReactElement {
     return `${BEE_HOSTS[hashIndex]}/bzz/${hash}`
   }
 
-  const isConnected = true
-
   return (
-    <Context.Provider value={{ getMetadata, isConnected, upload, getPreview, getChunk, getDownloadLink }}>
+    <Context.Provider value={{ getMetadata, upload, getPreview, getChunk, getDownloadLink }}>
       {children}
     </Context.Provider>
   )
