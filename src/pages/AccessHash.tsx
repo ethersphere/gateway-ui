@@ -17,7 +17,6 @@ import LoadingFile from '../components/LoadingFile'
 import InvalidSwarmHash from '../components/InvalidSwarmHash'
 
 import { Context } from '../providers/bee'
-import { DOWNLOAD_HOST } from '../constants'
 
 import text from '../translations'
 
@@ -35,7 +34,7 @@ const SharePage = (): ReactElement => {
   const classes = useStyles()
 
   const { hash } = useParams<{ hash: string }>()
-  const { getMetadata, getPreview, getChunk } = useContext(Context)
+  const { getMetadata, getPreview, getChunk, getDownloadLink } = useContext(Context)
   const [metadata, setMetadata] = useState<Metadata | undefined>()
   const [preview, setPreview] = useState<string | undefined>(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -119,7 +118,7 @@ const SharePage = (): ReactElement => {
               variant="contained"
               className={classes.button}
               size="large"
-              href={`${DOWNLOAD_HOST}/bzz/${hash}`}
+              href={getDownloadLink(hash)}
               target="_blank"
             >
               <ArrowDown />
@@ -151,7 +150,7 @@ const SharePage = (): ReactElement => {
               variant="contained"
               className={classes.button}
               size="large"
-              href={`${DOWNLOAD_HOST}/bzz/${hash}`}
+              href={getDownloadLink(hash)}
               target="_blank"
             >
               <ArrowDown />
