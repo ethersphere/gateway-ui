@@ -1,6 +1,5 @@
 import type { ReactElement } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
 import { Check, CornerUpLeft, ArrowRight } from 'react-feather'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
@@ -12,6 +11,7 @@ import Layout from './Layout'
 import Header from './Header'
 import Footer from './Footer'
 import { CircularButton } from './CircularButton'
+import { Button } from './Button'
 
 import text from '../translations'
 
@@ -25,11 +25,6 @@ const useStyles = makeStyles((theme: Theme) =>
       minHeight: '100vh',
       zIndex: 1000,
       backgroundColor: theme.palette.background.default,
-    },
-    button: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
     },
     ul: {
       display: 'grid',
@@ -101,25 +96,20 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
             </Typography>
           </Paper>
           <Button
-            variant="contained"
-            className={classes.button}
-            size="small"
-            style={{ marginTop: 2, paddingLeft: 16, paddingRight: 16 }}
+            kind="secondary"
+            icon="CornerUpLeft"
+            style={{ marginTop: 2 }}
             onClick={() => history.push(ROUTES.LANDING_PAGE)}
           >
-            <CornerUpLeft />
             {text.accessPage.backAction}
-            <CornerUpLeft style={{ opacity: 0 }} />
           </Button>
         </div>,
       ]}
       bottom={[
         <div key="bottom1" style={{ zIndex: 1000 }}>
           <Footer>
-            <Button variant="contained" className={classes.button} size="large" onClick={handleAgree}>
-              <Check />
+            <Button size="large" icon="Check" onClick={handleAgree}>
               {text.termsAndConditions.agreeAction}
-              <Check style={{ opacity: 0 }} />
             </Button>
           </Footer>
         </div>,
