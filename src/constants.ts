@@ -11,3 +11,4 @@ export const PREVIEW_FILE_NAME = '.swarmgatewaypreview.jpeg'
 const url = window.location.origin
 
 export const GATEWAY_URL = process.env.REACT_APP_GATEWAY_URL || url
+export const DIRECT_DOWNLOAD_URL = process.env.DIRECT_DOWNLOAD_URL || 'https://download.gateway.ethswarm.org/bzz/'

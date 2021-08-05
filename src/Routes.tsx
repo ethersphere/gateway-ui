@@ -7,8 +7,11 @@ export const ACCESS_HASH = (hash = ':hash'): string => `/access/${hash}`
 export const SHARE = '/share'
 export const TERMS_AND_CONDITIONS = '/termsandconditions'
 
+// ENS compatibility
+export const BZZ = '/bzz/:hash'
+
 // pages
-import { Access, AccessHash, LandingPage, Share, Page404, TermsAndConditions } from './pages'
+import { Access, AccessHash, LandingPage, Share, Page404, TermsAndConditions, RedirectToDownload } from './pages'
 
 const BaseRouter = (): ReactElement => (
   <BrowserRouter>
@@ -18,6 +21,9 @@ const BaseRouter = (): ReactElement => (
       <Route exact path={ACCESS} component={Access} />
       <Route exact path={ACCESS_HASH()} component={AccessHash} />
       <Route exact path={TERMS_AND_CONDITIONS} component={TermsAndConditions} />
+
+      {/* ENS compatibility, redirect to download directly*/}
+      <Route exact path={BZZ} component={RedirectToDownload} />
       <Route path="*" component={Page404} />
     </Switch>
   </BrowserRouter>
