@@ -6,7 +6,7 @@ const RedirectToDownload = (): null => {
 
   // React router can redirect only withing the app itself, that is why we need to assing window.location
   // https://knowbody.github.io/react-router-docs/api/Redirect.html
-  window.location.assign(`${DIRECT_DOWNLOAD_URL}${hash}`)
+  window.location.replace(`${DIRECT_DOWNLOAD_URL}${hash}`)
 
   return null
 }
