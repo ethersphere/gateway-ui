@@ -47,8 +47,10 @@ There are some ways you can make this module better:
 
 ## Maintainers
 
-- [agazso](https://github.com/agazso)
 - [vojtechsimetka](https://github.com/vojtechsimetka)
+- [Cafe137](https://github.com/Cafe137)
+
+See what "Maintainer" means [here](https://github.com/ethersphere/repo-maintainer).
 
 ## License
 
