@@ -79,7 +79,7 @@ const SharePage = (): ReactElement => {
         URL.revokeObjectURL(preview)
       }
     }
-  }, [metadata, hash, preview, getPreview])
+  }, [metadata, hash]) //eslint-disable-line react-hooks/exhaustive-deps
 
   if (isLoading) {
     return (

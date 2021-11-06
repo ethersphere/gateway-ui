@@ -51,7 +51,7 @@ export default function ShareGeneral(): ReactElement {
         URL.revokeObjectURL(preview)
       }
     }
-  }, [file, preview])
+  }, [file]) //eslint-disable-line react-hooks/exhaustive-deps
 
   if (!file) return <AddFile setFile={setFile} />
 
