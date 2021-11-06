@@ -12,6 +12,11 @@ jobs:
   check:
     runs-on: ubuntu-latest
 
+    env:
+      REACT_APP_BEE_DOWNLOAD_API: 'https://gateway.ethswarm.org'
+      REACT_APP_BEE_UPLOAD_APIS:
+        '[https://bee-0.gateway.ethswarm.org, https://bee-1.gateway.ethswarm.org, https://bee-2.gateway.ethswarm.org]'
+
     strategy:
       matrix:
         node-version: [16.x]
@@ -47,11 +52,17 @@ jobs:
         env:
           CI: true
 
-      - name: Build
-        run: npm run build
-
       - name: Update supported Bee action
         uses: ethersphere/update-supported-bee-action@v1
         if: github.ref == 'refs/heads/master'
         with:
+          token: ${{ secrets.REPO_GHA_PAT }}
+
+      - name: Build
+        run: npm run build
+
+      - name: Create preview
+        uses: ethersphere/beeload-action@v1
+        with:
+          preview: 'true'
           token: ${{ secrets.REPO_GHA_PAT }}
