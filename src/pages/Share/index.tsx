@@ -26,7 +26,7 @@ export default function ShareGeneral(): ReactElement {
       .then(hash => {
         setUploadReference(hash)
       })
-      .catch(e => setUploadError(true)) // eslint-disable-line
+      .catch(() => setUploadError(true)) // eslint-disable-line
       .finally(() => {
         setIsUploadingFile(false)
       })
@@ -51,7 +51,7 @@ export default function ShareGeneral(): ReactElement {
         URL.revokeObjectURL(preview)
       }
     }
-  }, [file])
+  }, [file, preview])
 
   if (!file) return <AddFile setFile={setFile} />
 

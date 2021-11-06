@@ -63,7 +63,7 @@ const SharePage = (): ReactElement => {
           .catch(() => setChunkExists(false))
           .finally(() => setIsLoading(false))
       })
-  }, [hash])
+  }, [hash, getChunk, getMetadata])
 
   useEffect(() => {
     if (metadata && metadata.type.startsWith('image')) {
@@ -79,7 +79,7 @@ const SharePage = (): ReactElement => {
         URL.revokeObjectURL(preview)
       }
     }
-  }, [metadata, hash])
+  }, [metadata, hash, preview, getPreview])
 
   if (isLoading) {
     return (

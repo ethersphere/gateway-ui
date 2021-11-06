@@ -31,7 +31,7 @@ export default function SimpleTabs({ values, onChange }: Props): ReactElement {
     setIndex(newIndex)
   }
 
-  useEffect(() => onChange(values[index]?.value || ''), [index])
+  useEffect(() => onChange(values[index]?.value || ''), [index, values, onChange])
 
   return (
     <div className={classes.root}>
