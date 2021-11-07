@@ -42,7 +42,7 @@ const SharePage = (): ReactElement => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!(Utils.Hex.isHexString(hash, 64) || Utils.Hex.isHexString(hash, 128))) {
+    if (!(Utils.isHexString(hash, 64) || Utils.isHexString(hash, 128))) {
       setErrorMsg('Not a valid Swarm Reference')
       setIsLoading(false)
 
