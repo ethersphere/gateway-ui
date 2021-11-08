@@ -38,7 +38,7 @@ export default function AccessPage(): ReactElement {
   const [hashError, setHashError] = useState<boolean>(false)
 
   useEffect(() => {
-    if (!hash || Utils.Hex.isHexString(hash, 64) || Utils.Hex.isHexString(hash, 128)) setHashError(false)
+    if (!hash || Utils.isHexString(hash, 64) || Utils.isHexString(hash, 128)) setHashError(false)
     else setHashError(true)
   }, [hash])
 

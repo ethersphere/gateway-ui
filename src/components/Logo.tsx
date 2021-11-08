@@ -18,7 +18,7 @@ export default function LogoComponent(): ReactElement {
 
   return (
     <Link to={ROUTES.LANDING_PAGE}>
-      <img className={classes.img} src={logo} />
+      <img className={classes.img} src={logo} alt="logo" />
     </Link>
   )
 }

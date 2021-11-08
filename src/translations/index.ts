@@ -1,6 +1,6 @@
 // For review of the page copy purposes. Later on can be used to provide other language translations
 
-export default {
+const text = {
   // Main landng page
   landingPage: {
     tagline: 'The easiest way to share & access files on the Swarm network.',
@@ -122,3 +122,5 @@ export default {
     fileType: 'Type',
   },
 }
+
+export default text

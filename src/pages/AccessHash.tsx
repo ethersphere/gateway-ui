@@ -42,7 +42,7 @@ const SharePage = (): ReactElement => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!(Utils.Hex.isHexString(hash, 64) || Utils.Hex.isHexString(hash, 128))) {
+    if (!(Utils.isHexString(hash, 64) || Utils.isHexString(hash, 128))) {
       setErrorMsg('Not a valid Swarm Reference')
       setIsLoading(false)
 
@@ -63,7 +63,7 @@ const SharePage = (): ReactElement => {
           .catch(() => setChunkExists(false))
           .finally(() => setIsLoading(false))
       })
-  }, [hash])
+  }, [hash, getChunk, getMetadata])
 
   useEffect(() => {
     if (metadata && metadata.type.startsWith('image')) {
@@ -79,7 +79,7 @@ const SharePage = (): ReactElement => {
         URL.revokeObjectURL(preview)
       }
     }
-  }, [metadata, hash])
+  }, [metadata, hash]) //eslint-disable-line react-hooks/exhaustive-deps
 
   if (isLoading) {
     return (

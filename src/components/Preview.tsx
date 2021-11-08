@@ -42,7 +42,7 @@ const Preview = ({ file, preview }: Props): ReactElement => {
     <Paper square elevation={0} className={classes.root}>
       {preview && (
         <div className={classes.imageWrapper}>
-          <img src={preview} className={classes.image} />
+          <img src={preview} className={classes.image} alt="preview" />
         </div>
       )}
       {file && (

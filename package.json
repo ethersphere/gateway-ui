@@ -1,49 +1,52 @@
 {
   "name": "gateway",
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
-    "@ethersphere/bee-js": "^0.10.0",
-    "@material-ui/core": "^4.11.4",
-    "browser-image-resizer": "^2.2.0",
-    "feather-icons": "^4.28.0",
+    "@ethersphere/bee-js": "^2.1.0",
+    "@material-ui/core": "^4.12.3",
+    "browser-image-resizer": "^2.2.1",
     "react": "^17.0.2",
-    "react-copy-to-clipboard": "^5.0.3",
+    "react-copy-to-clipboard": "^5.0.4",
     "react-dom": "^17.0.2",
     "react-feather": "^2.0.9",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.3.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
-    "@types/react": "^17.0.0",
-    "@types/react-copy-to-clipboard": "^5.0.0",
-    "@types/react-dom": "^17.0.0",
-    "@types/react-router-dom": "^5.1.7",
+    "@commitlint/config-conventional": "^14.1.0",
+    "@testing-library/jest-dom": "^5.15.0",
+    "@testing-library/react": "^12.1.2",
+    "@types/jest": "^27.0.2",
+    "@types/react": "^17.0.34",
+    "@types/react-copy-to-clipboard": "^5.0.2",
+    "@types/react-dom": "^17.0.11",
+    "@types/react-router-dom": "^5.3.2",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "babel-eslint": "^10.1.0",
+    "depcheck": "^1.4.2",
     "eslint": "^7.24.0",
     "eslint-config-prettier": "^8.2.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-flowtype": "^5.10.0",
+    "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-jest": "^24.3.5",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
-    "prettier": "^2.2.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-testing-library": "^3.10.2",
+    "prettier": "^2.4.1",
     "react-scripts": "4.0.3",
-    "typescript": "^4.1.2",
-    "web-vitals": "^1.0.1"
+    "typescript": "^4.4.4",
+    "web-vitals": "^2.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "depcheck": "depcheck .",
     "lint": "eslint --fix \"src/**/*.ts\" \"src/**/*.tsx\" && prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
     "lint:check": "eslint \"src/**/*.ts\" \"src/**/*.tsx\" && prettier --check \"src/**/*.ts\" \"src/**/*.tsx\""
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [

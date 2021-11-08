@@ -58,15 +58,15 @@ export function Provider({ children }: Props): ReactElement {
       files.push(previewFile)
     }
 
-    const hash = await randomBee.uploadFiles(POSTAGE_STAMP, files, { indexDocument: metadata.name })
-    const hashIndex = hashToIndex(hash)
+    const { reference } = await randomBee.uploadFiles(POSTAGE_STAMP, files, { indexDocument: metadata.name })
+    const hashIndex = hashToIndex(reference)
 
     if (hashIndex !== randomIndex) {
       const bee = new Bee(BEE_HOSTS[hashIndex])
       await bee.uploadFiles(POSTAGE_STAMP, files, { indexDocument: metadata.name })
     }
 
-    return hash
+    return reference
   }
 
   const getMetadata = async (hash: Reference | string): Promise<Metadata | undefined> => {
