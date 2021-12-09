@@ -1,4 +1,4 @@
-import { ReactElement, useState, DragEvent } from 'react'
+import { ReactElement, useState, DragEvent, useRef, useEffect } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
@@ -46,9 +46,18 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Upload({ setFile }: Props): ReactElement {
   const classes = useStyles()
+  const ref = useRef<HTMLInputElement>(null)
   const history = useHistory()
   const [isDragging, setIsDragging] = useState<boolean>(false)
   const [agreedToTerms, setAgreedToTerms] = useState(Boolean(window.localStorage.getItem('agreedToTerms')))
+
+  useEffect(() => {
+    if (ref.current !== null) {
+      ref.current.setAttribute('directory', '')
+      ref.current.setAttribute('mozdirectory', '')
+      ref.current.setAttribute('webkitdirectory', '')
+    }
+  }, [ref])
 
   const handleAgree = () => {
     setAgreedToTerms(true)
@@ -134,6 +143,20 @@ export default function Upload({ setFile }: Props): ReactElement {
             <input
               type="file"
               hidden
+              onChange={event => {
+                if (event.target?.files?.length === 1) setFile(event.target.files[0]) // eslint-disable-line
+              }}
+            />
+            <Plus style={{ opacity: 0 }} />
+          </Button>,
+          <Button variant="contained" key="center2" component="label" size="large" className={classes.button}>
+            <Plus strokeWidth={1} />
+            {text.addFile.addFolderAction}
+            <input
+              type="file"
+              hidden
+              multiple
+              ref={ref}
               onChange={event => {
                 if (event.target?.files?.length === 1) setFile(event.target.files[0]) // eslint-disable-line
               }}

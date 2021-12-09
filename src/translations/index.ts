@@ -20,13 +20,15 @@ const text = {
   /** Access flow **/
   addFile: {
     header: 'share',
-    tagline: 'Use the button below, or drag and drop, to select a file you would like to share on the Swarm network.',
+    tagline: 'Use the buttons below, or drag and drop, to select files you would like to share on the Swarm network.',
     addFileAction: 'add a file',
-    disclaimer: 'Maximum file size is 10MB. You can upload only one file at a time.',
+    addFolderAction: 'add a folder or website',
+    disclaimer:
+      'Maximum upload size is 10MB. To upload a website make sure that your folder contains an "index.html file".',
 
     // Drag & drop overlay
     dragHeader: 'drop it',
-    dragTagline: 'Add a file by dropping it anywhere on this window.',
+    dragTagline: 'Add by dropping it anywhere on this window.',
   },
 
   uploadFile: {
