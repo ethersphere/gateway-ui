@@ -9,12 +9,13 @@ import Typography from '@material-ui/core/Typography'
 import Header from '../../components/Header'
 import Layout from '../../components/Layout'
 import TermsAndConditionsPopup from '../../components/TermsAndConditionsPopup'
+import { SwarmFile } from '../../utils/SwarmFile'
 
 import * as ROUTES from '../../Routes'
 import text from '../../translations'
 
 interface Props {
-  setFile: (file: File | null) => void
+  setFiles: (files: SwarmFile[]) => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 )
 
-export default function Upload({ setFile }: Props): ReactElement {
+export default function Upload({ setFiles }: Props): ReactElement {
   const classes = useStyles()
   const ref = useRef<HTMLInputElement>(null)
   const history = useHistory()
@@ -73,25 +74,31 @@ export default function Upload({ setFile }: Props): ReactElement {
   const onDrop = (ev: DragEvent<HTMLDivElement>) => {
     // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault()
+    const fls = []
 
     if (ev.dataTransfer.items) {
-      const fls = []
       // Use DataTransferItemList interface to access the file(s)
       for (let i = 0; i < ev.dataTransfer.items.length; i++) {
         // If dropped items aren't files, reject them
         if (ev.dataTransfer.items[i].kind === 'file') {
           const fl = ev.dataTransfer.items[i].getAsFile()
 
-          if (fl) fls.push(fl)
+          if (fl) fls.push(new SwarmFile(fl))
         }
       }
-
-      if (fls.length === 1) setFile(fls[0])
     } else {
       // Use DataTransfer interface to access the file(s)
-      if (ev.dataTransfer.files.length === 1) setFile(ev.dataTransfer.files[0])
+      for (let i = 0; i < ev.dataTransfer.files.length; i++) fls.push(new SwarmFile(ev.dataTransfer.files[i]))
     }
+    setFiles(fls)
     setIsDragging(false)
+  }
+
+  const handleFiles = (files: FileList | null) => {
+    const fls = []
+
+    if (files) for (let i = 0; i < files.length; i++) fls.push(new SwarmFile(files[i]))
+    setFiles(fls)
   }
 
   const onDragLeave = (ev: DragEvent<HTMLDivElement>) => {
@@ -143,8 +150,9 @@ export default function Upload({ setFile }: Props): ReactElement {
             <input
               type="file"
               hidden
+              multiple
               onChange={event => {
-                if (event.target?.files?.length === 1) setFile(event.target.files[0]) // eslint-disable-line
+                handleFiles(event.target.files)
               }}
             />
             <Plus style={{ opacity: 0 }} />
@@ -158,7 +166,7 @@ export default function Upload({ setFile }: Props): ReactElement {
               multiple
               ref={ref}
               onChange={event => {
-                if (event.target?.files?.length === 1) setFile(event.target.files[0]) // eslint-disable-line
+                handleFiles(event.target.files)
               }}
             />
             <Plus style={{ opacity: 0 }} />

@@ -13,6 +13,7 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import Preview from '../../components/Preview'
 import Layout from '../../components/Layout'
+import { SwarmFile } from '../../utils/SwarmFile'
 
 import * as ROUTES from '../../Routes'
 
@@ -29,16 +30,22 @@ const useStyles = makeStyles(() =>
 )
 
 interface Props {
-  setFile: (file: File | null) => void
-  file: File
+  setFiles: (files: SwarmFile[]) => void
+  files: SwarmFile[]
   preview: string | undefined
   uploadFile: () => void
   isUploadingFile: boolean
   uploadError: boolean
 }
 
-const SharePage = ({ uploadError, setFile, file, preview, uploadFile, isUploadingFile }: Props): ReactElement => {
+const SharePage = ({ uploadError, setFiles, files, preview, uploadFile, isUploadingFile }: Props): ReactElement => {
   const classes = useStyles()
+
+  const fls = []
+  for (let i = 0; i < files.length; ++i) {
+    const file = files[i] as any
+    fls.push(file.path ? file.path : file.name)
+  }
 
   return (
     <Layout
@@ -46,7 +53,7 @@ const SharePage = ({ uploadError, setFile, file, preview, uploadFile, isUploadin
         <Header
           key="top1"
           rightAction={
-            <IconButton onClick={() => setFile(null)}>
+            <IconButton onClick={() => setFiles([])}>
               <X />
             </IconButton>
           }
@@ -57,7 +64,7 @@ const SharePage = ({ uploadError, setFile, file, preview, uploadFile, isUploadin
           {text.uploadFile.tagline}
         </Typography>,
       ]}
-      center={[<Preview key="center" file={file} preview={preview} />]}
+      center={[<div key="center1">{fls.join(' ')}</div> /*<Preview key="center" file={files} preview={preview} />*/]}
       bottom={[
         <Typography key="top2" variant="body1">
           {text.uploadFile.disclaimer}{' '}

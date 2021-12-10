@@ -3,13 +3,15 @@ import { ReactElement, useState, useContext, useEffect } from 'react'
 import SharePage from './Share'
 import AddFile from './AddFile'
 import Upload from './Upload'
+import { SwarmFile } from '../../utils/SwarmFile'
+import { detectIndexHtml, getAssetNameFromFiles } from '../../utils/file'
 
 import { readAndCompressImage } from 'browser-image-resizer'
 
 import { Context } from '../../providers/bee'
 
 export default function ShareGeneral(): ReactElement {
-  const [file, setFile] = useState<File | null>(null)
+  const [files, setFiles] = useState<SwarmFile[]>([])
   const [uploadReference, setUploadReference] = useState('')
   const [isUploadingFile, setIsUploadingFile] = useState<boolean>(false)
   const [uploadError, setUploadError] = useState<boolean>(false)
@@ -18,11 +20,12 @@ export default function ShareGeneral(): ReactElement {
   const { upload } = useContext(Context)
 
   const uploadFile = () => {
-    if (!file) return
+    if (files.length === 0) return
 
     setIsUploadingFile(true)
     setUploadError(false)
-    upload(file, previewBlob)
+
+    upload(files, previewBlob)
       .then(hash => {
         setUploadReference(hash)
       })
@@ -39,29 +42,29 @@ export default function ShareGeneral(): ReactElement {
       setPreviewBlob(undefined)
     }
 
-    if (!file || !file.type.startsWith('image')) return
-
-    readAndCompressImage(file, { maxWidth: 896, maxHeight: 672, autoRotate: false }).then(blob => {
-      setPreview(URL.createObjectURL(blob)) // NOTE: Until it is cleared with URL.revokeObjectURL, the file stays allocated in memory
-      setPreviewBlob(blob)
-    })
+    // if (!file || !file.type.startsWith('image')) return
+    //
+    // readAndCompressImage(file, { maxWidth: 896, maxHeight: 672, autoRotate: false }).then(blob => {
+    //   setPreview(URL.createObjectURL(blob)) // NOTE: Until it is cleared with URL.revokeObjectURL, the file stays allocated in memory
+    //   setPreviewBlob(blob)
+    // })
 
     return () => {
       if (preview) {
         URL.revokeObjectURL(preview)
       }
     }
-  }, [file]) //eslint-disable-line react-hooks/exhaustive-deps
+  }, [files]) //eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!file) return <AddFile setFile={setFile} />
+  if (files.length === 0) return <AddFile setFiles={setFiles} />
 
   if (uploadReference) return <SharePage uploadReference={uploadReference} />
 
   return (
     <Upload
       uploadError={uploadError}
-      setFile={setFile}
-      file={file}
+      setFiles={setFiles}
+      files={files}
       preview={preview}
       uploadFile={uploadFile}
       isUploadingFile={isUploadingFile}

@@ -1,12 +1,13 @@
 import { createContext, ReactChild, ReactElement } from 'react'
 import { Bee, Data, FileData, Reference } from '@ethersphere/bee-js'
 import { BEE_HOSTS, META_FILE_NAME, POSTAGE_STAMP, PREVIEW_FILE_NAME } from '../constants'
+import { SwarmFile } from '../utils/SwarmFile'
 
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
 const randomBee = new Bee(BEE_HOSTS[randomIndex])
 
 interface ContextInterface {
-  upload: (file: File, preview?: Blob) => Promise<Reference>
+  upload: (files: SwarmFile[], preview?: Blob) => Promise<Reference>
   getMetadata: (hash: Reference | string) => Promise<Metadata | undefined>
   getPreview: (hash: Reference | string) => Promise<FileData<Data>>
   getChunk: (hash: Reference | string) => Promise<Data>
@@ -35,35 +36,37 @@ function hashToIndex(hash: Reference | string) {
 }
 
 export function Provider({ children }: Props): ReactElement {
-  const upload = async (file: File, preview?: Blob) => {
-    const lastModified = file.lastModified
+  const upload = async (files: SwarmFile[], preview?: Blob) => {
+    // const indexDocument = files.length === 1 ? files[0].name : detectIndexHtml(files) || undefined
+    // const lastModified = file.lastModified
 
-    const metadata = {
-      name: file.name,
-      type: file.type,
-      size: file.size,
-    }
+    // const metadata = {
+    //   name: file.name,
+    //   type: file.type,
+    //   size: file.size,
+    // }
+    //
+    // const metafile = new File([JSON.stringify(metadata)], META_FILE_NAME, {
+    //   type: 'application/json',
+    //   lastModified,
+    // })
+    //
+    // const files = [file, metafile]
 
-    const metafile = new File([JSON.stringify(metadata)], META_FILE_NAME, {
-      type: 'application/json',
-      lastModified,
-    })
+    // if (preview) {
+    //   const previewFile = new File([preview], PREVIEW_FILE_NAME, {
+    //     lastModified,
+    //   })
+    //   files.push(previewFile)
+    // }
 
-    const files = [file, metafile]
-
-    if (preview) {
-      const previewFile = new File([preview], PREVIEW_FILE_NAME, {
-        lastModified,
-      })
-      files.push(previewFile)
-    }
-
-    const { reference } = await randomBee.uploadFiles(POSTAGE_STAMP, files, { indexDocument: metadata.name })
+    const fls = files as unknown as File[]
+    const { reference } = await randomBee.uploadFiles(POSTAGE_STAMP, fls) //, { indexDocument: metadata.name })
     const hashIndex = hashToIndex(reference)
 
     if (hashIndex !== randomIndex) {
       const bee = new Bee(BEE_HOSTS[hashIndex])
-      await bee.uploadFiles(POSTAGE_STAMP, files, { indexDocument: metadata.name })
+      await bee.uploadFiles(POSTAGE_STAMP, fls) //, { indexDocument: metadata.name })
     }
 
     return reference
