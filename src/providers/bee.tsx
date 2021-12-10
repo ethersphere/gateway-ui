@@ -2,6 +2,7 @@ import { createContext, ReactChild, ReactElement } from 'react'
 import { Bee, Data, FileData, Reference } from '@ethersphere/bee-js'
 import { BEE_HOSTS, META_FILE_NAME, POSTAGE_STAMP, PREVIEW_FILE_NAME } from '../constants'
 import { SwarmFile } from '../utils/SwarmFile'
+import { detectIndexHtml } from '../utils/file'
 
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
 const randomBee = new Bee(BEE_HOSTS[randomIndex])
@@ -37,7 +38,7 @@ function hashToIndex(hash: Reference | string) {
 
 export function Provider({ children }: Props): ReactElement {
   const upload = async (files: SwarmFile[], preview?: Blob) => {
-    // const indexDocument = files.length === 1 ? files[0].name : detectIndexHtml(files) || undefined
+    const indexDocument = files.length === 1 ? files[0].name : detectIndexHtml(files) || undefined
     // const lastModified = file.lastModified
 
     // const metadata = {
@@ -60,13 +61,12 @@ export function Provider({ children }: Props): ReactElement {
     //   files.push(previewFile)
     // }
 
-    const fls = files as unknown as File[]
-    const { reference } = await randomBee.uploadFiles(POSTAGE_STAMP, fls) //, { indexDocument: metadata.name })
+    const { reference } = await randomBee.uploadFiles(POSTAGE_STAMP, files, { indexDocument })
     const hashIndex = hashToIndex(reference)
 
     if (hashIndex !== randomIndex) {
       const bee = new Bee(BEE_HOSTS[hashIndex])
-      await bee.uploadFiles(POSTAGE_STAMP, fls) //, { indexDocument: metadata.name })
+      await bee.uploadFiles(POSTAGE_STAMP, files, { indexDocument })
     }
 
     return reference
