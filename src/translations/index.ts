@@ -24,7 +24,7 @@ const text = {
     addFileAction: 'add a file',
     addFolderAction: 'add a folder or website',
     disclaimer:
-      'Maximum upload size is 10MB. To upload a website make sure that your folder contains an "index.html file".',
+      'Maximum upload size is 10MB. To upload a website make sure that your folder contains an "index.html" file.',
 
     // Drag & drop overlay
     dragHeader: 'drop it',
@@ -32,7 +32,9 @@ const text = {
   },
 
   uploadFile: {
-    header: 'file',
+    headerFile: 'file',
+    headerWebsite: 'website',
+    headerFolder: 'folder',
     tagline: 'Please double-check before uploading, there is no undo.',
     disclaimer: 'By uploading you agree to the Swarm Gateway',
     termsAndCondition: 'Terms & Conditions',
@@ -119,9 +121,12 @@ const text = {
   },
 
   previewDetails: {
+    folderName: 'Folder Name',
+    folderContent: 'Folder content',
+    items: 'items',
     fileName: 'Filename',
-    fileSize: 'Size',
-    fileType: 'Type',
+    size: 'Size',
+    type: 'Type',
   },
 }
 

@@ -11,9 +11,10 @@ import Link from '@material-ui/core/Link'
 
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
-import Preview from '../../components/Preview'
+import { AssetPreview } from '../../components/AssetPreview'
 import Layout from '../../components/Layout'
 import { SwarmFile } from '../../utils/SwarmFile'
+import { detectIndexHtml } from '../../utils/file'
 
 import * as ROUTES from '../../Routes'
 
@@ -32,20 +33,19 @@ const useStyles = makeStyles(() =>
 interface Props {
   setFiles: (files: SwarmFile[]) => void
   files: SwarmFile[]
-  preview: string | undefined
   uploadFile: () => void
   isUploadingFile: boolean
   uploadError: boolean
 }
 
-const SharePage = ({ uploadError, setFiles, files, preview, uploadFile, isUploadingFile }: Props): ReactElement => {
+const SharePage = ({ uploadError, setFiles, files, uploadFile, isUploadingFile }: Props): ReactElement => {
   const classes = useStyles()
 
-  const fls = []
-  for (let i = 0; i < files.length; ++i) {
-    const file = files[i] as any
-    fls.push(file.path ? file.path : file.name)
-  }
+  let header = text.uploadFile.headerFile
+
+  if (files.length > 1) header = text.uploadFile.headerFolder
+
+  if (detectIndexHtml(files)) header = text.uploadFile.headerWebsite
 
   return (
     <Layout
@@ -58,13 +58,13 @@ const SharePage = ({ uploadError, setFiles, files, preview, uploadFile, isUpload
             </IconButton>
           }
         >
-          {text.uploadFile.header}
+          {header}
         </Header>,
         <Typography key="top2" variant="body1">
           {text.uploadFile.tagline}
         </Typography>,
       ]}
-      center={[<div key="center1">{fls.join(' ')}</div> /*<Preview key="center" file={files} preview={preview} />*/]}
+      center={[<AssetPreview key="center" files={files} />]}
       bottom={[
         <Typography key="top2" variant="body1">
           {text.uploadFile.disclaimer}{' '}
