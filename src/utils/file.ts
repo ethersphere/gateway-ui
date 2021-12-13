@@ -1,3 +1,4 @@
+import { DragEvent } from 'react'
 import { FileData } from '@ethersphere/bee-js'
 import { SwarmFile } from './SwarmFile'
 
@@ -70,4 +71,87 @@ export function getAssetNameFromFiles(files: SwarmFile[]): string {
   }
 
   return files[0].path.split('/')[0]
+}
+
+/**
+ * Directory Typeguard
+ */
+function isDirectory(entry: FileSystemEntry): entry is FileSystemDirectoryEntry {
+  return entry.isDirectory
+}
+
+/**
+ * File Typeguard
+ */
+function isFile(entry: FileSystemEntry): entry is FileSystemFileEntry {
+  return entry.isFile
+}
+
+function readEntryContentAsync(entry: FileSystemEntry) {
+  return new Promise<File[]>(resolve => {
+    let reading = 0
+    const contents: SwarmFile[] = []
+
+    readEntry(entry)
+
+    function readEntry(entry: FileSystemEntry) {
+      // This is a file, load it
+      if (isFile(entry)) {
+        reading++
+        entry.file(file => {
+          reading--
+          contents.push(new SwarmFile(file, entry.fullPath))
+
+          if (reading === 0) resolve(contents)
+        })
+      }
+
+      // This is a directory, recursively process it's content
+      else if (isDirectory(entry)) {
+        reading++
+        const reader = entry.createReader()
+
+        reader.readEntries(entries => {
+          reading--
+          for (const entry of entries) readEntry(entry)
+
+          if (reading === 0) {
+            resolve(contents)
+          }
+        })
+      }
+    }
+  })
+}
+
+async function processItem(item: DataTransferItem, files: SwarmFile[]) {
+  // This is file or directory
+  if (item.kind === 'file') {
+    if (typeof item.webkitGetAsEntry === 'function') {
+      const entry = item.webkitGetAsEntry()
+
+      if (entry) {
+        const entryContent = await readEntryContentAsync(entry)
+        files.push(...entryContent.map(f => new SwarmFile(f)))
+      }
+    } else {
+      const file = item.getAsFile()
+
+      if (file) files.push(new SwarmFile(file))
+    }
+  }
+}
+
+export async function handleDrop(ev: DragEvent): Promise<SwarmFile[]> {
+  const files: SwarmFile[] = []
+
+  if (ev.dataTransfer.items) {
+    // Use DataTransferItemList interface to access the file(s) and directories
+    for (let i = 0; i < ev.dataTransfer.items.length; i++) await processItem(ev.dataTransfer.items[i], files)
+  } else {
+    // Use DataTransfer interface to access the file(s), this is a fallback as we can not handle directories here (even though this API is newer)
+    for (let i = 0; i < ev.dataTransfer.files.length; i++) files.push(new SwarmFile(ev.dataTransfer.files[i]))
+  }
+
+  return files
 }

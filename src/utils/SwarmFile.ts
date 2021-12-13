@@ -11,9 +11,9 @@ export class SwarmFile implements File {
   public arrayBuffer: () => Promise<ArrayBuffer>
   private data: Promise<ArrayBuffer>
 
-  constructor(file: File) {
-    const path = Reflect.get(file, 'path') || file.webkitRelativePath || file.name
-    this.path = path.startsWith('/') ? path.slice(1) : path
+  constructor(file: File, path?: string) {
+    const pth = path || Reflect.get(file, 'path') || file.webkitRelativePath || file.name
+    this.path = pth.startsWith('/') ? pth.slice(1) : pth
     this.webkitRelativePath = this.path
     this.name = file.name
     this.type = file.type

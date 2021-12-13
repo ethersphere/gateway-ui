@@ -1,4 +1,3 @@
-/* eslint max-depth: "off" */
 import { ReactElement, useState, DragEvent, useRef, useEffect } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
@@ -11,6 +10,7 @@ import Header from '../../components/Header'
 import Layout from '../../components/Layout'
 import TermsAndConditionsPopup from '../../components/TermsAndConditionsPopup'
 import { SwarmFile } from '../../utils/SwarmFile'
+import { handleDrop } from '../../utils/file'
 
 import * as ROUTES from '../../Routes'
 import text from '../../translations'
@@ -67,90 +67,18 @@ export default function Upload({ setFiles }: Props): ReactElement {
   }
 
   const onDragOver = (ev: DragEvent<HTMLDivElement>) => {
-    setIsDragging(true)
-
     ev.preventDefault()
-  }
+    ev.stopPropagation()
 
-  function isDirectory(entry: FileSystemEntry): entry is FileSystemDirectoryEntry {
-    return entry.isDirectory
-  }
-
-  function isFile(entry: FileSystemEntry): entry is FileSystemFileEntry {
-    return entry.isFile
-  }
-
-  function readEntryContentAsync(entry: FileSystemEntry) {
-    return new Promise<File[]>((resolve, reject) => {
-      let reading = 0
-      const contents: File[] = []
-
-      readEntry(entry)
-
-      function readEntry(entry: FileSystemEntry) {
-        if (isFile(entry)) {
-          reading++
-          entry.file(file => {
-            reading--
-            contents.push(file)
-
-            if (reading === 0) resolve(contents)
-          })
-        } else if (isDirectory(entry)) {
-          readReaderContent(entry.createReader())
-        }
-      }
-
-      function readReaderContent(reader: FileSystemDirectoryReader) {
-        reading++
-
-        reader.readEntries(entries => {
-          reading--
-          for (const entry of entries) {
-            readEntry(entry)
-          }
-
-          if (reading === 0) {
-            resolve(contents)
-          }
-        })
-      }
-    })
+    setIsDragging(true)
   }
 
   const onDrop = async (ev: DragEvent<HTMLDivElement>) => {
     // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault()
-    const fls: SwarmFile[] = []
+    ev.stopPropagation()
 
-    if (ev.dataTransfer.items) {
-      // Use DataTransferItemList interface to access the file(s)
-      for (let i = 0; i < ev.dataTransfer.items.length; i++) {
-        // This is file or directory
-        const item = ev.dataTransfer.items[i]
-
-        if (item.kind === 'file') {
-          if (typeof item.webkitGetAsEntry === 'function') {
-            const entry = item.webkitGetAsEntry()
-
-            if (!entry) continue
-
-            const entryContent = await readEntryContentAsync(entry)
-            fls.push(...entryContent.map(f => new SwarmFile(f)))
-            continue
-          }
-
-          const file = item.getAsFile()
-
-          if (file) fls.push(new SwarmFile(file))
-        }
-      }
-    } else {
-      // Use DataTransfer interface to access the file(s), this is a fallback as we can not handle directories here
-      for (let i = 0; i < ev.dataTransfer.files.length; i++) fls.push(new SwarmFile(ev.dataTransfer.files[i]))
-    }
-    console.log(fls) //eslint-disable-line
-    setFiles(fls)
+    setFiles(await handleDrop(ev))
     setIsDragging(false)
   }
 
@@ -162,9 +90,10 @@ export default function Upload({ setFiles }: Props): ReactElement {
   }
 
   const onDragLeave = (ev: DragEvent<HTMLDivElement>) => {
-    setIsDragging(false)
-
     ev.preventDefault()
+    ev.stopPropagation()
+
+    setIsDragging(false)
   }
 
   if (!agreedToTerms) return <TermsAndConditionsPopup handleAgree={handleAgree} />
