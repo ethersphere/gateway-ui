@@ -1,19 +1,25 @@
 import { createContext, ReactChild, ReactElement } from 'react'
 import { Bee, Data, FileData, Reference } from '@ethersphere/bee-js'
+import { ManifestJs } from '@ethersphere/manifest-js'
+import { saveAs } from 'file-saver'
+import JSZip from 'jszip'
+
 import { BEE_HOSTS, META_FILE_NAME, POSTAGE_STAMP, PREVIEW_FILE_NAME } from '../constants'
 import { SwarmFile } from '../utils/SwarmFile'
 import { detectIndexHtml, convertManifestToFiles } from '../utils/file'
-import { ManifestJs } from '@ethersphere/manifest-js'
 
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
 const randomBee = new Bee(BEE_HOSTS[randomIndex])
 
 interface ContextInterface {
   upload: (files: SwarmFile[], preview?: Blob) => Promise<Reference>
-  getMetadata: (hash: Reference | string) => Promise<{ files: SwarmFile[]; indexDocument: string | null }>
+  getMetadata: (
+    hash: Reference | string,
+  ) => Promise<{ entries: Record<string, string>; files: SwarmFile[]; indexDocument: string | null }>
   getPreview: (hash: Reference | string) => Promise<FileData<Data>>
   getChunk: (hash: Reference | string) => Promise<Data>
   getDownloadLink: (hash: Reference | string) => string
+  download: (hash: Reference | string, entries: Record<string, string>) => Promise<void>
 }
 
 const initialValues: ContextInterface = {
@@ -22,6 +28,7 @@ const initialValues: ContextInterface = {
   getPreview: () => Promise.reject(),
   getChunk: () => Promise.reject(),
   getDownloadLink: () => '',
+  download: () => Promise.resolve(),
 }
 
 export const Context = createContext<ContextInterface>(initialValues)
@@ -73,9 +80,25 @@ export function Provider({ children }: Props): ReactElement {
     return reference
   }
 
+  const download = async (hash: Reference | string, entries: Record<string, string>) => {
+    const hashIndex = hashToIndex(hash)
+    const bee = new Bee(BEE_HOSTS[hashIndex])
+
+    if (Object.keys(entries).length === 1) {
+      window.open(getDownloadLink(hash), '_blank')
+    } else {
+      const zip = new JSZip()
+      for (const [path, hash] of Object.entries(entries)) {
+        zip.file(path, await bee.downloadData(hash))
+      }
+      const content = await zip.generateAsync({ type: 'blob' })
+      saveAs(content, hash + '.zip')
+    }
+  }
+
   const getMetadata = async (
     hash: Reference | string,
-  ): Promise<{ files: SwarmFile[]; indexDocument: string | null }> => {
+  ): Promise<{ entries: Record<string, string>; files: SwarmFile[]; indexDocument: string | null }> => {
     try {
       const hashIndex = hashToIndex(hash)
       const bee = new Bee(BEE_HOSTS[hashIndex])
@@ -89,7 +112,7 @@ export function Provider({ children }: Props): ReactElement {
       const entries = await manifestJs.getHashes(hash)
       const indexDocument = await manifestJs.getIndexDocumentPath(hash)
 
-      return { files: convertManifestToFiles(entries), indexDocument }
+      return { entries, files: convertManifestToFiles(entries), indexDocument }
     } catch (e) {
       let message = typeof e === 'object' && e !== null && Reflect.get(e, 'message')
 
@@ -125,7 +148,7 @@ export function Provider({ children }: Props): ReactElement {
   }
 
   return (
-    <Context.Provider value={{ getMetadata, upload, getPreview, getChunk, getDownloadLink }}>
+    <Context.Provider value={{ getMetadata, upload, getPreview, getChunk, getDownloadLink, download }}>
       {children}
     </Context.Provider>
   )

@@ -35,9 +35,10 @@ const SharePage = (): ReactElement => {
   const classes = useStyles()
 
   const { hash } = useParams<{ hash: string }>()
-  const { getMetadata, getPreview, getChunk, getDownloadLink } = useContext(Context)
+  const { getMetadata, getPreview, getChunk, download } = useContext(Context)
   const [files, setFiles] = useState<SwarmFile[]>([])
   const [preview, setPreview] = useState<string | undefined>(undefined)
+  const [entries, setEntries] = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [chunkExists, setChunkExists] = useState<boolean>(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
@@ -51,10 +52,13 @@ const SharePage = (): ReactElement => {
     }
 
     setErrorMsg(null)
+    setFiles([])
+    setEntries({})
     setIsLoading(true)
     getMetadata(hash)
-      .then(({ files }) => {
+      .then(({ files, entries }) => {
         setFiles(files)
+        setEntries(entries)
         setIsLoading(false)
       })
       .catch(() => {
@@ -115,13 +119,7 @@ const SharePage = (): ReactElement => {
         center={[<AssetPreview key="center1" files={files} assetName={hash} />]}
         bottom={[
           <Footer key="bottom1">
-            <Button
-              variant="contained"
-              className={classes.button}
-              size="large"
-              href={getDownloadLink(hash)}
-              target="_blank"
-            >
+            <Button variant="contained" className={classes.button} size="large" onClick={() => download(hash, entries)}>
               <ArrowDown />
               {text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
@@ -147,13 +145,7 @@ const SharePage = (): ReactElement => {
         center={[<UnknownFile key="center1" />]}
         bottom={[
           <Footer key="bottom1">
-            <Button
-              variant="contained"
-              className={classes.button}
-              size="large"
-              href={getDownloadLink(hash)}
-              target="_blank"
-            >
+            <Button variant="contained" className={classes.button} size="large" onClick={() => download(hash, entries)}>
               <ArrowDown />
               {text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
