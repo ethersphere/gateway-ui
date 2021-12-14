@@ -2,14 +2,15 @@ import { createContext, ReactChild, ReactElement } from 'react'
 import { Bee, Data, FileData, Reference } from '@ethersphere/bee-js'
 import { BEE_HOSTS, META_FILE_NAME, POSTAGE_STAMP, PREVIEW_FILE_NAME } from '../constants'
 import { SwarmFile } from '../utils/SwarmFile'
-import { detectIndexHtml } from '../utils/file'
+import { detectIndexHtml, convertManifestToFiles } from '../utils/file'
+import { ManifestJs } from '@ethersphere/manifest-js'
 
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
 const randomBee = new Bee(BEE_HOSTS[randomIndex])
 
 interface ContextInterface {
   upload: (files: SwarmFile[], preview?: Blob) => Promise<Reference>
-  getMetadata: (hash: Reference | string) => Promise<Metadata | undefined>
+  getMetadata: (hash: Reference | string) => Promise<{ files: SwarmFile[]; indexDocument: string | null }>
   getPreview: (hash: Reference | string) => Promise<FileData<Data>>
   getChunk: (hash: Reference | string) => Promise<Data>
   getDownloadLink: (hash: Reference | string) => string
@@ -72,15 +73,34 @@ export function Provider({ children }: Props): ReactElement {
     return reference
   }
 
-  const getMetadata = async (hash: Reference | string): Promise<Metadata | undefined> => {
+  const getMetadata = async (
+    hash: Reference | string,
+  ): Promise<{ files: SwarmFile[]; indexDocument: string | null }> => {
     try {
       const hashIndex = hashToIndex(hash)
       const bee = new Bee(BEE_HOSTS[hashIndex])
-      const metadata = await bee.downloadFile(hash, META_FILE_NAME)
 
-      return JSON.parse(metadata.data.text()) as Metadata
+      const manifestJs = new ManifestJs(bee)
+      const isManifest = await manifestJs.isManifest(hash)
+
+      if (!isManifest) {
+        throw Error('The specified hash does not contain valid content.')
+      }
+      const entries = await manifestJs.getHashes(hash)
+      const indexDocument = await manifestJs.getIndexDocumentPath(hash)
+
+      return { files: convertManifestToFiles(entries), indexDocument }
     } catch (e) {
-      throw e
+      let message = typeof e === 'object' && e !== null && Reflect.get(e, 'message')
+
+      if (message.includes('path address not found')) {
+        message = 'The specified hash does not have an index document set.'
+      }
+
+      if (message.includes('Not Found: Not Found')) {
+        message = 'The specified hash was not found.'
+      }
+      throw new Error(message)
     }
   }
 

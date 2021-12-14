@@ -17,6 +17,7 @@ import LoadingFile from '../components/LoadingFile'
 import InvalidSwarmHash from '../components/InvalidSwarmHash'
 
 import { Context } from '../providers/bee'
+import { SwarmFile } from '../utils/SwarmFile'
 
 import text from '../translations'
 
@@ -35,7 +36,7 @@ const SharePage = (): ReactElement => {
 
   const { hash } = useParams<{ hash: string }>()
   const { getMetadata, getPreview, getChunk, getDownloadLink } = useContext(Context)
-  const [metadata, setMetadata] = useState<Metadata | undefined>()
+  const [files, setFiles] = useState<SwarmFile[]>([])
   const [preview, setPreview] = useState<string | undefined>(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [chunkExists, setChunkExists] = useState<boolean>(false)
@@ -52,8 +53,8 @@ const SharePage = (): ReactElement => {
     setErrorMsg(null)
     setIsLoading(true)
     getMetadata(hash)
-      .then(mtd => {
-        setMetadata(mtd)
+      .then(({ files }) => {
+        setFiles(files)
         setIsLoading(false)
       })
       .catch(() => {
@@ -65,21 +66,21 @@ const SharePage = (): ReactElement => {
       })
   }, [hash, getChunk, getMetadata])
 
-  useEffect(() => {
-    if (metadata && metadata.type.startsWith('image')) {
-      getPreview(hash)
-        .then(dt => {
-          setPreview(URL.createObjectURL(new Blob([dt.data.buffer])))
-        })
-        .catch() // We don't care preview does not exist
-    }
-
-    return () => {
-      if (preview) {
-        URL.revokeObjectURL(preview)
-      }
-    }
-  }, [metadata, hash]) //eslint-disable-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   if (metadata && metadata.type.startsWith('image')) {
+  //     getPreview(hash)
+  //       .then(dt => {
+  //         setPreview(URL.createObjectURL(new Blob([dt.data.buffer])))
+  //       })
+  //       .catch() // We don't care preview does not exist
+  //   }
+  //
+  //   return () => {
+  //     if (preview) {
+  //       URL.revokeObjectURL(preview)
+  //     }
+  //   }
+  // }, [metadata, hash]) //eslint-disable-line react-hooks/exhaustive-deps
 
   if (isLoading) {
     return (
@@ -100,7 +101,7 @@ const SharePage = (): ReactElement => {
   }
 
   // There are some metadata, display them and offer downloading the content
-  if (metadata) {
+  if (files.length > 0) {
     return (
       <Layout
         top={[
@@ -111,7 +112,7 @@ const SharePage = (): ReactElement => {
             {text.accessHashPage.useButtonToDownload}
           </Typography>,
         ]}
-        center={[<AssetPreview key="center1" files={[]} assetName={hash} />]}
+        center={[<AssetPreview key="center1" files={files} assetName={hash} />]}
         bottom={[
           <Footer key="bottom1">
             <Button
