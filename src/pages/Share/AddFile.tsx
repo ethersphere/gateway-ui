@@ -1,4 +1,4 @@
-import { ReactElement, useState, DragEvent } from 'react'
+import { ReactElement, useState, DragEvent, useRef, useEffect } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
@@ -9,12 +9,14 @@ import Typography from '@material-ui/core/Typography'
 import Header from '../../components/Header'
 import Layout from '../../components/Layout'
 import TermsAndConditionsPopup from '../../components/TermsAndConditionsPopup'
+import { SwarmFile } from '../../utils/SwarmFile'
+import { handleDrop } from '../../utils/file'
 
 import * as ROUTES from '../../Routes'
 import text from '../../translations'
 
 interface Props {
-  setFile: (file: File | null) => void
+  setFiles: (files: SwarmFile[]) => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -44,11 +46,20 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 )
 
-export default function Upload({ setFile }: Props): ReactElement {
+export default function Upload({ setFiles }: Props): ReactElement {
   const classes = useStyles()
+  const ref = useRef<HTMLInputElement>(null)
   const history = useHistory()
   const [isDragging, setIsDragging] = useState<boolean>(false)
   const [agreedToTerms, setAgreedToTerms] = useState(Boolean(window.localStorage.getItem('agreedToTerms')))
+
+  useEffect(() => {
+    if (ref.current !== null) {
+      ref.current.setAttribute('directory', '')
+      ref.current.setAttribute('mozdirectory', '')
+      ref.current.setAttribute('webkitdirectory', '')
+    }
+  }, [ref])
 
   const handleAgree = () => {
     setAgreedToTerms(true)
@@ -56,39 +67,33 @@ export default function Upload({ setFile }: Props): ReactElement {
   }
 
   const onDragOver = (ev: DragEvent<HTMLDivElement>) => {
-    setIsDragging(true)
-
     ev.preventDefault()
+    ev.stopPropagation()
+
+    setIsDragging(true)
   }
 
-  const onDrop = (ev: DragEvent<HTMLDivElement>) => {
+  const onDrop = async (ev: DragEvent<HTMLDivElement>) => {
     // Prevent default behavior (Prevent file from being opened)
     ev.preventDefault()
+    ev.stopPropagation()
 
-    if (ev.dataTransfer.items) {
-      const fls = []
-      // Use DataTransferItemList interface to access the file(s)
-      for (let i = 0; i < ev.dataTransfer.items.length; i++) {
-        // If dropped items aren't files, reject them
-        if (ev.dataTransfer.items[i].kind === 'file') {
-          const fl = ev.dataTransfer.items[i].getAsFile()
-
-          if (fl) fls.push(fl)
-        }
-      }
-
-      if (fls.length === 1) setFile(fls[0])
-    } else {
-      // Use DataTransfer interface to access the file(s)
-      if (ev.dataTransfer.files.length === 1) setFile(ev.dataTransfer.files[0])
-    }
+    setFiles(await handleDrop(ev))
     setIsDragging(false)
+  }
+
+  const handleFiles = (fileList: FileList | null) => {
+    const files = []
+
+    if (fileList) for (let i = 0; i < fileList.length; i++) files.push(new SwarmFile(fileList[i]))
+    setFiles(files)
   }
 
   const onDragLeave = (ev: DragEvent<HTMLDivElement>) => {
-    setIsDragging(false)
-
     ev.preventDefault()
+    ev.stopPropagation()
+
+    setIsDragging(false)
   }
 
   if (!agreedToTerms) return <TermsAndConditionsPopup handleAgree={handleAgree} />
@@ -134,8 +139,23 @@ export default function Upload({ setFile }: Props): ReactElement {
             <input
               type="file"
               hidden
+              multiple
               onChange={event => {
-                if (event.target?.files?.length === 1) setFile(event.target.files[0]) // eslint-disable-line
+                handleFiles(event.target.files)
+              }}
+            />
+            <Plus style={{ opacity: 0 }} />
+          </Button>,
+          <Button variant="contained" key="center2" component="label" size="large" className={classes.button}>
+            <Plus strokeWidth={1} />
+            {text.addFile.addFolderAction}
+            <input
+              type="file"
+              hidden
+              multiple
+              ref={ref}
+              onChange={event => {
+                handleFiles(event.target.files)
               }}
             />
             <Plus style={{ opacity: 0 }} />

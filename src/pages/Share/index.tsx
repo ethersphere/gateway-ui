@@ -1,36 +1,21 @@
-import { ReactElement, useState, useContext, useEffect } from 'react'
+import { ReactElement, useEffect, useState, useContext } from 'react'
+import { readAndCompressImage } from 'browser-image-resizer'
 
 import SharePage from './Share'
 import AddFile from './AddFile'
 import Upload from './Upload'
-
-import { readAndCompressImage } from 'browser-image-resizer'
+import { SwarmFile } from '../../utils/SwarmFile'
 
 import { Context } from '../../providers/bee'
 
 export default function ShareGeneral(): ReactElement {
-  const [file, setFile] = useState<File | null>(null)
+  const [files, setFiles] = useState<SwarmFile[]>([])
   const [uploadReference, setUploadReference] = useState('')
   const [isUploadingFile, setIsUploadingFile] = useState<boolean>(false)
   const [uploadError, setUploadError] = useState<boolean>(false)
   const [preview, setPreview] = useState<string | undefined>(undefined)
   const [previewBlob, setPreviewBlob] = useState<Blob | undefined>(undefined)
   const { upload } = useContext(Context)
-
-  const uploadFile = () => {
-    if (!file) return
-
-    setIsUploadingFile(true)
-    setUploadError(false)
-    upload(file, previewBlob)
-      .then(hash => {
-        setUploadReference(hash)
-      })
-      .catch(() => setUploadError(true)) // eslint-disable-line
-      .finally(() => {
-        setIsUploadingFile(false)
-      })
-  }
 
   useEffect(() => {
     if (preview) {
@@ -39,9 +24,9 @@ export default function ShareGeneral(): ReactElement {
       setPreviewBlob(undefined)
     }
 
-    if (!file || !file.type.startsWith('image')) return
+    if (files.length !== 1 || !files[0].type.startsWith('image')) return
 
-    readAndCompressImage(file, { maxWidth: 896, maxHeight: 672, autoRotate: false }).then(blob => {
+    readAndCompressImage(files[0], { maxWidth: 896, maxHeight: 672, autoRotate: false }).then(blob => {
       setPreview(URL.createObjectURL(blob)) // NOTE: Until it is cleared with URL.revokeObjectURL, the file stays allocated in memory
       setPreviewBlob(blob)
     })
@@ -51,18 +36,34 @@ export default function ShareGeneral(): ReactElement {
         URL.revokeObjectURL(preview)
       }
     }
-  }, [file]) //eslint-disable-line react-hooks/exhaustive-deps
+  }, [files]) //eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!file) return <AddFile setFile={setFile} />
+  const uploadFile = () => {
+    if (files.length === 0) return
+
+    setIsUploadingFile(true)
+    setUploadError(false)
+
+    upload(files, previewBlob)
+      .then(hash => {
+        setUploadReference(hash)
+      })
+      .catch(() => setUploadError(true)) // eslint-disable-line
+      .finally(() => {
+        setIsUploadingFile(false)
+      })
+  }
+
+  if (files.length === 0) return <AddFile setFiles={setFiles} />
 
   if (uploadReference) return <SharePage uploadReference={uploadReference} />
 
   return (
     <Upload
       uploadError={uploadError}
-      setFile={setFile}
-      file={file}
+      setFiles={setFiles}
       preview={preview}
+      files={files}
       uploadFile={uploadFile}
       isUploadingFile={isUploadingFile}
     />

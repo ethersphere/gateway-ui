@@ -9,7 +9,7 @@ import { Utils } from '@ethersphere/bee-js'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Logo from '../components/Logo'
-import Preview from '../components/Preview'
+import { AssetPreview } from '../components/AssetPreview'
 import Layout from '../components/Layout'
 import FileNotFound from '../components/FileNotFound'
 import UnknownFile from '../components/UnknownFile'
@@ -111,7 +111,7 @@ const SharePage = (): ReactElement => {
             {text.accessHashPage.useButtonToDownload}
           </Typography>,
         ]}
-        center={[<Preview key="center1" file={metadata} preview={preview} />]}
+        center={[<AssetPreview key="center1" files={[]} assetName={hash} />]}
         bottom={[
           <Footer key="bottom1">
             <Button
