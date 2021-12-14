@@ -82,11 +82,11 @@ export default function Upload({ setFiles }: Props): ReactElement {
     setIsDragging(false)
   }
 
-  const handleFiles = (files: FileList | null) => {
-    const fls = []
+  const handleFiles = (fileList: FileList | null) => {
+    const files = []
 
-    if (files) for (let i = 0; i < files.length; i++) fls.push(new SwarmFile(files[i]))
-    setFiles(fls)
+    if (fileList) for (let i = 0; i < fileList.length; i++) files.push(new SwarmFile(fileList[i]))
+    setFiles(files)
   }
 
   const onDragLeave = (ev: DragEvent<HTMLDivElement>) => {
