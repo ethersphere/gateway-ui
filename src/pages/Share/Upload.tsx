@@ -33,12 +33,13 @@ const useStyles = makeStyles(() =>
 interface Props {
   setFiles: (files: SwarmFile[]) => void
   files: SwarmFile[]
+  preview?: string
   uploadFile: () => void
   isUploadingFile: boolean
   uploadError: boolean
 }
 
-const SharePage = ({ uploadError, setFiles, files, uploadFile, isUploadingFile }: Props): ReactElement => {
+const SharePage = ({ uploadError, setFiles, files, preview, uploadFile, isUploadingFile }: Props): ReactElement => {
   const classes = useStyles()
 
   let header = text.uploadFile.headerFile
@@ -64,7 +65,7 @@ const SharePage = ({ uploadError, setFiles, files, uploadFile, isUploadingFile }
           {text.uploadFile.tagline}
         </Typography>,
       ]}
-      center={[<AssetPreview key="center" files={files} />]}
+      center={[<AssetPreview key="center" files={files} previewUri={preview} />]}
       bottom={[
         <Typography key="top2" variant="body1">
           {text.uploadFile.disclaimer}{' '}

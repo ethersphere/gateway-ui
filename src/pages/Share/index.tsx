@@ -1,4 +1,5 @@
-import { ReactElement, useState, useContext } from 'react'
+import { ReactElement, useEffect, useState, useContext } from 'react'
+import { readAndCompressImage } from 'browser-image-resizer'
 
 import SharePage from './Share'
 import AddFile from './AddFile'
@@ -12,7 +13,30 @@ export default function ShareGeneral(): ReactElement {
   const [uploadReference, setUploadReference] = useState('')
   const [isUploadingFile, setIsUploadingFile] = useState<boolean>(false)
   const [uploadError, setUploadError] = useState<boolean>(false)
+  const [preview, setPreview] = useState<string | undefined>(undefined)
+  const [previewBlob, setPreviewBlob] = useState<Blob | undefined>(undefined)
   const { upload } = useContext(Context)
+
+  useEffect(() => {
+    if (preview) {
+      URL.revokeObjectURL(preview) // Clear the preview from memory
+      setPreview(undefined)
+      setPreviewBlob(undefined)
+    }
+
+    if (files.length !== 1 || !files[0].type.startsWith('image')) return
+
+    readAndCompressImage(files[0], { maxWidth: 896, maxHeight: 672, autoRotate: false }).then(blob => {
+      setPreview(URL.createObjectURL(blob)) // NOTE: Until it is cleared with URL.revokeObjectURL, the file stays allocated in memory
+      setPreviewBlob(blob)
+    })
+
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview)
+      }
+    }
+  }, [files]) //eslint-disable-line react-hooks/exhaustive-deps
 
   const uploadFile = () => {
     if (files.length === 0) return
@@ -20,7 +44,7 @@ export default function ShareGeneral(): ReactElement {
     setIsUploadingFile(true)
     setUploadError(false)
 
-    upload(files)
+    upload(files, previewBlob)
       .then(hash => {
         setUploadReference(hash)
       })
@@ -38,6 +62,7 @@ export default function ShareGeneral(): ReactElement {
     <Upload
       uploadError={uploadError}
       setFiles={setFiles}
+      preview={preview}
       files={files}
       uploadFile={uploadFile}
       isUploadingFile={isUploadingFile}

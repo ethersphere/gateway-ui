@@ -11,42 +11,24 @@ import text from '../translations'
 
 interface Props {
   assetName?: string
+  previewUri?: string
   files: SwarmFile[]
 }
 
 // TODO: add optional prop for indexDocument when it is already known (e.g. downloading a manifest)
 
-export function AssetPreview({ assetName, files }: Props): ReactElement {
+export function AssetPreview({ assetName, files, previewUri }: Props): ReactElement {
   const [previewComponent, setPreviewComponent] = useState<ReactElement | undefined>(undefined)
-  const [previewUri, setPreviewUri] = useState<string | undefined>(undefined)
 
   useEffect(() => {
     if (files.length === 1) {
       // single image
-      if (files[0].type.startsWith('image/')) {
-        files[0].arrayBuffer().then(value => {
-          const blob = new Blob([value])
-          setPreviewUri(URL.createObjectURL(blob))
-        })
-        // single non-image
-      } else {
-        setPreviewUri(undefined)
-        setPreviewComponent(<AssetIcon icon={<File />} />)
-      }
+      setPreviewComponent(<AssetIcon icon={<File />} />)
       // collection
     } else if (detectIndexHtml(files)) {
-      setPreviewUri(undefined)
       setPreviewComponent(<AssetIcon icon={<Web />} />)
     } else {
-      setPreviewUri(undefined)
       setPreviewComponent(<AssetIcon icon={<Folder />} />)
-    }
-
-    // cleanup the preview image
-    return () => {
-      if (previewUri) {
-        URL.revokeObjectURL(previewUri)
-      }
     }
   }, [files]) // eslint-disable-line react-hooks/exhaustive-deps
 
