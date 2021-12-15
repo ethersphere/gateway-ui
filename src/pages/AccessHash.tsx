@@ -17,7 +17,6 @@ import LoadingFile from '../components/LoadingFile'
 import InvalidSwarmHash from '../components/InvalidSwarmHash'
 
 import { Context } from '../providers/bee'
-import { SwarmFile } from '../utils/SwarmFile'
 import { shortenHash } from '../utils/hash'
 
 import text from '../translations'

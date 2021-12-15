@@ -13,7 +13,6 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import { AssetPreview } from '../../components/AssetPreview'
 import Layout from '../../components/Layout'
-import { SwarmFile } from '../../utils/SwarmFile'
 import { detectIndexHtml } from '../../utils/file'
 
 import * as ROUTES from '../../Routes'
@@ -37,9 +36,18 @@ interface Props {
   uploadFile: () => void
   isUploadingFile: boolean
   uploadError: boolean
+  metadata?: Metadata
 }
 
-const SharePage = ({ uploadError, setFiles, files, preview, uploadFile, isUploadingFile }: Props): ReactElement => {
+const SharePage = ({
+  uploadError,
+  setFiles,
+  files,
+  preview,
+  uploadFile,
+  isUploadingFile,
+  metadata,
+}: Props): ReactElement => {
   const classes = useStyles()
 
   let header = text.uploadFile.headerFile
@@ -65,7 +73,7 @@ const SharePage = ({ uploadError, setFiles, files, preview, uploadFile, isUpload
           {text.uploadFile.tagline}
         </Typography>,
       ]}
-      center={[<AssetPreview key="center" files={files} previewUri={preview} />]}
+      center={[<AssetPreview key="center" files={files} previewUri={preview} metadata={metadata} />]}
       bottom={[
         <Typography key="top2" variant="body1">
           {text.uploadFile.disclaimer}{' '}

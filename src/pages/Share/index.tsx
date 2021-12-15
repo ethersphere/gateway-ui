@@ -4,9 +4,9 @@ import { readAndCompressImage } from 'browser-image-resizer'
 import SharePage from './Share'
 import AddFile from './AddFile'
 import Upload from './Upload'
-import { SwarmFile } from '../../utils/SwarmFile'
 
 import { Context } from '../../providers/bee'
+import { getMetadata } from '../../utils/file'
 
 export default function ShareGeneral(): ReactElement {
   const [files, setFiles] = useState<SwarmFile[]>([])
@@ -15,9 +15,12 @@ export default function ShareGeneral(): ReactElement {
   const [uploadError, setUploadError] = useState<boolean>(false)
   const [preview, setPreview] = useState<string | undefined>(undefined)
   const [previewBlob, setPreviewBlob] = useState<Blob | undefined>(undefined)
+  const [metadata, setMetadata] = useState<Metadata | undefined>()
   const { upload } = useContext(Context)
 
   useEffect(() => {
+    setMetadata(getMetadata(files))
+
     if (preview) {
       URL.revokeObjectURL(preview) // Clear the preview from memory
       setPreview(undefined)
@@ -39,12 +42,12 @@ export default function ShareGeneral(): ReactElement {
   }, [files]) //eslint-disable-line react-hooks/exhaustive-deps
 
   const uploadFile = () => {
-    if (files.length === 0) return
+    if (files.length === 0 || !metadata) return
 
     setIsUploadingFile(true)
     setUploadError(false)
 
-    upload(files, previewBlob)
+    upload(files, metadata, previewBlob)
       .then(hash => {
         setUploadReference(hash)
       })
@@ -62,6 +65,7 @@ export default function ShareGeneral(): ReactElement {
     <Upload
       uploadError={uploadError}
       setFiles={setFiles}
+      metadata={metadata}
       preview={preview}
       files={files}
       uploadFile={uploadFile}

@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography'
 import Header from '../../components/Header'
 import Layout from '../../components/Layout'
 import TermsAndConditionsPopup from '../../components/TermsAndConditionsPopup'
-import { SwarmFile, convertSwarmFile } from '../../utils/SwarmFile'
+import { convertSwarmFile } from '../../utils/SwarmFile'
 import { handleDrop } from '../../utils/file'
 
 import * as ROUTES from '../../Routes'

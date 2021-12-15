@@ -1,10 +1,18 @@
 /// <reference types="react-scripts" />
 
-interface Metadata {
-  path?: string
+interface SwarmMetadata {
   size: number
-  type: string
   name: string
+  type?: string
+}
+
+interface Metadata extends SwarmMetadata {
+  type: string
+  isWebsite: boolean
 }
 
 type FilePath = File & { path?: string }
+
+interface SwarmFile extends File {
+  path: string
+}

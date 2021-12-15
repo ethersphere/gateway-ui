@@ -4,59 +4,31 @@ import { ReactElement, useEffect, useState } from 'react'
 import { File, Folder } from 'react-feather'
 import { AssetIcon } from './AssetIcon'
 import { FitImage } from './FitImage'
-import { detectIndexHtml, getAssetNameFromFiles, getHumanReadableFileSize } from '../utils/file'
-import { SwarmFile } from '../utils/SwarmFile'
+import { mimeToKind, shortenBytes } from '../utils'
+import { detectIndexHtml, getAssetNameFromFiles } from '../utils/file'
 
 import text from '../translations'
 
 interface Props {
   assetName?: string
   previewUri?: string
+  metadata?: Metadata
   files: SwarmFile[]
 }
 
 // TODO: add optional prop for indexDocument when it is already known (e.g. downloading a manifest)
 
-export function AssetPreview({ assetName, files, previewUri }: Props): ReactElement {
-  const [previewComponent, setPreviewComponent] = useState<ReactElement | undefined>(undefined)
+export function AssetPreview({ assetName, files, previewUri, metadata }: Props): ReactElement {
+  let previewComponent = <File />
+  let type = mimeToKind(metadata?.type)
 
-  useEffect(() => {
-    if (files.length === 1) {
-      // single image
-      setPreviewComponent(<AssetIcon icon={<File />} />)
-      // collection
-    } else if (detectIndexHtml(files)) {
-      setPreviewComponent(<AssetIcon icon={<Web />} />)
-    } else {
-      setPreviewComponent(<AssetIcon icon={<Folder />} />)
-    }
-  }, [files]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const getPrimaryText = () => {
-    const name = getAssetNameFromFiles(files)
-
-    if (files.length === 1) return `${text.previewDetails.fileName}: ${assetName || name}`
-
-    return `${text.previewDetails.folderName}: ${assetName || name}`
+  if (metadata?.isWebsite) {
+    previewComponent = <Web />
+    type = text.uploadFile.headerWebsite
+  } else if (metadata?.type === 'folder') {
+    previewComponent = <Folder />
+    type = text.uploadFile.headerFolder
   }
-
-  const getKind = () => {
-    if (files.length === 1) return files[0].type
-
-    if (detectIndexHtml(files)) return text.uploadFile.headerWebsite
-
-    return text.uploadFile.headerFolder
-  }
-
-  const isFolder = () => [text.uploadFile.headerFolder, text.uploadFile.headerWebsite].includes(getKind())
-
-  const getSize = () => {
-    const bytes = files.reduce((total, item) => total + item.size, 0)
-
-    return getHumanReadableFileSize(bytes)
-  }
-
-  const size = getSize()
 
   return (
     <Box mb={4}>
@@ -65,22 +37,25 @@ export function AssetPreview({ assetName, files, previewUri }: Props): ReactElem
           {previewUri ? (
             <FitImage maxWidth="250px" maxHeight="175px" alt="Upload Preview" src={previewUri} />
           ) : (
-            previewComponent
+            <AssetIcon icon={previewComponent} />
           )}
           <Box p={2} textAlign="left">
-            <Typography>{getPrimaryText()}</Typography>
             <Typography>
-              {text.previewDetails.type}: {getKind()}
+              {metadata?.type === 'folder' ? text.previewDetails.folderName : text.previewDetails.fileName}:{' '}
+              {assetName || getAssetNameFromFiles(files)}
             </Typography>
-            {size !== '0 bytes' && (
+            <Typography>
+              {text.previewDetails.type}: {type}
+            </Typography>
+            {metadata?.size && (
               <Typography>
-                {text.previewDetails.size}: {size}
+                {text.previewDetails.size}: {shortenBytes(metadata.size)}
               </Typography>
             )}
           </Box>
         </Grid>
       </Box>
-      {isFolder() && (
+      {metadata?.type === 'folder' && (
         <Box mt={0.25} p={2} bgcolor="background.paper">
           <Grid container justifyContent="space-between" alignItems="center" direction="row">
             <Typography variant="subtitle2">{text.previewDetails.folderContent}</Typography>

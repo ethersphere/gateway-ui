@@ -1,6 +1,6 @@
 import { DragEvent } from 'react'
 import { FileData } from '@ethersphere/bee-js'
-import { SwarmFile, convertSwarmFile } from './SwarmFile'
+import { convertSwarmFile } from './SwarmFile'
 
 const indexHtmls = ['index.html', 'index.htm']
 
@@ -65,12 +65,21 @@ export function convertManifestToFiles(files: Record<string, string>): SwarmFile
   )
 }
 
-export function getAssetNameFromFiles(files: SwarmFile[]): string {
-  if (files.length === 1) {
-    return files[0].name
-  }
+export function getMetadata(files: SwarmFile[]): Metadata {
+  const size = files.reduce((total, item) => total + item.size, 0)
+  const isWebsite = Boolean(detectIndexHtml(files))
+  const name = getAssetNameFromFiles(files)
+  const type = files.length === 1 ? files[0].type : 'folder'
 
-  return files[0].path.split('/')[0]
+  return { size, name, type, isWebsite }
+}
+
+export function getAssetNameFromFiles(files: SwarmFile[]): string {
+  if (files.length === 1) return files[0].name
+
+  if (files.length > 0) return files[0].path.split('/')[0]
+
+  return 'unknown'
 }
 
 /**

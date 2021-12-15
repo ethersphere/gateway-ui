@@ -4,15 +4,15 @@ import { ManifestJs } from '@ethersphere/manifest-js'
 import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 
-import { BEE_HOSTS, POSTAGE_STAMP, PREVIEW_FILE_NAME } from '../constants'
-import { SwarmFile, convertSwarmFile } from '../utils/SwarmFile'
+import { BEE_HOSTS, META_FILE_NAME, POSTAGE_STAMP, PREVIEW_FILE_NAME } from '../constants'
+import { convertSwarmFile } from '../utils/SwarmFile'
 import { detectIndexHtml, convertManifestToFiles } from '../utils/file'
 
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
 const randomBee = new Bee(BEE_HOSTS[randomIndex])
 
 interface ContextInterface {
-  upload: (files: SwarmFile[], preview?: Blob) => Promise<Reference>
+  upload: (files: SwarmFile[], metadata: Metadata, preview?: Blob) => Promise<Reference>
   getMetadata: (
     hash: Reference | string,
   ) => Promise<{ entries: Record<string, string>; files: SwarmFile[]; indexDocument: string | null }>
@@ -45,24 +45,29 @@ function hashToIndex(hash: Reference | string) {
 }
 
 export function Provider({ children }: Props): ReactElement {
-  const upload = async (files: SwarmFile[], preview?: Blob) => {
+  const upload = async (files: SwarmFile[], metadata: Metadata, preview?: Blob) => {
     const indexDocument = files.length === 1 ? files[0].name : detectIndexHtml(files) || undefined
 
-    // const metadata = {
-    //   name: file.name,
-    //   type: file.type,
-    //   size: file.size,
-    // }
-    //
-    // const metafile = new File([JSON.stringify(metadata)], META_FILE_NAME, {
-    //   type: 'application/json',
-    //   lastModified,
-    // })
-    //
-    // const files = [file, metafile]
+    const lastModified = files[0].lastModified
+
+    // We want to store only some metadata
+    const mtd: SwarmMetadata = {
+      name: metadata.name,
+      size: metadata.size,
+    }
+
+    if (files.length > 1) mtd.type = metadata.type
+
+    files.push(
+      convertSwarmFile(
+        new File([JSON.stringify(mtd)], META_FILE_NAME, {
+          type: 'application/json',
+          lastModified,
+        }),
+      ),
+    )
 
     if (preview) {
-      const lastModified = files[0].lastModified
       const previewFile = new File([preview], PREVIEW_FILE_NAME, {
         lastModified,
       })
