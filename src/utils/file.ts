@@ -1,6 +1,6 @@
 import { DragEvent } from 'react'
 import { FileData } from '@ethersphere/bee-js'
-import { SwarmFile } from './SwarmFile'
+import { SwarmFile, convertSwarmFile } from './SwarmFile'
 
 const indexHtmls = ['index.html', 'index.htm']
 
@@ -100,7 +100,7 @@ function readEntryContentAsync(entry: FileSystemEntry) {
         reading++
         entry.file(file => {
           reading--
-          contents.push(new SwarmFile(file, entry.fullPath))
+          contents.push(convertSwarmFile(file, entry.fullPath))
 
           if (reading === 0) resolve(contents)
         })
@@ -132,12 +132,12 @@ async function processItem(item: DataTransferItem, files: SwarmFile[]) {
 
       if (entry) {
         const entryContent = await readEntryContentAsync(entry)
-        files.push(...entryContent.map(f => new SwarmFile(f)))
+        files.push(...entryContent.map(f => convertSwarmFile(f)))
       }
     } else {
       const file = item.getAsFile()
 
-      if (file) files.push(new SwarmFile(file))
+      if (file) files.push(convertSwarmFile(file))
     }
   }
 }
@@ -150,7 +150,7 @@ export async function handleDrop(ev: DragEvent): Promise<SwarmFile[]> {
     for (let i = 0; i < ev.dataTransfer.items.length; i++) await processItem(ev.dataTransfer.items[i], files)
   } else {
     // Use DataTransfer interface to access the file(s), this is a fallback as we can not handle directories here (even though this API is newer)
-    for (let i = 0; i < ev.dataTransfer.files.length; i++) files.push(new SwarmFile(ev.dataTransfer.files[i]))
+    for (let i = 0; i < ev.dataTransfer.files.length; i++) files.push(convertSwarmFile(ev.dataTransfer.files[i]))
   }
 
   return files

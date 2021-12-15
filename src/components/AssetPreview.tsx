@@ -62,10 +62,10 @@ export function AssetPreview({ assetName, files, previewUri }: Props): ReactElem
     <Box mb={4}>
       <Box bgcolor="background.paper">
         <Grid container direction="row">
-          {previewComponent ? (
-            previewComponent
-          ) : (
+          {previewUri ? (
             <FitImage maxWidth="250px" maxHeight="175px" alt="Upload Preview" src={previewUri} />
+          ) : (
+            previewComponent
           )}
           <Box p={2} textAlign="left">
             <Typography>{getPrimaryText()}</Typography>

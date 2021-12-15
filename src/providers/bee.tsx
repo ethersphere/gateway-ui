@@ -5,7 +5,7 @@ import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 
 import { BEE_HOSTS, POSTAGE_STAMP, PREVIEW_FILE_NAME } from '../constants'
-import { SwarmFile } from '../utils/SwarmFile'
+import type { SwarmFile } from '../utils/SwarmFile'
 import { detectIndexHtml, convertManifestToFiles } from '../utils/file'
 
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
