@@ -18,6 +18,7 @@ import InvalidSwarmHash from '../components/InvalidSwarmHash'
 
 import { Context } from '../providers/bee'
 import { SwarmFile } from '../utils/SwarmFile'
+import { shortenHash } from '../utils/hash'
 
 import text from '../translations'
 
@@ -35,9 +36,8 @@ const SharePage = (): ReactElement => {
   const classes = useStyles()
 
   const { hash } = useParams<{ hash: string }>()
-  const { getMetadata, getPreview, getChunk, download } = useContext(Context)
+  const { getMetadata, getChunk, download } = useContext(Context)
   const [files, setFiles] = useState<SwarmFile[]>([])
-  const [preview, setPreview] = useState<string | undefined>(undefined)
   const [entries, setEntries] = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [chunkExists, setChunkExists] = useState<boolean>(false)
@@ -70,22 +70,6 @@ const SharePage = (): ReactElement => {
       })
   }, [hash, getChunk, getMetadata])
 
-  // useEffect(() => {
-  //   if (metadata && metadata.type.startsWith('image')) {
-  //     getPreview(hash)
-  //       .then(dt => {
-  //         setPreview(URL.createObjectURL(new Blob([dt.data.buffer])))
-  //       })
-  //       .catch() // We don't care preview does not exist
-  //   }
-  //
-  //   return () => {
-  //     if (preview) {
-  //       URL.revokeObjectURL(preview)
-  //     }
-  //   }
-  // }, [metadata, hash]) //eslint-disable-line react-hooks/exhaustive-deps
-
   if (isLoading) {
     return (
       <Layout
@@ -116,7 +100,7 @@ const SharePage = (): ReactElement => {
             {text.accessHashPage.useButtonToDownload}
           </Typography>,
         ]}
-        center={[<AssetPreview key="center1" files={files} assetName={hash} />]}
+        center={[<AssetPreview key="center1" files={files} assetName={shortenHash(hash)} />]}
         bottom={[
           <Footer key="bottom1">
             <Button variant="contained" className={classes.button} size="large" onClick={() => download(hash, entries)}>

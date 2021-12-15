@@ -4,7 +4,7 @@ import { ManifestJs } from '@ethersphere/manifest-js'
 import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 
-import { BEE_HOSTS, META_FILE_NAME, POSTAGE_STAMP, PREVIEW_FILE_NAME } from '../constants'
+import { BEE_HOSTS, POSTAGE_STAMP, PREVIEW_FILE_NAME } from '../constants'
 import { SwarmFile } from '../utils/SwarmFile'
 import { detectIndexHtml, convertManifestToFiles } from '../utils/file'
 

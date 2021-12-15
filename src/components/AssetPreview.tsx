@@ -48,7 +48,7 @@ export function AssetPreview({ assetName, files, previewUri }: Props): ReactElem
     return text.uploadFile.headerFolder
   }
 
-  const isFolder = () => ['Folder', 'Website'].includes(getKind())
+  const isFolder = () => [text.uploadFile.headerFolder, text.uploadFile.headerWebsite].includes(getKind())
 
   const getSize = () => {
     const bytes = files.reduce((total, item) => total + item.size, 0)
@@ -67,7 +67,7 @@ export function AssetPreview({ assetName, files, previewUri }: Props): ReactElem
           ) : (
             <FitImage maxWidth="250px" maxHeight="175px" alt="Upload Preview" src={previewUri} />
           )}
-          <Box p={2}>
+          <Box p={2} textAlign="left">
             <Typography>{getPrimaryText()}</Typography>
             <Typography>
               {text.previewDetails.type}: {getKind()}
