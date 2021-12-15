@@ -1,11 +1,11 @@
 import { createContext, ReactChild, ReactElement } from 'react'
-import { Bee, Data, FileData, Reference } from '@ethersphere/bee-js'
+import { Bee, Data, Reference } from '@ethersphere/bee-js'
 import { ManifestJs } from '@ethersphere/manifest-js'
 import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 
 import { BEE_HOSTS, POSTAGE_STAMP, PREVIEW_FILE_NAME } from '../constants'
-import type { SwarmFile } from '../utils/SwarmFile'
+import { SwarmFile, convertSwarmFile } from '../utils/SwarmFile'
 import { detectIndexHtml, convertManifestToFiles } from '../utils/file'
 
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
@@ -16,7 +16,7 @@ interface ContextInterface {
   getMetadata: (
     hash: Reference | string,
   ) => Promise<{ entries: Record<string, string>; files: SwarmFile[]; indexDocument: string | null }>
-  getPreview: (hash: Reference | string) => Promise<FileData<Data>>
+  getPreview: (entries: Record<string, string>, hash: Reference | string) => string | undefined
   getChunk: (hash: Reference | string) => Promise<Data>
   getDownloadLink: (hash: Reference | string) => string
   download: (hash: Reference | string, entries: Record<string, string>) => Promise<void>
@@ -25,7 +25,7 @@ interface ContextInterface {
 const initialValues: ContextInterface = {
   upload: () => Promise.reject(),
   getMetadata: () => Promise.reject(),
-  getPreview: () => Promise.reject(),
+  getPreview: () => undefined,
   getChunk: () => Promise.reject(),
   getDownloadLink: () => '',
   download: () => Promise.resolve(),
@@ -47,7 +47,6 @@ function hashToIndex(hash: Reference | string) {
 export function Provider({ children }: Props): ReactElement {
   const upload = async (files: SwarmFile[], preview?: Blob) => {
     const indexDocument = files.length === 1 ? files[0].name : detectIndexHtml(files) || undefined
-    // const lastModified = file.lastModified
 
     // const metadata = {
     //   name: file.name,
@@ -62,12 +61,13 @@ export function Provider({ children }: Props): ReactElement {
     //
     // const files = [file, metafile]
 
-    // if (preview) {
-    //   const previewFile = new File([preview], PREVIEW_FILE_NAME, {
-    //     lastModified,
-    //   })
-    //   files.push(previewFile)
-    // }
+    if (preview) {
+      const lastModified = files[0].lastModified
+      const previewFile = new File([preview], PREVIEW_FILE_NAME, {
+        lastModified,
+      })
+      files.push(convertSwarmFile(previewFile))
+    }
 
     const { reference } = await randomBee.uploadFiles(POSTAGE_STAMP, files, { indexDocument })
     const hashIndex = hashToIndex(reference)
@@ -127,11 +127,12 @@ export function Provider({ children }: Props): ReactElement {
     }
   }
 
-  const getPreview = (hash: Reference | string): Promise<FileData<Data>> => {
-    const hashIndex = hashToIndex(hash)
-    const bee = new Bee(BEE_HOSTS[hashIndex])
+  const getPreview = (entries: Record<string, string>, hash: Reference | string): string | undefined => {
+    if (!entries[PREVIEW_FILE_NAME]) return
 
-    return bee.downloadFile(hash, PREVIEW_FILE_NAME)
+    const hashIndex = hashToIndex(hash)
+
+    return `${BEE_HOSTS[hashIndex]}/bzz/${hash}/${PREVIEW_FILE_NAME}`
   }
 
   const getChunk = (hash: Reference | string): Promise<Data> => {

@@ -36,7 +36,7 @@ const SharePage = (): ReactElement => {
   const classes = useStyles()
 
   const { hash } = useParams<{ hash: string }>()
-  const { getMetadata, getChunk, download } = useContext(Context)
+  const { getMetadata, getPreview, getChunk, download } = useContext(Context)
   const [files, setFiles] = useState<SwarmFile[]>([])
   const [entries, setEntries] = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -100,7 +100,14 @@ const SharePage = (): ReactElement => {
             {text.accessHashPage.useButtonToDownload}
           </Typography>,
         ]}
-        center={[<AssetPreview key="center1" files={files} assetName={shortenHash(hash)} />]}
+        center={[
+          <AssetPreview
+            key="center1"
+            files={files}
+            assetName={shortenHash(hash)}
+            previewUri={getPreview(entries, hash)}
+          />,
+        ]}
         bottom={[
           <Footer key="bottom1">
             <Button variant="contained" className={classes.button} size="large" onClick={() => download(hash, entries)}>
