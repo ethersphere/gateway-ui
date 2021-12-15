@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { RefreshCw, ArrowDown } from 'react-feather'
 import { Utils } from '@ethersphere/bee-js'
+import LaunchIcon from '@material-ui/icons/Launch'
 
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -15,6 +16,7 @@ import FileNotFound from '../components/FileNotFound'
 import UnknownFile from '../components/UnknownFile'
 import LoadingFile from '../components/LoadingFile'
 import InvalidSwarmHash from '../components/InvalidSwarmHash'
+import { DIRECT_DOWNLOAD_URL } from '../constants'
 
 import { Context } from '../providers/bee'
 
@@ -99,7 +101,23 @@ const SharePage = (): ReactElement => {
             {text.accessHashPage.useButtonToDownload}
           </Typography>,
         ]}
-        center={[<AssetPreview key="center1" previewUri={preview} metadata={metadata} />]}
+        center={[
+          <div key="center1">
+            <AssetPreview previewUri={preview} metadata={metadata} />
+            {metadata?.isWebsite && metadata?.hash && (
+              <Button
+                variant="contained"
+                className={classes.button}
+                href={`${DIRECT_DOWNLOAD_URL}${hash}`}
+                target="blank"
+              >
+                <LaunchIcon />
+                {text.accessHashPage.openWebsite}
+                <LaunchIcon style={{ opacity: 0 }} />
+              </Button>
+            )}
+          </div>,
+        ]}
         bottom={[
           <Footer key="bottom1">
             <Button

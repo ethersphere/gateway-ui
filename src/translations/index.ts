@@ -118,6 +118,7 @@ const text = {
     retryAction: 'retry',
     downloadAction: 'download',
     useButtonToDownload: 'Use the button below to download this file.',
+    openWebsite: 'open website',
   },
 
   previewDetails: {

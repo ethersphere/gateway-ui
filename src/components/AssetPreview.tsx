@@ -30,7 +30,7 @@ export function AssetPreview({ previewUri, metadata }: Props): ReactElement {
   }
 
   return (
-    <Box mb={4}>
+    <Box mb={0.25}>
       <Box bgcolor="background.paper">
         <Grid container direction="row">
           {previewUri ? (
