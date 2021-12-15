@@ -13,7 +13,6 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import { AssetPreview } from '../../components/AssetPreview'
 import Layout from '../../components/Layout'
-import { detectIndexHtml } from '../../utils/file'
 
 import * as ROUTES from '../../Routes'
 
@@ -54,7 +53,7 @@ const SharePage = ({
 
   if (files.length > 1) header = text.uploadFile.headerFolder
 
-  if (detectIndexHtml(files)) header = text.uploadFile.headerWebsite
+  if (metadata?.isWebsite) header = text.uploadFile.headerWebsite
 
   return (
     <Layout
@@ -73,7 +72,7 @@ const SharePage = ({
           {text.uploadFile.tagline}
         </Typography>,
       ]}
-      center={[<AssetPreview key="center" files={files} previewUri={preview} metadata={metadata} />]}
+      center={[<AssetPreview key="center" previewUri={preview} metadata={metadata} />]}
       bottom={[
         <Typography key="top2" variant="body1">
           {text.uploadFile.disclaimer}{' '}

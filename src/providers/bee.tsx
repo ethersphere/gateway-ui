@@ -5,27 +5,27 @@ import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 
 import { BEE_HOSTS, META_FILE_NAME, POSTAGE_STAMP, PREVIEW_FILE_NAME } from '../constants'
-import { convertSwarmFile, packageFile } from '../utils/SwarmFile'
-import { detectIndexHtml, convertManifestToFiles } from '../utils/file'
+import { packageFile } from '../utils/SwarmFile'
+import { detectIndexHtml } from '../utils/file'
 
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
 const randomBee = new Bee(BEE_HOSTS[randomIndex])
 
 interface ContextInterface {
   upload: (files: SwarmFile[], metadata: Metadata, preview?: Blob) => Promise<Reference>
-  getMetadata: (
-    hash: Reference | string,
-  ) => Promise<{ entries: Record<string, string>; files: SwarmFile[]; indexDocument: string | null }>
-  getPreview: (entries: Record<string, string>, hash: Reference | string) => string | undefined
+  getMetadata: (hash: Reference | string) => Promise<{
+    metadata: Metadata
+    preview?: string
+    entries: Record<string, string>
+  }>
   getChunk: (hash: Reference | string) => Promise<Data>
   getDownloadLink: (hash: Reference | string) => string
-  download: (hash: Reference | string, entries: Record<string, string>) => Promise<void>
+  download: (hash: Reference | string, entries: Record<string, string>, metadata?: Metadata) => Promise<void>
 }
 
 const initialValues: ContextInterface = {
   upload: () => Promise.reject(),
   getMetadata: () => Promise.reject(),
-  getPreview: () => undefined,
   getChunk: () => Promise.reject(),
   getDownloadLink: () => '',
   download: () => Promise.resolve(),
@@ -56,7 +56,8 @@ export function Provider({ children }: Props): ReactElement {
       size: metadata.size,
     }
 
-    if (files.length > 1) mtd.type = metadata.type
+    // Type of the file only makes sense for a single file
+    if (files.length === 1) mtd.type = metadata.type
 
     fls.push(
       new File([JSON.stringify(mtd)], META_FILE_NAME, {
@@ -83,11 +84,11 @@ export function Provider({ children }: Props): ReactElement {
     return reference
   }
 
-  const download = async (hash: Reference | string, entries: Record<string, string>) => {
+  const download = async (hash: Reference | string, entries: Record<string, string>, metadata?: Metadata) => {
     const hashIndex = hashToIndex(hash)
     const bee = new Bee(BEE_HOSTS[hashIndex])
 
-    if (Object.keys(entries).length === 1) {
+    if (Object.keys(entries).length <= 1) {
       window.open(getDownloadLink(hash), '_blank')
     } else {
       const zip = new JSZip()
@@ -95,41 +96,54 @@ export function Provider({ children }: Props): ReactElement {
         zip.file(path, await bee.downloadData(hash))
       }
       const content = await zip.generateAsync({ type: 'blob' })
-      saveAs(content, hash + '.zip')
+      saveAs(content, metadata?.name + '.zip')
     }
   }
 
   const getMetadata = async (
     hash: Reference | string,
-  ): Promise<{ entries: Record<string, string>; files: SwarmFile[]; indexDocument: string | null }> => {
-    try {
-      const hashIndex = hashToIndex(hash)
-      const bee = new Bee(BEE_HOSTS[hashIndex])
+  ): Promise<{
+    metadata: Metadata
+    preview?: string
+    entries: Record<string, string>
+  }> => {
+    let metadata: Metadata | undefined = { size: 0, type: 'unknown', name: hash, isWebsite: false }
+    let entries: Record<string, string> = {}
+    let preview
 
+    const hashIndex = hashToIndex(hash)
+    const bee = new Bee(BEE_HOSTS[hashIndex])
+
+    try {
+      const mtdt = await bee.downloadFile(hash, META_FILE_NAME)
+      metadata = { ...metadata, ...(JSON.parse(mtdt.data.text()) as Metadata) }
+    } catch (e) {} // eslint-disable-line no-empty
+
+    try {
       const manifestJs = new ManifestJs(bee)
       const isManifest = await manifestJs.isManifest(hash)
 
-      if (!isManifest) {
-        throw Error('The specified hash does not contain valid content.')
-      }
-      const entries = await manifestJs.getHashes(hash)
+      if (!isManifest) throw Error('The specified hash does not contain valid content.')
+      entries = await manifestJs.getHashes(hash)
+
       const indexDocument = await manifestJs.getIndexDocumentPath(hash)
 
-      console.log({ entries, files: convertManifestToFiles(entries), indexDocument }) //eslint-disable-line
+      metadata.isWebsite = Boolean(indexDocument && /.*\.html?$/i.test(indexDocument)) // only html documents can be websites
 
-      return { entries, files: convertManifestToFiles(entries), indexDocument }
-    } catch (e) {
-      let message = typeof e === 'object' && e !== null && Reflect.get(e, 'message')
+      preview = getPreview(entries, hash)
 
-      if (message.includes('path address not found')) {
-        message = 'The specified hash does not have an index document set.'
-      }
+      // Erase the files added by the gateway
+      delete entries[META_FILE_NAME]
+      delete entries[PREVIEW_FILE_NAME]
 
-      if (message.includes('Not Found: Not Found')) {
-        message = 'The specified hash was not found.'
-      }
-      throw new Error(message)
-    }
+      metadata.count = Object.keys(entries).length
+
+      if (metadata.count > 1) metadata.type = 'folder'
+    } catch (e) {} // eslint-disable-line no-empty
+
+    metadata.hash = hash
+
+    return { metadata, preview, entries }
   }
 
   const getPreview = (entries: Record<string, string>, hash: Reference | string): string | undefined => {
@@ -154,8 +168,6 @@ export function Provider({ children }: Props): ReactElement {
   }
 
   return (
-    <Context.Provider value={{ getMetadata, upload, getPreview, getChunk, getDownloadLink, download }}>
-      {children}
-    </Context.Provider>
+    <Context.Provider value={{ getMetadata, upload, getChunk, getDownloadLink, download }}>{children}</Context.Provider>
   )
 }

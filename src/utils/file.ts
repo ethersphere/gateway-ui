@@ -1,5 +1,4 @@
 import { DragEvent } from 'react'
-import { FileData } from '@ethersphere/bee-js'
 import { convertSwarmFile } from './SwarmFile'
 
 const indexHtmls = ['index.html', 'index.htm']
@@ -30,48 +29,14 @@ export function detectIndexHtml(files: SwarmFile[]): string | false {
   return false
 }
 
-export function getHumanReadableFileSize(bytes: number): string {
-  if (bytes >= 1e6) {
-    return (bytes / 1e6).toFixed(2) + ' MB'
-  }
-
-  if (bytes >= 1e3) {
-    return (bytes / 1e3).toFixed(2) + ' kB'
-  }
-
-  return bytes + ' bytes'
-}
-
-export function convertBeeFileToBrowserFile(file: FileData<ArrayBuffer>): Partial<File> {
-  return {
-    name: file.name,
-    size: file.data.byteLength,
-    type: file.contentType,
-    arrayBuffer: () => new Promise(resolve => resolve(file.data)),
-  }
-}
-
-export function convertManifestToFiles(files: Record<string, string>): SwarmFile[] {
-  return Object.entries(files).map(
-    x =>
-      ({
-        name: x[0],
-        path: x[0],
-        type: 'n/a',
-        size: 0,
-        webkitRelativePath: x[0],
-        arrayBuffer: () => new Promise(resolve => resolve(new ArrayBuffer(0))),
-      } as SwarmFile),
-  )
-}
-
 export function getMetadata(files: SwarmFile[]): Metadata {
   const size = files.reduce((total, item) => total + item.size, 0)
   const isWebsite = Boolean(detectIndexHtml(files))
   const name = getAssetNameFromFiles(files)
   const type = files.length === 1 ? files[0].type : 'folder'
+  const count = files.length
 
-  return { size, name, type, isWebsite }
+  return { size, name, type, isWebsite, count }
 }
 
 export function getAssetNameFromFiles(files: SwarmFile[]): string {

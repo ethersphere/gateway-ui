@@ -1,11 +1,11 @@
 import { Box, Grid, Typography } from '@material-ui/core'
 import { Web } from '@material-ui/icons'
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement } from 'react'
 import { File, Folder } from 'react-feather'
 import { AssetIcon } from './AssetIcon'
 import { FitImage } from './FitImage'
 import { mimeToKind, shortenBytes } from '../utils'
-import { detectIndexHtml, getAssetNameFromFiles } from '../utils/file'
+import { shortenHash } from '../utils/hash'
 
 import text from '../translations'
 
@@ -13,12 +13,11 @@ interface Props {
   assetName?: string
   previewUri?: string
   metadata?: Metadata
-  files: SwarmFile[]
 }
 
 // TODO: add optional prop for indexDocument when it is already known (e.g. downloading a manifest)
 
-export function AssetPreview({ assetName, files, previewUri, metadata }: Props): ReactElement {
+export function AssetPreview({ previewUri, metadata }: Props): ReactElement {
   let previewComponent = <File />
   let type = mimeToKind(metadata?.type)
 
@@ -40,9 +39,10 @@ export function AssetPreview({ assetName, files, previewUri, metadata }: Props):
             <AssetIcon icon={previewComponent} />
           )}
           <Box p={2} textAlign="left">
+            {metadata?.hash && <Typography>Swarm Hash: {shortenHash(metadata.hash)}</Typography>}
             <Typography>
               {metadata?.type === 'folder' ? text.previewDetails.folderName : text.previewDetails.fileName}:{' '}
-              {assetName || getAssetNameFromFiles(files)}
+              {metadata?.name}
             </Typography>
             <Typography>
               {text.previewDetails.type}: {type}
@@ -55,12 +55,12 @@ export function AssetPreview({ assetName, files, previewUri, metadata }: Props):
           </Box>
         </Grid>
       </Box>
-      {metadata?.type === 'folder' && (
+      {metadata?.type === 'folder' && metadata.count && (
         <Box mt={0.25} p={2} bgcolor="background.paper">
           <Grid container justifyContent="space-between" alignItems="center" direction="row">
             <Typography variant="subtitle2">{text.previewDetails.folderContent}</Typography>
             <Typography variant="subtitle2">
-              {files.length} {text.previewDetails.items}
+              {metadata.count} {text.previewDetails.items}
             </Typography>
           </Grid>
         </Box>

@@ -17,7 +17,6 @@ import LoadingFile from '../components/LoadingFile'
 import InvalidSwarmHash from '../components/InvalidSwarmHash'
 
 import { Context } from '../providers/bee'
-import { shortenHash } from '../utils/hash'
 
 import text from '../translations'
 
@@ -35,9 +34,10 @@ const SharePage = (): ReactElement => {
   const classes = useStyles()
 
   const { hash } = useParams<{ hash: string }>()
-  const { getMetadata, getPreview, getChunk, download } = useContext(Context)
-  const [files, setFiles] = useState<SwarmFile[]>([])
+  const { getMetadata, getChunk, download } = useContext(Context)
   const [entries, setEntries] = useState<Record<string, string>>({})
+  const [metadata, setMetadata] = useState<Metadata | undefined>()
+  const [preview, setPreview] = useState<string | undefined>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [chunkExists, setChunkExists] = useState<boolean>(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
@@ -51,12 +51,12 @@ const SharePage = (): ReactElement => {
     }
 
     setErrorMsg(null)
-    setFiles([])
     setEntries({})
     setIsLoading(true)
     getMetadata(hash)
-      .then(({ files, entries }) => {
-        setFiles(files)
+      .then(({ metadata, preview, entries }) => {
+        setMetadata(metadata)
+        setPreview(preview)
         setEntries(entries)
         setIsLoading(false)
       })
@@ -88,7 +88,7 @@ const SharePage = (): ReactElement => {
   }
 
   // There are some metadata, display them and offer downloading the content
-  if (files.length > 0) {
+  if (Object.keys(entries).length > 0) {
     return (
       <Layout
         top={[
@@ -99,17 +99,15 @@ const SharePage = (): ReactElement => {
             {text.accessHashPage.useButtonToDownload}
           </Typography>,
         ]}
-        center={[
-          <AssetPreview
-            key="center1"
-            files={files}
-            assetName={shortenHash(hash)}
-            previewUri={getPreview(entries, hash)}
-          />,
-        ]}
+        center={[<AssetPreview key="center1" previewUri={preview} metadata={metadata} />]}
         bottom={[
           <Footer key="bottom1">
-            <Button variant="contained" className={classes.button} size="large" onClick={() => download(hash, entries)}>
+            <Button
+              variant="contained"
+              className={classes.button}
+              size="large"
+              onClick={() => download(hash, entries, metadata)}
+            >
               <ArrowDown />
               {text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
