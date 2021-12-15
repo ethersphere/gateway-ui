@@ -5,7 +5,7 @@ import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 
 import { BEE_HOSTS, META_FILE_NAME, POSTAGE_STAMP, PREVIEW_FILE_NAME } from '../constants'
-import { convertSwarmFile } from '../utils/SwarmFile'
+import { convertSwarmFile, packageFile } from '../utils/SwarmFile'
 import { detectIndexHtml, convertManifestToFiles } from '../utils/file'
 
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
@@ -46,8 +46,8 @@ function hashToIndex(hash: Reference | string) {
 
 export function Provider({ children }: Props): ReactElement {
   const upload = async (files: SwarmFile[], metadata: Metadata, preview?: Blob) => {
+    const fls = files.map(packageFile) // Apart from packaging, this is needed to not modify the original files array as it can trigger effects
     const indexDocument = files.length === 1 ? files[0].name : detectIndexHtml(files) || undefined
-
     const lastModified = files[0].lastModified
 
     // We want to store only some metadata
@@ -58,28 +58,26 @@ export function Provider({ children }: Props): ReactElement {
 
     if (files.length > 1) mtd.type = metadata.type
 
-    files.push(
-      convertSwarmFile(
-        new File([JSON.stringify(mtd)], META_FILE_NAME, {
-          type: 'application/json',
-          lastModified,
-        }),
-      ),
+    fls.push(
+      new File([JSON.stringify(mtd)], META_FILE_NAME, {
+        type: 'application/json',
+        lastModified,
+      }),
     )
 
     if (preview) {
       const previewFile = new File([preview], PREVIEW_FILE_NAME, {
         lastModified,
       })
-      files.push(convertSwarmFile(previewFile))
+      fls.push(previewFile)
     }
 
-    const { reference } = await randomBee.uploadFiles(POSTAGE_STAMP, files, { indexDocument })
+    const { reference } = await randomBee.uploadFiles(POSTAGE_STAMP, fls, { indexDocument })
     const hashIndex = hashToIndex(reference)
 
     if (hashIndex !== randomIndex) {
       const bee = new Bee(BEE_HOSTS[hashIndex])
-      await bee.uploadFiles(POSTAGE_STAMP, files, { indexDocument })
+      await bee.uploadFiles(POSTAGE_STAMP, fls, { indexDocument })
     }
 
     return reference
@@ -116,6 +114,8 @@ export function Provider({ children }: Props): ReactElement {
       }
       const entries = await manifestJs.getHashes(hash)
       const indexDocument = await manifestJs.getIndexDocumentPath(hash)
+
+      console.log({ entries, files: convertManifestToFiles(entries), indexDocument }) //eslint-disable-line
 
       return { entries, files: convertManifestToFiles(entries), indexDocument }
     } catch (e) {

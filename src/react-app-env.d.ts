@@ -11,7 +11,7 @@ interface Metadata extends SwarmMetadata {
   isWebsite: boolean
 }
 
-type FilePath = File & { path?: string }
+type FilePath = File & { path?: string; fullPath?: string }
 
 interface SwarmFile extends File {
   path: string
