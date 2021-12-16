@@ -53,7 +53,7 @@ export default function AccessPage(): ReactElement {
                 history.push(ROUTES.LANDING_PAGE)
               }}
             >
-              <ArrowLeft />
+              <ArrowLeft strokeWidth={1} />
             </IconButton>
           }
         >
@@ -108,7 +108,7 @@ export default function AccessPage(): ReactElement {
                 onClick={() => history.push(ROUTES.ACCESS_HASH(hash))}
                 size="large"
               >
-                <Search />
+                <Search strokeWidth={1} />
                 {text.accessPage.findAction}
                 <Search style={{ opacity: 0 }} />
               </Button>

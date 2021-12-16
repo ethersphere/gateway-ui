@@ -108,7 +108,7 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
             style={{ marginTop: 2, paddingLeft: 16, paddingRight: 16 }}
             onClick={() => history.push(ROUTES.LANDING_PAGE)}
           >
-            <CornerUpLeft />
+            <CornerUpLeft strokeWidth={1} />
             {text.accessPage.backAction}
             <CornerUpLeft style={{ opacity: 0 }} />
           </Button>
@@ -118,7 +118,7 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
         <div key="bottom1" style={{ zIndex: 1000 }}>
           <Footer>
             <Button variant="contained" className={classes.button} size="large" onClick={handleAgree}>
-              <Check />
+              <Check strokeWidth={1} />
               {text.termsAndConditions.agreeAction}
               <Check style={{ opacity: 0 }} />
             </Button>

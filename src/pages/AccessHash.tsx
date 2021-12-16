@@ -111,7 +111,7 @@ const SharePage = (): ReactElement => {
                 href={`${DIRECT_DOWNLOAD_URL}${hash}`}
                 target="blank"
               >
-                <LaunchIcon />
+                <LaunchIcon strokeWidth={1} />
                 {text.accessHashPage.openWebsite}
                 <LaunchIcon style={{ opacity: 0 }} />
               </Button>
@@ -126,7 +126,7 @@ const SharePage = (): ReactElement => {
               size="large"
               onClick={() => download(hash, entries, metadata)}
             >
-              <ArrowDown />
+              <ArrowDown strokeWidth={1} />
               {text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
             </Button>

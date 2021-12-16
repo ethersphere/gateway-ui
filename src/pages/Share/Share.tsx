@@ -112,7 +112,7 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
                 e.stopPropagation()
               }}
             >
-              {copiedToClipboard ? <Check /> : <Clipboard />}
+              {copiedToClipboard ? <Check strokeWidth={1} /> : <Clipboard strokeWidth={1} />}
               {copiedToClipboard ? text.shareHashPage.copyLinkActionSuccess : text.shareHashPage.copyLinkAction}
               {/* Needed to properly align icon to the right and label to center */}
               <Clipboard style={{ opacity: 0 }} />
