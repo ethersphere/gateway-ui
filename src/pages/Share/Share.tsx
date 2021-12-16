@@ -64,8 +64,10 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
         <Tabs
           key="center1"
           onChange={reference => {
-            setActiveValue(reference)
-            setCopiedToClipboard(false)
+            if (reference !== activeValue) {
+              setActiveValue(reference)
+              setCopiedToClipboard(false)
+            }
           }}
           values={[
             {
@@ -108,11 +110,11 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
               className={classes.button}
               size="large"
               onClick={e => {
-                setCopiedToClipboard(true)
                 e.stopPropagation()
+                setCopiedToClipboard(true)
               }}
             >
-              {copiedToClipboard ? <Check /> : <Clipboard />}
+              {copiedToClipboard ? <Check strokeWidth={1} /> : <Clipboard strokeWidth={1} />}
               {copiedToClipboard ? text.shareHashPage.copyLinkActionSuccess : text.shareHashPage.copyLinkAction}
               {/* Needed to properly align icon to the right and label to center */}
               <Clipboard style={{ opacity: 0 }} />

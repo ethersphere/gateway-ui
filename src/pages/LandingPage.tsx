@@ -55,7 +55,7 @@ const LandingPage = (): ReactElement => {
           variant="contained"
           onClick={() => history.push(ROUTES.SHARE)}
         >
-          <ArrowUp />
+          <ArrowUp strokeWidth={1} />
           {text.landingPage.shareAction}
           {/* Needed to properly align icon to the right and label to center */}
           <ArrowUp style={{ opacity: 0 }} />
@@ -67,7 +67,7 @@ const LandingPage = (): ReactElement => {
           variant="contained"
           onClick={() => history.push(ROUTES.ACCESS)}
         >
-          <ArrowDown />
+          <ArrowDown strokeWidth={1} />
           {text.landingPage.accessAction}
           {/* Needed to properly align icon to the right and label to center */}
           <ArrowDown style={{ opacity: 0 }} />
