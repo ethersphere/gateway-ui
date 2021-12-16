@@ -16,6 +16,10 @@ const componentsOverrides = (theme: Theme) => ({
     contained: {
       backgroundColor: 'white',
       boxShadow: 'none',
+      '& svg': {
+        stroke: theme.palette.primary.main,
+        transition: '0.1s',
+      },
       '&:hover': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
@@ -26,16 +30,28 @@ const componentsOverrides = (theme: Theme) => ({
           color: 'white',
           boxShadow: 'none',
         },
-      },
-      '&:focus': {
-        backgroundColor: 'white',
-        color: theme.palette.text.primary,
-        boxShadow: 'none',
+        '& svg': {
+          stroke: '#fff',
+          transition: '0.1s',
+        },
       },
       '&:active': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
         boxShadow: 'none',
+        '& svg': {
+          stroke: '#fff',
+          transition: '0.1s',
+        },
+      },
+      '&:focus': {
+        backgroundColor: 'white',
+        color: theme.palette.text.primary,
+        boxShadow: 'none',
+        '& svg': {
+          stroke: theme.palette.primary.main,
+          transition: '0.1s',
+        },
       },
     },
   },
