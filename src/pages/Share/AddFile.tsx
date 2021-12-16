@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography'
 import Header from '../../components/Header'
 import Layout from '../../components/Layout'
 import TermsAndConditionsPopup from '../../components/TermsAndConditionsPopup'
-import { SwarmFile } from '../../utils/SwarmFile'
+import { convertSwarmFile } from '../../utils/SwarmFile'
 import { handleDrop } from '../../utils/file'
 
 import * as ROUTES from '../../Routes'
@@ -85,7 +85,7 @@ export default function Upload({ setFiles }: Props): ReactElement {
   const handleFiles = (fileList: FileList | null) => {
     const files = []
 
-    if (fileList) for (let i = 0; i < fileList.length; i++) files.push(new SwarmFile(fileList[i]))
+    if (fileList) for (let i = 0; i < fileList.length; i++) files.push(convertSwarmFile(fileList[i]))
     setFiles(files)
   }
 

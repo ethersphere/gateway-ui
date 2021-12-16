@@ -32,9 +32,9 @@ const text = {
   },
 
   uploadFile: {
-    headerFile: 'file',
-    headerWebsite: 'website',
-    headerFolder: 'folder',
+    headerFile: 'File',
+    headerWebsite: 'Website',
+    headerFolder: 'Folder',
     tagline: 'Please double-check before uploading, there is no undo.',
     disclaimer: 'By uploading you agree to the Swarm Gateway',
     termsAndCondition: 'Terms & Conditions',
@@ -118,6 +118,7 @@ const text = {
     retryAction: 'retry',
     downloadAction: 'download',
     useButtonToDownload: 'Use the button below to download this file.',
+    openWebsite: 'open website',
   },
 
   previewDetails: {

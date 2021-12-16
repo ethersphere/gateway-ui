@@ -1,6 +1,5 @@
 import { DragEvent } from 'react'
-import { FileData } from '@ethersphere/bee-js'
-import { SwarmFile } from './SwarmFile'
+import { convertSwarmFile } from './SwarmFile'
 
 const indexHtmls = ['index.html', 'index.htm']
 
@@ -30,47 +29,22 @@ export function detectIndexHtml(files: SwarmFile[]): string | false {
   return false
 }
 
-export function getHumanReadableFileSize(bytes: number): string {
-  if (bytes >= 1e6) {
-    return (bytes / 1e6).toFixed(2) + ' MB'
-  }
+export function getMetadata(files: SwarmFile[]): Metadata {
+  const size = files.reduce((total, item) => total + item.size, 0)
+  const isWebsite = Boolean(detectIndexHtml(files))
+  const name = getAssetNameFromFiles(files)
+  const type = files.length === 1 ? files[0].type : 'folder'
+  const count = files.length
 
-  if (bytes >= 1e3) {
-    return (bytes / 1e3).toFixed(2) + ' kB'
-  }
-
-  return bytes + ' bytes'
-}
-
-export function convertBeeFileToBrowserFile(file: FileData<ArrayBuffer>): Partial<File> {
-  return {
-    name: file.name,
-    size: file.data.byteLength,
-    type: file.contentType,
-    arrayBuffer: () => new Promise(resolve => resolve(file.data)),
-  }
-}
-
-export function convertManifestToFiles(files: Record<string, string>): SwarmFile[] {
-  return Object.entries(files).map(
-    x =>
-      ({
-        name: x[0],
-        path: x[0],
-        type: 'n/a',
-        size: 0,
-        webkitRelativePath: x[0],
-        arrayBuffer: () => new Promise(resolve => resolve(new ArrayBuffer(0))),
-      } as SwarmFile),
-  )
+  return { size, name, type, isWebsite, count }
 }
 
 export function getAssetNameFromFiles(files: SwarmFile[]): string {
-  if (files.length === 1) {
-    return files[0].name
-  }
+  if (files.length === 1) return files[0].name
 
-  return files[0].path.split('/')[0]
+  if (files.length > 0) return files[0].path.split('/')[0]
+
+  return 'unknown'
 }
 
 /**
@@ -100,7 +74,7 @@ function readEntryContentAsync(entry: FileSystemEntry) {
         reading++
         entry.file(file => {
           reading--
-          contents.push(new SwarmFile(file, entry.fullPath))
+          contents.push(convertSwarmFile(file, entry.fullPath))
 
           if (reading === 0) resolve(contents)
         })
@@ -132,12 +106,12 @@ async function processItem(item: DataTransferItem, files: SwarmFile[]) {
 
       if (entry) {
         const entryContent = await readEntryContentAsync(entry)
-        files.push(...entryContent.map(f => new SwarmFile(f)))
+        files.push(...entryContent.map(f => convertSwarmFile(f)))
       }
     } else {
       const file = item.getAsFile()
 
-      if (file) files.push(new SwarmFile(file))
+      if (file) files.push(convertSwarmFile(file))
     }
   }
 }
@@ -150,7 +124,7 @@ export async function handleDrop(ev: DragEvent): Promise<SwarmFile[]> {
     for (let i = 0; i < ev.dataTransfer.items.length; i++) await processItem(ev.dataTransfer.items[i], files)
   } else {
     // Use DataTransfer interface to access the file(s), this is a fallback as we can not handle directories here (even though this API is newer)
-    for (let i = 0; i < ev.dataTransfer.files.length; i++) files.push(new SwarmFile(ev.dataTransfer.files[i]))
+    for (let i = 0; i < ev.dataTransfer.files.length; i++) files.push(convertSwarmFile(ev.dataTransfer.files[i]))
   }
 
   return files

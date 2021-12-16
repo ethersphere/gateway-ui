@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { RefreshCw, ArrowDown } from 'react-feather'
 import { Utils } from '@ethersphere/bee-js'
+import LaunchIcon from '@material-ui/icons/Launch'
 
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -15,6 +16,7 @@ import FileNotFound from '../components/FileNotFound'
 import UnknownFile from '../components/UnknownFile'
 import LoadingFile from '../components/LoadingFile'
 import InvalidSwarmHash from '../components/InvalidSwarmHash'
+import { DIRECT_DOWNLOAD_URL } from '../constants'
 
 import { Context } from '../providers/bee'
 
@@ -34,9 +36,10 @@ const SharePage = (): ReactElement => {
   const classes = useStyles()
 
   const { hash } = useParams<{ hash: string }>()
-  const { getMetadata, getPreview, getChunk, getDownloadLink } = useContext(Context)
+  const { getMetadata, getChunk, download } = useContext(Context)
+  const [entries, setEntries] = useState<Record<string, string>>({})
   const [metadata, setMetadata] = useState<Metadata | undefined>()
-  const [preview, setPreview] = useState<string | undefined>(undefined)
+  const [preview, setPreview] = useState<string | undefined>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [chunkExists, setChunkExists] = useState<boolean>(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
@@ -50,10 +53,13 @@ const SharePage = (): ReactElement => {
     }
 
     setErrorMsg(null)
+    setEntries({})
     setIsLoading(true)
     getMetadata(hash)
-      .then(mtd => {
-        setMetadata(mtd)
+      .then(({ metadata, preview, entries }) => {
+        setMetadata(metadata)
+        setPreview(preview)
+        setEntries(entries)
         setIsLoading(false)
       })
       .catch(() => {
@@ -64,22 +70,6 @@ const SharePage = (): ReactElement => {
           .finally(() => setIsLoading(false))
       })
   }, [hash, getChunk, getMetadata])
-
-  useEffect(() => {
-    if (metadata && metadata.type.startsWith('image')) {
-      getPreview(hash)
-        .then(dt => {
-          setPreview(URL.createObjectURL(new Blob([dt.data.buffer])))
-        })
-        .catch() // We don't care preview does not exist
-    }
-
-    return () => {
-      if (preview) {
-        URL.revokeObjectURL(preview)
-      }
-    }
-  }, [metadata, hash]) //eslint-disable-line react-hooks/exhaustive-deps
 
   if (isLoading) {
     return (
@@ -100,7 +90,7 @@ const SharePage = (): ReactElement => {
   }
 
   // There are some metadata, display them and offer downloading the content
-  if (metadata) {
+  if (Object.keys(entries).length > 0) {
     return (
       <Layout
         top={[
@@ -111,15 +101,30 @@ const SharePage = (): ReactElement => {
             {text.accessHashPage.useButtonToDownload}
           </Typography>,
         ]}
-        center={[<AssetPreview key="center1" files={[]} assetName={hash} />]}
+        center={[
+          <div key="center1">
+            <AssetPreview previewUri={preview} metadata={metadata} />
+            {metadata?.isWebsite && metadata?.hash && (
+              <Button
+                variant="contained"
+                className={classes.button}
+                href={`${DIRECT_DOWNLOAD_URL}${hash}`}
+                target="blank"
+              >
+                <LaunchIcon />
+                {text.accessHashPage.openWebsite}
+                <LaunchIcon style={{ opacity: 0 }} />
+              </Button>
+            )}
+          </div>,
+        ]}
         bottom={[
           <Footer key="bottom1">
             <Button
               variant="contained"
               className={classes.button}
               size="large"
-              href={getDownloadLink(hash)}
-              target="_blank"
+              onClick={() => download(hash, entries, metadata)}
             >
               <ArrowDown />
               {text.accessHashPage.downloadAction}
@@ -146,13 +151,7 @@ const SharePage = (): ReactElement => {
         center={[<UnknownFile key="center1" />]}
         bottom={[
           <Footer key="bottom1">
-            <Button
-              variant="contained"
-              className={classes.button}
-              size="large"
-              href={getDownloadLink(hash)}
-              target="_blank"
-            >
+            <Button variant="contained" className={classes.button} size="large" onClick={() => download(hash, entries)}>
               <ArrowDown />
               {text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
