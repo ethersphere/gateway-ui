@@ -4,6 +4,9 @@ import { orange } from '@material-ui/core/colors'
 // Overwriting default components styles
 const componentsOverrides = (theme: Theme) => ({
   MuiButton: {
+    root: {
+      borderRadius: 0,
+    },
     textSizeLarge: {
       padding: theme.spacing(2),
     },
@@ -16,6 +19,7 @@ const componentsOverrides = (theme: Theme) => ({
       '&:hover': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
+        boxShadow: 'none',
         // https://github.com/mui-org/material-ui/issues/22543
         '@media (hover: none)': {
           backgroundColor: theme.palette.primary.main,
@@ -26,10 +30,12 @@ const componentsOverrides = (theme: Theme) => ({
       '&:focus': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
+        boxShadow: 'none',
       },
       '&:active': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
+        boxShadow: 'none',
       },
     },
   },
@@ -41,6 +47,7 @@ const componentsOverrides = (theme: Theme) => ({
       '&:hover': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
+        boxShadow: 'none',
         // https://github.com/mui-org/material-ui/issues/22543
         '@media (hover: none)': {
           backgroundColor: theme.palette.primary.main,
@@ -51,10 +58,12 @@ const componentsOverrides = (theme: Theme) => ({
       '&:focus': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
+        boxShadow: 'none',
       },
       '&:active': {
         backgroundColor: theme.palette.primary.main,
         color: 'white',
+        boxShadow: 'none',
       },
     },
   },
@@ -160,9 +169,14 @@ export const theme = createMuiTheme({
     },
     body2: {
       color: '#999999',
+      fontWeight: 400,
     },
     subtitle1: {
       color: '#242424',
+    },
+    subtitle2: {
+      color: '#999999',
+      fontWeight: 400,
     },
     fontFamily: ['Work Sans', 'Montserrat', 'Nunito', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'].join(','),
   },
