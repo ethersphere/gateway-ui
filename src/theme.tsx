@@ -28,8 +28,8 @@ const componentsOverrides = (theme: Theme) => ({
         },
       },
       '&:focus': {
-        backgroundColor: theme.palette.primary.main,
-        color: 'white',
+        backgroundColor: 'white',
+        color: theme.palette.text.primary,
         boxShadow: 'none',
       },
       '&:active': {

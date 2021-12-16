@@ -64,8 +64,10 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
         <Tabs
           key="center1"
           onChange={reference => {
-            setActiveValue(reference)
-            setCopiedToClipboard(false)
+            if (reference !== activeValue) {
+              setActiveValue(reference)
+              setCopiedToClipboard(false)
+            }
           }}
           values={[
             {
@@ -108,8 +110,8 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
               className={classes.button}
               size="large"
               onClick={e => {
-                setCopiedToClipboard(true)
                 e.stopPropagation()
+                setCopiedToClipboard(true)
               }}
             >
               {copiedToClipboard ? <Check strokeWidth={1} /> : <Clipboard strokeWidth={1} />}
