@@ -16,7 +16,7 @@
     "react-router-dom": "^5.3.0"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^14.1.0",
+    "@commitlint/config-conventional": "^15.0.0",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^12.1.2",
     "@types/file-saver": "^2.0.4",
