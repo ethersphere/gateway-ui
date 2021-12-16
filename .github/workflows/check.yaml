@@ -64,3 +64,4 @@ jobs:
         uses: ethersphere/beeload-action@v1
         with:
           preview: 'true'
+          token: ${{ secrets.REPO_GHA_PAT }}
