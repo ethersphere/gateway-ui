@@ -117,6 +117,7 @@ const text = {
     tagline: 'The easiest way to share & access files on the Swarm network.',
     retryAction: 'retry',
     downloadAction: 'download',
+    downloadingAction: 'downloading...',
     useButtonToDownload: 'Use the button below to download this file.',
     openWebsite: 'open website',
   },

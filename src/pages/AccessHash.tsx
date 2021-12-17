@@ -40,6 +40,7 @@ const SharePage = (): ReactElement => {
   const [metadata, setMetadata] = useState<Metadata | undefined>()
   const [preview, setPreview] = useState<string | undefined>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isDownloading, setIsDownloading] = useState<boolean>(false)
   const [chunkExists, setChunkExists] = useState<boolean>(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
@@ -69,6 +70,11 @@ const SharePage = (): ReactElement => {
           .finally(() => setIsLoading(false))
       })
   }, [hash, getChunk, getMetadata])
+
+  const handleDownload = () => {
+    setIsDownloading(true)
+    download(hash, entries).finally(() => setIsDownloading(false))
+  }
 
   if (isLoading) {
     return (
@@ -123,10 +129,11 @@ const SharePage = (): ReactElement => {
               variant="contained"
               className={classes.button}
               size="large"
-              onClick={() => download(hash, entries, metadata)}
+              onClick={handleDownload}
+              disabled={isDownloading}
             >
               <ArrowDown strokeWidth={1} />
-              {text.accessHashPage.downloadAction}
+              {isDownloading ? text.accessHashPage.downloadingAction : text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
             </Button>
           </Footer>,
@@ -150,9 +157,15 @@ const SharePage = (): ReactElement => {
         center={[<UnknownFile key="center1" />]}
         bottom={[
           <Footer key="bottom1">
-            <Button variant="contained" className={classes.button} size="large" onClick={() => download(hash, entries)}>
+            <Button
+              variant="contained"
+              className={classes.button}
+              size="large"
+              onClick={handleDownload}
+              disabled={isDownloading}
+            >
               <ArrowDown />
-              {text.accessHashPage.downloadAction}
+              {isDownloading ? text.accessHashPage.downloadingAction : text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
             </Button>
           </Footer>,
