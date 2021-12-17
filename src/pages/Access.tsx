@@ -30,6 +30,26 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 )
 
+function extractSwarmHash(string: string): string | null {
+  const matches = string.match(/[a-fA-F0-9]{64,128}/)
+
+  return (matches && matches[0]) || null
+}
+
+function recognizeSwarmHash(value: string) {
+  if (value.length < 64) {
+    return value
+  }
+
+  const hash = extractSwarmHash(value)
+
+  if (hash) {
+    return hash
+  }
+
+  return value
+}
+
 export default function AccessPage(): ReactElement {
   const classes = useStyles()
   const history = useHistory()
@@ -77,7 +97,7 @@ export default function AccessPage(): ReactElement {
             <InputBase
               className={classes.button}
               placeholder="Paste Swarm Hash Here"
-              onChange={event => setHash(event.target.value)}
+              onChange={event => setHash(recognizeSwarmHash(event.target.value))}
               value={hash}
               multiline
               style={{ backgroundColor: 'white' }}
