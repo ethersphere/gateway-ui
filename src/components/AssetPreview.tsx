@@ -1,7 +1,6 @@
 import { Box, Grid, Typography } from '@material-ui/core'
-import { Web } from '@material-ui/icons'
 import { ReactElement } from 'react'
-import { File, Folder } from 'react-feather'
+import { File, Folder, Monitor } from 'react-feather'
 import { AssetIcon } from './AssetIcon'
 import { FitImage } from './FitImage'
 import { mimeToKind, shortenBytes } from '../utils'
@@ -22,7 +21,7 @@ export function AssetPreview({ previewUri, metadata }: Props): ReactElement {
   let type = mimeToKind(metadata?.type)
 
   if (metadata?.isWebsite) {
-    previewComponent = <Web />
+    previewComponent = <Monitor />
     type = text.uploadFile.headerWebsite
   } else if (metadata?.type === 'folder') {
     previewComponent = <Folder />
