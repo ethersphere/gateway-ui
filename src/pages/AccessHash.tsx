@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { RefreshCw, ArrowDown, ExternalLink } from 'react-feather'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import { Utils } from '@ethersphere/bee-js'
 
 import Header from '../components/Header'
@@ -132,7 +133,7 @@ const SharePage = (): ReactElement => {
               onClick={handleDownload}
               disabled={isDownloading}
             >
-              <ArrowDown strokeWidth={1} />
+              {isDownloading ? <CircularProgress size={24} color="inherit" /> : <ArrowDown strokeWidth={1} />}
               {isDownloading ? text.accessHashPage.downloadingAction : text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
             </Button>
@@ -164,7 +165,7 @@ const SharePage = (): ReactElement => {
               onClick={handleDownload}
               disabled={isDownloading}
             >
-              <ArrowDown />
+              {isDownloading ? <CircularProgress size={24} color="inherit" /> : <ArrowDown strokeWidth={1} />}
               {isDownloading ? text.accessHashPage.downloadingAction : text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
             </Button>
