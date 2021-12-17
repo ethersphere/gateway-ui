@@ -3,9 +3,8 @@ import { makeStyles, createStyles } from '@material-ui/core/styles'
 import { useParams } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import { RefreshCw, ArrowDown } from 'react-feather'
+import { RefreshCw, ArrowDown, ExternalLink } from 'react-feather'
 import { Utils } from '@ethersphere/bee-js'
-import LaunchIcon from '@material-ui/icons/Launch'
 
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -111,9 +110,9 @@ const SharePage = (): ReactElement => {
                 href={`${DIRECT_DOWNLOAD_URL}${hash}`}
                 target="blank"
               >
-                <LaunchIcon strokeWidth={1} />
+                <ExternalLink strokeWidth={1} />
                 {text.accessHashPage.openWebsite}
-                <LaunchIcon style={{ opacity: 0 }} />
+                <ExternalLink style={{ opacity: 0 }} />
               </Button>
             )}
           </div>,
