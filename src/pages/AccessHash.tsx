@@ -74,7 +74,7 @@ const SharePage = (): ReactElement => {
 
   const handleDownload = () => {
     setIsDownloading(true)
-    download(hash, entries).finally(() => setIsDownloading(false))
+    download(hash, entries, metadata).finally(() => setIsDownloading(false))
   }
 
   if (isLoading) {
