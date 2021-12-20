@@ -3,7 +3,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import { useHistory } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
-import { ArrowLeft, Clipboard, Check } from 'react-feather'
+import { ArrowLeft, Clipboard, Check, ExternalLink } from 'react-feather'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
@@ -14,12 +14,14 @@ import Tabs from '../../components/Tabs'
 import Layout from '../../components/Layout'
 
 import * as ROUTES from '../../Routes'
-import { GATEWAY_URL } from '../../constants'
+import { BZZ_LINK_DOMAIN, GATEWAY_URL } from '../../constants'
 
 import text from '../../translations'
+import { encodeManifestReference } from '@ethersphere/swarm-cid'
 
 interface Props {
   uploadReference: string
+  metadata?: Metadata
 }
 
 const useStyles = makeStyles(() =>
@@ -32,9 +34,14 @@ const useStyles = makeStyles(() =>
   }),
 )
 
-const SharePage = ({ uploadReference }: Props): ReactElement => {
+const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
   const classes = useStyles()
   const history = useHistory()
+  const isWebsite = metadata?.isWebsite
+
+  const bzzLink = `https://${encodeManifestReference(uploadReference)}.${BZZ_LINK_DOMAIN}/`
+  const linkHeader = isWebsite ? 'Bzz Link' : 'Web link'
+  const linkUrl = isWebsite ? bzzLink : `${GATEWAY_URL}${ROUTES.ACCESS_HASH(uploadReference)}`
 
   const [copiedToClipboard, setCopiedToClipboard] = useState<boolean>(false)
   const [activeValue, setActiveValue] = useState<string>(uploadReference)
@@ -71,17 +78,32 @@ const SharePage = ({ uploadReference }: Props): ReactElement => {
           }}
           values={[
             {
-              label: 'Web link',
+              label: linkHeader,
               component: (
-                <Paper
-                  square
-                  elevation={0}
-                  style={{ overflowWrap: 'break-word', textAlign: 'left', padding: 16, margin: 4 }}
-                >
-                  <Typography variant="caption">{`${GATEWAY_URL}${ROUTES.ACCESS_HASH(uploadReference)}`}</Typography>
-                </Paper>
+                <div>
+                  <Paper
+                    square
+                    elevation={0}
+                    style={{ overflowWrap: 'break-word', textAlign: 'left', padding: 16, margin: 4 }}
+                  >
+                    <Typography variant="caption">{linkUrl}</Typography>
+                  </Paper>
+                  {isWebsite && (
+                    <Button
+                      variant="contained"
+                      style={{ margin: 4, width: 'auto' }}
+                      className={classes.button}
+                      href={bzzLink}
+                      target="blank"
+                    >
+                      <ExternalLink strokeWidth={1} />
+                      {text.accessHashPage.openWebsite}
+                      <ExternalLink style={{ opacity: 0 }} />
+                    </Button>
+                  )}
+                </div>
               ),
-              value: `${GATEWAY_URL}${ROUTES.ACCESS_HASH(uploadReference)}`,
+              value: linkUrl,
             },
             {
               label: 'Swarm hash',
