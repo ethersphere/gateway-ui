@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { RefreshCw, ArrowDown, ExternalLink } from 'react-feather'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import { Utils } from '@ethersphere/bee-js'
 
 import Header from '../components/Header'
@@ -40,6 +41,7 @@ const SharePage = (): ReactElement => {
   const [metadata, setMetadata] = useState<Metadata | undefined>()
   const [preview, setPreview] = useState<string | undefined>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isDownloading, setIsDownloading] = useState<boolean>(false)
   const [chunkExists, setChunkExists] = useState<boolean>(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
@@ -69,6 +71,11 @@ const SharePage = (): ReactElement => {
           .finally(() => setIsLoading(false))
       })
   }, [hash, getChunk, getMetadata])
+
+  const handleDownload = () => {
+    setIsDownloading(true)
+    download(hash, entries).finally(() => setIsDownloading(false))
+  }
 
   if (isLoading) {
     return (
@@ -123,10 +130,11 @@ const SharePage = (): ReactElement => {
               variant="contained"
               className={classes.button}
               size="large"
-              onClick={() => download(hash, entries, metadata)}
+              onClick={handleDownload}
+              disabled={isDownloading}
             >
-              <ArrowDown strokeWidth={1} />
-              {text.accessHashPage.downloadAction}
+              {isDownloading ? <CircularProgress size={24} color="inherit" /> : <ArrowDown strokeWidth={1} />}
+              {isDownloading ? text.accessHashPage.downloadingAction : text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
             </Button>
           </Footer>,
@@ -150,9 +158,15 @@ const SharePage = (): ReactElement => {
         center={[<UnknownFile key="center1" />]}
         bottom={[
           <Footer key="bottom1">
-            <Button variant="contained" className={classes.button} size="large" onClick={() => download(hash, entries)}>
-              <ArrowDown />
-              {text.accessHashPage.downloadAction}
+            <Button
+              variant="contained"
+              className={classes.button}
+              size="large"
+              onClick={handleDownload}
+              disabled={isDownloading}
+            >
+              {isDownloading ? <CircularProgress size={24} color="inherit" /> : <ArrowDown strokeWidth={1} />}
+              {isDownloading ? text.accessHashPage.downloadingAction : text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
             </Button>
           </Footer>,
