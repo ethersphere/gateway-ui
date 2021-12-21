@@ -44,6 +44,7 @@ The Gateway runs in development mode on [http://localhost:3030/](http://localhos
 
 - `BEE_HOSTS` - comma separated bee API URLs through which the gateway uploads and downloads. The api to upload is
   selected at random while on download the gateway checks all the hosts (defaults to `[http://localhost:1633]`)
+- `BZZ_LINK_DOMAIN` - specifies what domain of Bzz Link should be used (defaults to `bzz.link`)
 - `REACT_APP_POSTAGE_STAMP` - Postage stamp batch ID to be used for uploading (defaults to `00000...00000`
 - `REACT_APP_GATEWAY_URL` - URL on which the gateway is hosted (defaults to current window location)
 

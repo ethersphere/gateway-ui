@@ -119,7 +119,7 @@ const text = {
     downloadAction: 'download',
     downloadingAction: 'downloading...',
     useButtonToDownload: 'Use the button below to download this file.',
-    openWebsite: 'open website',
+    openWebsite: 'open bzz link',
   },
 
   previewDetails: {

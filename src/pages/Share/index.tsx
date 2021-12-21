@@ -59,7 +59,7 @@ export default function ShareGeneral(): ReactElement {
 
   if (files.length === 0) return <AddFile setFiles={setFiles} />
 
-  if (uploadReference) return <SharePage uploadReference={uploadReference} />
+  if (uploadReference) return <SharePage uploadReference={uploadReference} metadata={metadata} />
 
   return (
     <Upload

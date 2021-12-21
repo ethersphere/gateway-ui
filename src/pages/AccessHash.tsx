@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import { RefreshCw, ArrowDown, ExternalLink } from 'react-feather'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { Utils } from '@ethersphere/bee-js'
+import { encodeManifestReference } from '@ethersphere/swarm-cid'
 
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -16,7 +17,7 @@ import FileNotFound from '../components/FileNotFound'
 import UnknownFile from '../components/UnknownFile'
 import LoadingFile from '../components/LoadingFile'
 import InvalidSwarmHash from '../components/InvalidSwarmHash'
-import { DIRECT_DOWNLOAD_URL } from '../constants'
+import { BZZ_LINK_DOMAIN } from '../constants'
 
 import { Context } from '../providers/bee'
 
@@ -36,6 +37,7 @@ const SharePage = (): ReactElement => {
   const classes = useStyles()
 
   const { hash } = useParams<{ hash: string }>()
+  const bzzLink = `https://${encodeManifestReference(hash)}.${BZZ_LINK_DOMAIN}/`
   const { getMetadata, getChunk, download } = useContext(Context)
   const [entries, setEntries] = useState<Record<string, string>>({})
   const [metadata, setMetadata] = useState<Metadata | undefined>()
@@ -111,12 +113,7 @@ const SharePage = (): ReactElement => {
           <div key="center1">
             <AssetPreview previewUri={preview} metadata={metadata} />
             {metadata?.isWebsite && metadata?.hash && (
-              <Button
-                variant="contained"
-                className={classes.button}
-                href={`${DIRECT_DOWNLOAD_URL}${hash}`}
-                target="blank"
-              >
+              <Button variant="contained" className={classes.button} href={bzzLink} target="blank">
                 <ExternalLink strokeWidth={1} />
                 {text.accessHashPage.openWebsite}
                 <ExternalLink style={{ opacity: 0 }} />
