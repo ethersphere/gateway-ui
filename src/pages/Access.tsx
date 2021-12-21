@@ -58,20 +58,8 @@ function extractSwarmCid(s: string): string | undefined {
   }
 }
 
-function recognizeSwarmHash(value: string) {
-  const hash = extractSwarmHash(value)
-
-  if (hash) {
-    return hash
-  }
-
-  const hashFromCid = extractSwarmCid(value)
-
-  if (hashFromCid) {
-    return hashFromCid
-  }
-
-  return value
+function recognizeSwarmHash(value: string): string {
+  return extractSwarmHash(value) || extractSwarmCid(value) || value
 }
 
 export default function AccessPage(): ReactElement {
