@@ -17,6 +17,7 @@ import Layout from '../components/Layout'
 import * as ROUTES from '../Routes'
 
 import text from '../translations'
+import { BZZ_LINK_DOMAIN } from '../constants'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,13 +39,14 @@ function extractSwarmHash(string: string): string | undefined {
 }
 
 function extractSwarmCid(s: string): string | undefined {
-  const matches = s.match(/bah[a-z0-9]{58}/)
+  const regexp = new RegExp(`https://(.*)\\.${BZZ_LINK_DOMAIN}`)
+  const matches = s.match(regexp)
 
-  if (!matches || !matches[0]) {
+  if (!matches || !matches[1]) {
     return
   }
 
-  const cid = matches[0]
+  const cid = matches[1]
   try {
     const decodeResult = decodeCid(cid)
 
