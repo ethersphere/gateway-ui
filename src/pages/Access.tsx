@@ -59,10 +59,6 @@ function extractSwarmCid(s: string): string | null {
 }
 
 function recognizeSwarmHash(value: string) {
-  if (value.length < 64) {
-    return value
-  }
-
   const hash = extractSwarmHash(value)
 
   if (hash) {
