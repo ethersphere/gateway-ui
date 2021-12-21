@@ -31,17 +31,17 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 )
 
-function extractSwarmHash(string: string): string | null {
+function extractSwarmHash(string: string): string | undefined {
   const matches = string.match(/[a-fA-F0-9]{64,128}/)
 
-  return (matches && matches[0]) || null
+  return (matches && matches[0]) || undefined
 }
 
-function extractSwarmCid(s: string): string | null {
+function extractSwarmCid(s: string): string | undefined {
   const matches = s.match(/bah[a-z0-9]{58}/)
 
   if (!matches || !matches[0]) {
-    return null
+    return
   }
 
   const cid = matches[0]
@@ -49,12 +49,12 @@ function extractSwarmCid(s: string): string | null {
     const decodeResult = decodeCid(cid)
 
     if (!decodeResult.type) {
-      return null
+      return
     }
 
     return decodeResult.reference
   } catch (e) {
-    return null
+    return
   }
 }
 
