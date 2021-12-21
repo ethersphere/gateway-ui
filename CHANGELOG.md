@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://www.github.com/ethersphere/gateway/compare/v0.1.0...v0.2.0) (2021-12-21)
+
+
+### Features
+
+* access with bzz.link ([#139](https://www.github.com/ethersphere/gateway/issues/139)) ([71edfe4](https://www.github.com/ethersphere/gateway/commit/71edfe4f70e2f7fa23902dcce6d003a69c82415d))
+
 ## 0.1.0 (2021-12-21)
 
 
