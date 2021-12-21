@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 function extractSwarmHash(string: string): string | undefined {
-  const matches = string.match(/[a-fA-F0-9]{64,128}/)
+  const matches = string.match(/[a-f0-9]{64,128}/i)
 
   return (matches && matches[0]) || undefined
 }
