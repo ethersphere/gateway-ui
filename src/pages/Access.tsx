@@ -8,6 +8,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import InputBase from '@material-ui/core/InputBase'
 import Typography from '@material-ui/core/Typography'
 import { Utils } from '@ethersphere/bee-js'
+import { decodeCid } from '@ethersphere/swarm-cid'
 
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -36,6 +37,27 @@ function extractSwarmHash(string: string): string | null {
   return (matches && matches[0]) || null
 }
 
+function extractSwarmCid(s: string): string | null {
+  const matches = s.match(/bah[a-z0-9]{58}/)
+
+  if (!matches || !matches[0]) {
+    return null
+  }
+
+  const cid = matches[0]
+  try {
+    const decodeResult = decodeCid(cid)
+
+    if (!decodeResult.type) {
+      return null
+    }
+
+    return decodeResult.reference
+  } catch (e) {
+    return null
+  }
+}
+
 function recognizeSwarmHash(value: string) {
   if (value.length < 64) {
     return value
@@ -45,6 +67,12 @@ function recognizeSwarmHash(value: string) {
 
   if (hash) {
     return hash
+  }
+
+  const hashFromCid = extractSwarmCid(value)
+
+  if (hashFromCid) {
+    return hashFromCid
   }
 
   return value
