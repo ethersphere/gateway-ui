@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react'
-import { Switch, Route, BrowserRouter } from 'react-router-dom'
+import { Routes, Route, BrowserRouter } from 'react-router-dom'
 
 // pages
 import { Access, AccessHash, LandingPage, Share, Page404, TermsAndConditions, RedirectToDownload } from './pages'
@@ -15,17 +15,17 @@ export const BZZ = '/bzz/:hash'
 
 const BaseRouter = (): ReactElement => (
   <BrowserRouter>
-    <Switch>
-      <Route exact path={LANDING_PAGE} component={LandingPage} />
-      <Route exact path={SHARE} component={Share} />
-      <Route exact path={ACCESS} component={Access} />
-      <Route exact path={ACCESS_HASH()} component={AccessHash} />
-      <Route exact path={TERMS_AND_CONDITIONS} component={TermsAndConditions} />
+    <Routes>
+      <Route path={LANDING_PAGE} element={<LandingPage />} />
+      <Route path={SHARE} element={<Share />} />
+      <Route path={ACCESS} element={<Access />} />
+      <Route path={ACCESS_HASH()} element={<AccessHash />} />
+      <Route path={TERMS_AND_CONDITIONS} element={<TermsAndConditions />} />
 
       {/* ENS compatibility, redirect to download directly*/}
-      <Route exact path={BZZ} component={RedirectToDownload} />
-      <Route path="*" component={Page404} />
-    </Switch>
+      <Route path={BZZ} element={<RedirectToDownload />} />
+      <Route path="*" element={<Page404 />} />
+    </Routes>
   </BrowserRouter>
 )
 

@@ -3,7 +3,7 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import { ArrowLeft, Plus } from 'react-feather'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
 
 import Header from '../../components/Header'
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Upload({ setFiles }: Props): ReactElement {
   const classes = useStyles()
   const ref = useRef<HTMLInputElement>(null)
-  const history = useHistory()
+  const navigate = useNavigate()
   const [isDragging, setIsDragging] = useState<boolean>(false)
   const [agreedToTerms, setAgreedToTerms] = useState(Boolean(window.localStorage.getItem('agreedToTerms')))
 
@@ -117,11 +117,7 @@ export default function Upload({ setFiles }: Props): ReactElement {
           <Header
             key="top1"
             leftAction={
-              <IconButton
-                onClick={() => {
-                  history.push(ROUTES.LANDING_PAGE)
-                }}
-              >
+              <IconButton onClick={() => navigate(ROUTES.LANDING_PAGE)}>
                 <ArrowLeft strokeWidth={1} />
               </IconButton>
             }

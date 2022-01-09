@@ -5,7 +5,7 @@ import Divider from '@material-ui/core/Divider'
 import { ArrowDown, ArrowUp } from 'react-feather'
 import Typography from '@material-ui/core/Typography'
 import Link from '@material-ui/core/Link'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import * as ROUTES from '../Routes'
 
 import Layout from '../components/Layout'
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const LandingPage = (): ReactElement => {
   const classes = useStyles()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   return (
     <Layout
@@ -53,7 +53,7 @@ const LandingPage = (): ReactElement => {
           className={classes.button}
           size="large"
           variant="contained"
-          onClick={() => history.push(ROUTES.SHARE)}
+          onClick={() => navigate(ROUTES.SHARE)}
         >
           <ArrowUp strokeWidth={1} />
           {text.landingPage.shareAction}
@@ -65,7 +65,7 @@ const LandingPage = (): ReactElement => {
           className={classes.button}
           size="large"
           variant="contained"
-          onClick={() => history.push(ROUTES.ACCESS)}
+          onClick={() => navigate(ROUTES.ACCESS)}
         >
           <ArrowDown strokeWidth={1} />
           {text.landingPage.accessAction}

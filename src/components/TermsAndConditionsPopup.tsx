@@ -6,7 +6,7 @@ import { X, Check, CornerUpLeft, ArrowRight } from 'react-feather'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Link from '@material-ui/core/Link'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import * as ROUTES from '../Routes'
 
 import Layout from './Layout'
@@ -54,7 +54,7 @@ interface Props {
 
 export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactElement | null {
   const classes = useStyles()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   return (
     <Layout
@@ -62,11 +62,7 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
         <Header
           key="top1"
           rightAction={
-            <IconButton
-              onClick={() => {
-                history.push(ROUTES.LANDING_PAGE)
-              }}
-            >
+            <IconButton onClick={() => navigate(ROUTES.LANDING_PAGE)}>
               <X />
             </IconButton>
           }
@@ -106,7 +102,7 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
             className={classes.button}
             size="small"
             style={{ marginTop: 2, paddingLeft: 16, paddingRight: 16 }}
-            onClick={() => history.push(ROUTES.LANDING_PAGE)}
+            onClick={() => navigate(ROUTES.LANDING_PAGE)}
           >
             <CornerUpLeft strokeWidth={1} />
             {text.accessPage.backAction}
