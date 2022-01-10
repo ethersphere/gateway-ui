@@ -1,7 +1,7 @@
 import { ReactElement, useState, useEffect } from 'react'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import { ArrowLeft, CornerUpLeft, Search } from 'react-feather'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -66,7 +66,7 @@ function recognizeSwarmHash(value: string): string {
 
 export default function AccessPage(): ReactElement {
   const classes = useStyles()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const [hash, setHash] = useState<string>('')
   const [hashError, setHashError] = useState<boolean>(false)
@@ -84,7 +84,7 @@ export default function AccessPage(): ReactElement {
           leftAction={
             <IconButton
               onClick={() => {
-                history.push(ROUTES.LANDING_PAGE)
+                navigate(ROUTES.LANDING_PAGE)
               }}
             >
               <ArrowLeft strokeWidth={1} />
@@ -139,7 +139,7 @@ export default function AccessPage(): ReactElement {
                 variant="contained"
                 className={classes.button}
                 disabled={hashError}
-                onClick={() => history.push(ROUTES.ACCESS_HASH(hash))}
+                onClick={() => navigate(ROUTES.ACCESS_HASH(hash))}
                 size="large"
               >
                 <Search strokeWidth={1} />

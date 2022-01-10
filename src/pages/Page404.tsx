@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import { ArrowLeft, AlertOctagon } from 'react-feather'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import Layout from '../components/Layout'
 import Logo from '../components/Logo'
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Page404 = (): ReactElement => {
   const classes = useStyles()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   return (
     <Layout
@@ -61,7 +61,7 @@ const Page404 = (): ReactElement => {
             variant="contained"
             className={classes.button}
             onClick={() => {
-              history.push(ROUTES.LANDING_PAGE)
+              navigate(ROUTES.LANDING_PAGE)
             }}
             size="large"
           >

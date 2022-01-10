@@ -1,7 +1,7 @@
 import { ReactElement, useState } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import { ArrowLeft, Clipboard, Check, ExternalLink } from 'react-feather'
 import Paper from '@material-ui/core/Paper'
@@ -36,7 +36,7 @@ const useStyles = makeStyles(() =>
 
 const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
   const classes = useStyles()
-  const history = useHistory()
+  const navigate = useNavigate()
   const isWebsite = metadata?.isWebsite
 
   const bzzLink = `https://${encodeManifestReference(uploadReference)}.${BZZ_LINK_DOMAIN}/`
@@ -54,7 +54,7 @@ const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
           leftAction={
             <IconButton
               onClick={() => {
-                history.push(ROUTES.LANDING_PAGE)
+                navigate(ROUTES.LANDING_PAGE)
               }}
             >
               <ArrowLeft />

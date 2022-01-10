@@ -37,7 +37,7 @@ const SharePage = (): ReactElement => {
   const classes = useStyles()
 
   const { hash } = useParams<{ hash: string }>()
-  const bzzLink = `https://${encodeManifestReference(hash)}.${BZZ_LINK_DOMAIN}/`
+  const bzzLink = `https://${encodeManifestReference(hash!)}.${BZZ_LINK_DOMAIN}/` //eslint-disable-line
   const { getMetadata, getChunk, download } = useContext(Context)
   const [entries, setEntries] = useState<Record<string, string>>({})
   const [metadata, setMetadata] = useState<Metadata | undefined>()
@@ -76,7 +76,8 @@ const SharePage = (): ReactElement => {
 
   const handleDownload = () => {
     setIsDownloading(true)
-    download(hash, entries, metadata).finally(() => setIsDownloading(false))
+    // The hash is already validated that is why there can be not a null assertion
+    download(hash!, entries, metadata).finally(() => setIsDownloading(false)) //eslint-disable-line
   }
 
   if (isLoading) {
@@ -93,6 +94,21 @@ const SharePage = (): ReactElement => {
           </div>,
         ]}
         bottom={[<div key="bottom1" />]}
+      />
+    )
+  }
+
+  // The hash is wrong, display error message
+  if (errorMsg) {
+    return (
+      <Layout
+        top={[
+          <Header key="top1">
+            <Logo />
+          </Header>,
+        ]}
+        center={[<InvalidSwarmHash key="center" />]}
+        bottom={[]}
       />
     )
   }
@@ -168,21 +184,6 @@ const SharePage = (): ReactElement => {
             </Button>
           </Footer>,
         ]}
-      />
-    )
-  }
-
-  // The hash is wrong, display error message
-  if (errorMsg) {
-    return (
-      <Layout
-        top={[
-          <Header key="top1">
-            <Logo />
-          </Header>,
-        ]}
-        center={[<InvalidSwarmHash key="center" />]}
-        bottom={[]}
       />
     )
   }
