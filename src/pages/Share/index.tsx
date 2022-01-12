@@ -30,7 +30,7 @@ export default function ShareGeneral(): ReactElement {
 
     if (files.length !== 1 || !files[0].type.startsWith('image')) return
 
-    resize({ ...PREVIEW_DIMENSIONS, file: files[0] }).then(blob => {
+    resize(files[0], PREVIEW_DIMENSIONS.maxWidth, PREVIEW_DIMENSIONS.maxHeight).then(blob => {
       setPreview(URL.createObjectURL(blob)) // NOTE: Until it is cleared with URL.revokeObjectURL, the file stays allocated in memory
       setPreviewBlob(blob)
     })

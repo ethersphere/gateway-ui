@@ -1,43 +1,54 @@
-interface Options {
-  file: File
-  maxWidth?: number
-  maxHeight?: number
-  lastModified?: number
-}
-
 interface Dimensions {
   width: number
   height: number
 }
 
-function getDimensions(imgWidth: number, imgHeight: number, maxWidth?: number, maxHeight?: number): Dimensions {
-  if (!maxWidth && !maxHeight) throw new Error('Please define width or height')
-
+/**
+ * Get the dimensions of the image after resize
+ *
+ * @param imgWidth  Current image width
+ * @param imgHeight Current image height
+ * @param maxWidth  Desired max width
+ * @param maxHeight Desired max height
+ *
+ * @returns Downscaled dimensions of the image to fit in the bounding box
+ */
+export function getDimensions(imgWidth: number, imgHeight: number, maxWidth?: number, maxHeight?: number): Dimensions {
   const ratioWidth = maxWidth ? imgWidth / maxWidth : 1
   const ratioHeight = maxHeight ? imgHeight / maxHeight : 1
 
   const ratio = Math.max(ratioWidth, ratioHeight)
 
+  // No need to resize
   if (ratio <= 1) return { width: imgWidth, height: imgHeight }
 
-  return { width: imgWidth * ratio, height: imgHeight * ratio }
+  return { width: imgWidth / ratio, height: imgHeight / ratio }
 }
 
-export function resize({ file, maxWidth, maxHeight }: Options): Promise<Blob> {
+/**
+ * Resize image passed to fit in the bounding box defined with maxWidth and maxHeight.
+ * Note that one or both of the bounding box dimensions may be omitted
+ *
+ * @param file      Image file to be resized
+ * @param maxWidth  Maximal image width
+ * @param maxHeight Maximal image height
+ *
+ * @returns Promise that resolves into the resized image blob
+ */
+export function resize(file: File, maxWidth?: number, maxHeight?: number): Promise<Blob> {
   return new Promise((resolve, reject) => {
-    const allow = ['jpg', 'gif', 'bmp', 'png', 'jpeg', 'svg']
+    const allowedTypes = [
+      'image/bmp',
+      'image/gif',
+      'image/vnd.microsoft.icon',
+      'image/jpeg',
+      'image/png',
+      'image/svg+xml',
+      'image/tiff',
+      'image/webp',
+    ]
 
-    if (
-      !(
-        file.name &&
-        file.name.split('.').reverse()[0] &&
-        allow.includes(file.name.split('.').reverse()[0].toLowerCase()) &&
-        file.size &&
-        file.type
-      )
-    ) {
-      reject('File not supported!')
-    }
+    if (!file.size || !file.type || !allowedTypes.includes(file.type)) reject('File not supported!')
 
     try {
       const reader = new FileReader()
@@ -45,7 +56,8 @@ export function resize({ file, maxWidth, maxHeight }: Options): Promise<Blob> {
       reader.onload = event => {
         const src = event?.target?.result
 
-        if (!src || typeof src !== 'string') throw new Error('Not string')
+        if (!src || typeof src !== 'string') throw new Error('Failed to load the image source')
+
         const img = new Image()
         img.src = src
         img.onload = () => {
@@ -55,11 +67,13 @@ export function resize({ file, maxWidth, maxHeight }: Options): Promise<Blob> {
           elem.height = dimensions.height
           const ctx = elem.getContext('2d')
 
-          if (!ctx) throw new Error('Failed to create cavas context')
+          if (!ctx) throw new Error('Failed to create canvas context')
+
           ctx.drawImage(img, 0, 0, elem.width, elem.height)
           ctx.canvas.toBlob(
             blob => {
-              if (!blob) throw new Error('Not a blob')
+              if (!blob) throw new Error('Failed to extract the blob from canvas')
+
               resolve(blob)
             },
             'image/jpeg',
