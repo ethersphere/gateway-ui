@@ -6,7 +6,7 @@ const useStyles = makeStyles(() =>
     image: {
       width: '100%',
       height: '100%',
-      objectFit: 'cover',
+      objectFit: 'scale-down',
     },
   }),
 )
@@ -14,17 +14,10 @@ const useStyles = makeStyles(() =>
 interface Props {
   alt: string
   src: string | undefined
-  maxHeight?: string
-  maxWidth?: string
 }
 
-export function FitImage(props: Props): ReactElement {
+export function FitImage({ alt, src }: Props): ReactElement {
   const classes = useStyles()
 
-  const inlineStyles: Record<string, string> = {}
-
-  props.maxHeight && (inlineStyles.maxHeight = props.maxHeight)
-  props.maxWidth && (inlineStyles.maxWidth = props.maxWidth)
-
-  return <img className={classes.image} alt={props.alt} src={props.src} style={inlineStyles} />
+  return <img className={classes.image} alt={alt} src={src} />
 }

@@ -5,6 +5,7 @@ import { AssetIcon } from './AssetIcon'
 import { FitImage } from './FitImage'
 import { mimeToKind, shortenBytes } from '../utils'
 import { shortenHash } from '../utils/hash'
+import { PREVIEW_DIMENSIONS } from '../constants'
 
 import text from '../translations'
 
@@ -32,11 +33,9 @@ export function AssetPreview({ previewUri, metadata }: Props): ReactElement {
     <Box mb={0.25}>
       <Box bgcolor="background.paper">
         <Grid container direction="row">
-          {previewUri ? (
-            <FitImage maxWidth="250px" maxHeight="175px" alt="Upload Preview" src={previewUri} />
-          ) : (
-            <AssetIcon icon={previewComponent} />
-          )}
+          <div style={{ width: PREVIEW_DIMENSIONS.maxWidth, height: PREVIEW_DIMENSIONS.maxHeight }}>
+            {previewUri ? <FitImage alt="Upload Preview" src={previewUri} /> : <AssetIcon icon={previewComponent} />}
+          </div>
           <Box p={2} textAlign="left">
             {metadata?.hash && <Typography>Swarm Hash: {shortenHash(metadata.hash)}</Typography>}
             <Typography>
