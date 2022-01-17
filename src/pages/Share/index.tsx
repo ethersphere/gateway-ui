@@ -1,5 +1,4 @@
 import { ReactElement, useEffect, useState, useContext } from 'react'
-import { readAndCompressImage } from 'browser-image-resizer'
 
 import SharePage from './Share'
 import AddFile from './AddFile'
@@ -7,6 +6,8 @@ import Upload from './Upload'
 
 import { Context } from '../../providers/bee'
 import { getMetadata } from '../../utils/file'
+import { resize } from '../../utils/image'
+import { PREVIEW_DIMENSIONS } from '../../constants'
 
 export default function ShareGeneral(): ReactElement {
   const [files, setFiles] = useState<SwarmFile[]>([])
@@ -29,7 +30,7 @@ export default function ShareGeneral(): ReactElement {
 
     if (files.length !== 1 || !files[0].type.startsWith('image')) return
 
-    readAndCompressImage(files[0], { maxWidth: 896, maxHeight: 672, autoRotate: false }).then(blob => {
+    resize(files[0], PREVIEW_DIMENSIONS.maxWidth, PREVIEW_DIMENSIONS.maxHeight).then(blob => {
       setPreview(URL.createObjectURL(blob)) // NOTE: Until it is cleared with URL.revokeObjectURL, the file stays allocated in memory
       setPreviewBlob(blob)
     })

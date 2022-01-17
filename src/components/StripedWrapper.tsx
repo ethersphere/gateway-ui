@@ -11,8 +11,8 @@ const useStyles = makeStyles(() =>
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      width: '175px',
-      height: '175px',
+      width: '100%',
+      height: '100%',
       background: `repeating-linear-gradient(
                         45deg,
                         #efefef,
