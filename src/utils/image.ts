@@ -48,7 +48,7 @@ export function resize(file: File, maxWidth?: number, maxHeight?: number): Promi
       'image/webp',
     ]
 
-    if (!file.size || !file.type || !allowedTypes.includes(file.type)) reject('File not supported!')
+    if (!file.size || !file.type || !allowedTypes.includes(file.type)) return reject('File not supported!')
 
     try {
       const reader = new FileReader()
