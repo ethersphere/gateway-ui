@@ -42,7 +42,12 @@ export function getMetadata(files: SwarmFile[]): Metadata {
 export function getAssetNameFromFiles(files: SwarmFile[]): string {
   if (files.length === 1) return files[0].name
 
-  if (files.length > 0) return files[0].path.split('/')[0]
+  if (files.length > 0) {
+    const prefix = files[0].path.split('/')[0]
+
+    // Only if all files have a common prefix we can use it as a folder name
+    if (files.every(f => f.path.split('/')[0] === prefix)) return prefix
+  }
 
   return 'unknown'
 }
