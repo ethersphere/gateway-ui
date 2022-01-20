@@ -85,10 +85,10 @@ export const mimeToKind = (mime?: string): string => {
   return 'Unknown file type'
 }
 
-export const shortenBytes = (value: number): string => {
+export const shortenBytes = (value: number, decimals = 2): string => {
   if (value < 1e3) return `${value} bytes`
 
   if (value < 1e6) return `${(value / 1e3).toFixed(2)} kB`
 
-  return `${(value / 1e6).toFixed(2)} MB`
+  return `${(value / 1e6).toFixed(decimals)} MB`
 }
