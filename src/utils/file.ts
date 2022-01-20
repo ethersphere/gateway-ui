@@ -61,67 +61,60 @@ function isFile(entry: FileSystemEntry): entry is FileSystemFileEntry {
   return entry.isFile
 }
 
-function readEntryContentAsync(entry: FileSystemEntry) {
-  return new Promise<File[]>(resolve => {
-    let reading = 0
-    const contents: SwarmFile[] = []
+function readEntries(directoryReader: FileSystemDirectoryReader): Promise<FileSystemFileEntry[]> {
+  return new Promise((resolve, reject) => {
+    directoryReader.readEntries(async entries => {
+      const files = []
 
-    readEntry(entry)
-
-    function readEntry(entry: FileSystemEntry) {
-      // This is a file, load it
-      if (isFile(entry)) {
-        reading++
-        entry.file(file => {
-          reading--
-          contents.push(convertSwarmFile(file, entry.fullPath))
-
-          if (reading === 0) resolve(contents)
-        })
+      for (let i = 0; i < entries.length; i++) {
+        const [file] = await scanFiles(entries[i])
+        files.push(file)
       }
-
-      // This is a directory, recursively process it's content
-      else if (isDirectory(entry)) {
-        reading++
-        const reader = entry.createReader()
-
-        reader.readEntries(entries => {
-          reading--
-          for (const entry of entries) readEntry(entry)
-
-          if (reading === 0) {
-            resolve(contents)
-          }
-        })
-      }
-    }
+      resolve(files)
+    }, reject)
   })
 }
 
-async function processItem(item: DataTransferItem, files: SwarmFile[]) {
-  // This is file or directory
-  if (item.kind === 'file') {
-    if (typeof item.webkitGetAsEntry === 'function') {
-      const entry = item.webkitGetAsEntry()
+/**
+ * Promisified item.file function
+ */
+function fileEntry2File(item: FileSystemFileEntry): Promise<SwarmFile> {
+  return new Promise((resolve, reject) => {
+    item.file((file: File) => resolve(convertSwarmFile(file, item.fullPath)), reject)
+  })
+}
 
-      if (entry) {
-        const entryContent = await readEntryContentAsync(entry)
-        files.push(...entryContent.map(f => convertSwarmFile(f)))
-      }
-    } else {
-      const file = item.getAsFile()
-
-      if (file) files.push(convertSwarmFile(file))
-    }
-  }
+function scanFiles(item: FileSystemEntry): Promise<FileSystemFileEntry[]> {
+  return new Promise(async (resolve, reject) => {
+    if (isDirectory(item)) {
+      const directoryReader = item.createReader()
+      const files = await readEntries(directoryReader)
+      resolve(files)
+    } else if (isFile(item)) {
+      resolve([item])
+    } else reject('Not a file nor directory')
+  })
 }
 
 export async function handleDrop(ev: DragEvent): Promise<SwarmFile[]> {
   const files: SwarmFile[] = []
 
   if (ev.dataTransfer.items) {
-    // Use DataTransferItemList interface to access the file(s) and directories
-    for (let i = 0; i < ev.dataTransfer.items.length; i++) await processItem(ev.dataTransfer.items[i], files)
+    const { items } = ev.dataTransfer
+    const entries = []
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i]
+      const entry = item.webkitGetAsEntry()
+
+      if (entry) entries.push(...(await scanFiles(entry)))
+    }
+
+    // This is deliberately a separate loop because item.file() function mutates the dataTransferItems object
+    for (let i = 0; i < entries.length; i++) {
+      const f = await fileEntry2File(entries[i])
+      files.push(f)
+    }
   } else {
     // Use DataTransfer interface to access the file(s), this is a fallback as we can not handle directories here (even though this API is newer)
     for (let i = 0; i < ev.dataTransfer.files.length; i++) files.push(convertSwarmFile(ev.dataTransfer.files[i]))
