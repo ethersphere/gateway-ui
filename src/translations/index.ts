@@ -1,4 +1,8 @@
 // For review of the page copy purposes. Later on can be used to provide other language translations
+import { UPLOAD_SIZE_LIMIT } from '../constants'
+import { shortenBytes } from '../utils'
+
+const uploadSizeLimit = shortenBytes(UPLOAD_SIZE_LIMIT, 0)
 
 const text = {
   // Main landng page
@@ -23,8 +27,7 @@ const text = {
     tagline: 'Use the buttons below, or drag and drop, to select files you would like to share on the Swarm network.',
     addFileAction: 'add a file',
     addFolderAction: 'add a folder or website',
-    disclaimer:
-      'Maximum upload size is 10MB. To upload a website make sure that your folder contains an "index.html" file.',
+    disclaimer: `Maximum upload size is ${uploadSizeLimit}. To upload a website make sure that your folder contains an "index.html" file.`,
 
     // Drag & drop overlay
     dragHeader: 'drop it',
@@ -41,6 +44,7 @@ const text = {
     uploadAction: 'upload',
     uploadingText: 'uploading...',
     uploadError: 'Failed to upload the file. Please try again later.',
+    sizeLimitError: `Your upload is over the limit of ${uploadSizeLimit}. Please use your own Bee node to avoid this limitation.`,
   },
 
   shareHashPage: {
@@ -93,7 +97,7 @@ const text = {
     featuresAndLimitationsHeader: 'In a nutshell, this is what you need to agree with:',
     featuresAndLimitations: [
       'This page is a free trial version of a gateway to Swarm',
-      'Max size per file: 10 megabytes',
+      `Max size per file: ${uploadSizeLimit}.`,
       'The file is kept on the Swarm network for a limited time and can disappear at any time',
       'Your data is not encrypted. The file you upload is publicly available, the link is hidden.',
       'No registration or signup required',

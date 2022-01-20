@@ -9,6 +9,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import Tooltip from '@material-ui/core/Tooltip'
 import Link from '@material-ui/core/Link'
 
+import { UPLOAD_SIZE_LIMIT } from '../../constants'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import { AssetPreview } from '../../components/AssetPreview'
@@ -55,6 +56,8 @@ const SharePage = ({
 
   if (metadata?.isWebsite) header = text.uploadFile.headerWebsite
 
+  const reachedSizeLimit = Boolean(metadata && metadata?.size > UPLOAD_SIZE_LIMIT)
+
   return (
     <Layout
       top={[
@@ -82,15 +85,21 @@ const SharePage = ({
         </Typography>,
         <Footer key="bottom">
           <Tooltip
-            title={text.uploadFile.uploadError}
+            title={reachedSizeLimit ? text.uploadFile.sizeLimitError : text.uploadFile.uploadError}
             placement="top"
-            open={uploadError}
+            open={uploadError || reachedSizeLimit}
             arrow
             disableFocusListener
             disableHoverListener
             disableTouchListener
           >
-            <Button variant="contained" className={classes.button} onClick={uploadFile} size="large">
+            <Button
+              variant="contained"
+              className={classes.button}
+              onClick={uploadFile}
+              disabled={reachedSizeLimit}
+              size="large"
+            >
               {isUploadingFile ? <CircularProgress size={24} color="inherit" /> : <ArrowUp strokeWidth={1} />}
               {isUploadingFile ? text.uploadFile.uploadingText : text.uploadFile.uploadAction}
               <ArrowUp style={{ opacity: 0 }} />
