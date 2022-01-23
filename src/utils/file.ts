@@ -72,8 +72,8 @@ function readEntries(directoryReader: FileSystemDirectoryReader): Promise<FileSy
       const files = []
 
       for (let i = 0; i < entries.length; i++) {
-        const [file] = await scanFiles(entries[i])
-        files.push(file)
+        const fls = await scanFiles(entries[i])
+        files.push(...fls)
       }
       resolve(files)
     }, reject)
