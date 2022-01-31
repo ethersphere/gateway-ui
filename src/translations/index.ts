@@ -17,7 +17,7 @@ const text = {
       { label: 'FAQ', link: 'https://www.ethswarm.org/faqs.html' },
       { label: 'Ecosystem', link: 'https://www.ethswarm.org/ecosystem.html' },
       { label: 'Github', link: 'https://github.com/ethersphere/' },
-      { label: 'Terms & Conditions', link: '/termsandconditions' },
+      { label: 'Terms & Conditions', link: '/termsandconditions', internal: true },
     ],
   },
 

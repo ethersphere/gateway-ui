@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexWrap: 'wrap',
     },
     spreadItems: {
+      cursor: 'pointer',
       marginLeft: theme.spacing(1),
       marginRight: theme.spacing(1),
     },
@@ -79,18 +80,24 @@ const LandingPage = (): ReactElement => {
         </Typography>,
         <Divider key="bottom2" variant="middle" />,
         <small key="bottom3" className={classes.spread}>
-          {text.landingPage.links.map(({ label, link }) => (
-            <Link
-              key={label}
-              className={classes.spreadItems}
-              href={link}
-              color="inherit"
-              underline="always"
-              target="blank"
-            >
-              {label}
-            </Link>
-          ))}
+          {text.landingPage.links.map(({ label, link, internal }) => {
+            let action: { href: string } | { onClick: () => void } = { href: link }
+
+            if (internal) action = { onClick: () => navigate(link) }
+
+            return (
+              <Link
+                key={label}
+                className={classes.spreadItems}
+                color="inherit"
+                underline="always"
+                target="blank"
+                {...action}
+              >
+                {label}
+              </Link>
+            )
+          })}
         </small>,
       ]}
     />
