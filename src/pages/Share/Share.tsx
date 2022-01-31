@@ -57,7 +57,7 @@ const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
                 navigate(ROUTES.LANDING_PAGE)
               }}
             >
-              <ArrowLeft />
+              <ArrowLeft strokeWidth={1} />
             </IconButton>
           }
         >

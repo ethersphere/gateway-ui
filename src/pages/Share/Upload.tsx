@@ -65,7 +65,7 @@ const SharePage = ({
           key="top1"
           rightAction={
             <IconButton onClick={() => setFiles([])}>
-              <X />
+              <X strokeWidth={1} />
             </IconButton>
           }
         >
