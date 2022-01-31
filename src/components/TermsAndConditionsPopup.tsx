@@ -63,7 +63,7 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
           key="top1"
           rightAction={
             <IconButton onClick={() => navigate(ROUTES.LANDING_PAGE)}>
-              <X />
+              <X strokeWidth={1} />
             </IconButton>
           }
         >
@@ -83,7 +83,7 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
             <div className={classes.ul}>
               {text.termsAndConditions.featuresAndLimitations.map(t => [
                 <Typography key={`${t}-bee`} variant="body1">
-                  <ArrowRight />
+                  <ArrowRight strokeWidth={1} />
                 </Typography>,
                 <Typography key={`${t}-text`} variant="body1">
                   {t}

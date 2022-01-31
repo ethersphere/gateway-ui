@@ -65,7 +65,7 @@ const Page404 = (): ReactElement => {
             }}
             size="large"
           >
-            <ArrowLeft />
+            <ArrowLeft strokeWidth={1} />
             {text.page404.goBackAction}
             <ArrowLeft style={{ opacity: 0 }} />
           </Button>
