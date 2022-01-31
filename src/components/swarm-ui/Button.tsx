@@ -1,32 +1,53 @@
-import { createStyles, makeStyles } from '@material-ui/core'
+import { createUseStyles } from 'react-jss'
 import { ReactElement, ReactNode, CSSProperties } from 'react'
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    common: {
-      fontFamily: 'iAWriterQuattroV',
-      fontWeight: 500,
-      fontStretch: 'normal',
-      fontStyle: 'normal',
-      color: '#303030',
+import Typography from './Typography'
+
+const useStyles = createUseStyles({
+  common: {
+    color: '#303030',
+    backgroundColor: 'white',
+    padding: 12,
+    cursor: 'pointer',
+    '-moz-user-select': '-moz-none',
+    '-khtml-user-select': 'none',
+    '-webkit-user-select': 'none',
+    '-ms-user-select': 'none',
+    userSelect: 'none',
+    '& svg': {
+      stroke: '#dd7200',
+      transition: '0.1s',
     },
-  }),
-)
+    '&:hover, &:active': {
+      color: 'white',
+      backgroundColor: '#dd7200',
+      transition: '0.1s',
+      '& svg': {
+        stroke: 'white',
+        transition: '0.1s',
+      },
+    },
+  },
+})
 
 interface Props {
   variant: 'primary' | 'secondary'
   children: ReactNode
   icon?: ReactElement
   style?: CSSProperties
+  onClick?: () => void
 }
 
-const Button = ({ variant, children, style }: Props): ReactElement => {
+const Button = ({ variant, children, style, onClick, icon }: Props): ReactElement => {
   const classes = useStyles()
 
   return (
-    <div style={style} className={classes.common}>
-      {children}
-    </div>
+    <Typography variant="button" style={style}>
+      <div className={classes.common} onClick={onClick}>
+        {icon}
+        {children}
+      </div>
+    </Typography>
   )
 }
 

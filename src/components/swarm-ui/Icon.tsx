@@ -14,8 +14,10 @@ interface Props {
   children: ReactElement
 }
 
-export default ({ children }: Props) => {
+const Icon = ({ children }: Props) => {
   const classes = useStyles()
 
   return <div className={classes.root}>{children}</div>
 }
+
+export default Icon

@@ -1,12 +1,12 @@
 import { ReactElement } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
 import { ArrowDown, ArrowUp } from 'react-feather'
-import Typography from '@material-ui/core/Typography'
 import Link from '@material-ui/core/Link'
 import { useNavigate } from 'react-router-dom'
 import * as ROUTES from '../Routes'
+
+import { Typography, Button } from '../components/swarm-ui'
 
 import Layout from '../components/Layout'
 import Logo from '../components/Logo'
@@ -16,11 +16,6 @@ import text from '../translations'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    button: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
     spread: {
       display: 'flex',
       justifyContent: 'center',
@@ -44,38 +39,32 @@ const LandingPage = (): ReactElement => {
         <Header key="top1">
           <Logo />
         </Header>,
-        <Typography key="top2" variant="subtitle1">
+        <Typography key="top2" variant="body">
           {text.landingPage.tagline}
         </Typography>,
       ]}
       center={[
-        <Button
-          key="center1"
-          className={classes.button}
-          size="large"
-          variant="contained"
-          onClick={() => navigate(ROUTES.SHARE)}
-        >
-          <ArrowUp strokeWidth={1} />
-          {text.landingPage.shareAction}
-          {/* Needed to properly align icon to the right and label to center */}
-          <ArrowUp style={{ opacity: 0 }} />
-        </Button>,
-        <Button
-          key="center2"
-          className={classes.button}
-          size="large"
-          variant="contained"
-          onClick={() => navigate(ROUTES.ACCESS)}
-        >
-          <ArrowDown strokeWidth={1} />
-          {text.landingPage.accessAction}
-          {/* Needed to properly align icon to the right and label to center */}
-          <ArrowDown style={{ opacity: 0 }} />
-        </Button>,
+        <div key="center1" style={{ display: 'flex', flexFlow: 'row' }}>
+          <Button
+            style={{ flexBasis: 100, flexGrow: 1 }}
+            variant="primary"
+            onClick={() => navigate(ROUTES.SHARE)}
+            icon={<ArrowUp strokeWidth={1} size={10} />}
+          >
+            {text.landingPage.shareAction}
+          </Button>
+          <Button
+            style={{ flexBasis: 100, flexGrow: 1 }}
+            variant="primary"
+            onClick={() => navigate(ROUTES.ACCESS)}
+            icon={<ArrowDown strokeWidth={1} size={10} />}
+          >
+            {text.landingPage.accessAction}
+          </Button>
+        </div>,
       ]}
       bottom={[
-        <Typography key="bottom1" variant="subtitle2">
+        <Typography key="bottom1" variant="caption">
           {text.landingPage.disclaimer}
         </Typography>,
         <Divider key="bottom2" variant="middle" />,

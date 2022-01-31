@@ -1,5 +1,5 @@
 import { createStyles, makeStyles } from '@material-ui/core'
-import { ReactElement, CSSProperties } from 'react'
+import type { ReactElement, ReactNode, CSSProperties } from 'react'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -22,7 +22,7 @@ const useStyles = makeStyles(() =>
       fontSize: 14,
     },
     code: {
-      fontFamily: 'iAWriterQuattroV',
+      fontFamily: 'iAWriterMonoV',
       fontSize: 14,
     },
     link: {
@@ -44,7 +44,7 @@ const useStyles = makeStyles(() =>
 interface Props {
   variant?: 'body' | 'button' | 'caption' | 'code' | 'link'
   size?: 'small' | 'medium' | 'large'
-  children?: ReactElement
+  children?: ReactNode
   style?: CSSProperties
 }
 
