@@ -2,6 +2,7 @@ import { ReactElement } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Divider from '@material-ui/core/Divider'
 import { ArrowDown, ArrowUp } from 'react-feather'
+import { UploadLine, DownloadLine } from '../components/swarm-ui/icons'
 import Link from '@material-ui/core/Link'
 import { useNavigate } from 'react-router-dom'
 import * as ROUTES from '../Routes'
@@ -46,10 +47,10 @@ const LandingPage = (): ReactElement => {
       center={[
         <div key="center1" style={{ display: 'flex', flexFlow: 'row' }}>
           <Button
-            style={{ flexBasis: 100, flexGrow: 1 }}
+            style={{ flexBasis: 100, flexGrow: 1, marginRight: 8 }}
             variant="primary"
             onClick={() => navigate(ROUTES.SHARE)}
-            icon={<ArrowUp strokeWidth={1} size={10} />}
+            icon={<UploadLine size={14} style={{ marginRight: 10 }} />}
           >
             {text.landingPage.shareAction}
           </Button>
@@ -57,7 +58,7 @@ const LandingPage = (): ReactElement => {
             style={{ flexBasis: 100, flexGrow: 1 }}
             variant="primary"
             onClick={() => navigate(ROUTES.ACCESS)}
-            icon={<ArrowDown strokeWidth={1} size={10} />}
+            icon={<DownloadLine size={14} style={{ marginRight: 10 }} />}
           >
             {text.landingPage.accessAction}
           </Button>

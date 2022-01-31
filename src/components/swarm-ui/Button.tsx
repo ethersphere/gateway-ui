@@ -15,7 +15,7 @@ const useStyles = createUseStyles({
     '-ms-user-select': 'none',
     userSelect: 'none',
     '& svg': {
-      stroke: '#dd7200',
+      fill: '#dd7200',
       transition: '0.1s',
     },
     '&:hover, &:active': {
@@ -23,7 +23,7 @@ const useStyles = createUseStyles({
       backgroundColor: '#dd7200',
       transition: '0.1s',
       '& svg': {
-        stroke: 'white',
+        fill: 'white',
         transition: '0.1s',
       },
     },

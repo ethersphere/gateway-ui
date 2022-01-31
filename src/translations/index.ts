@@ -8,8 +8,8 @@ const text = {
   // Main landng page
   landingPage: {
     tagline: 'The easiest way to share & access files on the Swarm network.',
-    shareAction: 'share',
-    accessAction: 'access',
+    shareAction: 'Share',
+    accessAction: 'Access',
     disclaimer:
       'The Swarm Gateway is graciously provided by the Swarm Foundation. This service is under development and provided for testing purposes only. For unlimited use of the Swarm network consider running your own node.',
     links: [
