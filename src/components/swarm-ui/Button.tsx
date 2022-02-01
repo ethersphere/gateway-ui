@@ -13,6 +13,9 @@ const useStyles = createUseStyles({
     '-khtml-user-select': 'none',
     '-webkit-user-select': 'none',
     '-ms-user-select': 'none',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     userSelect: 'none',
     '& svg': {
       fill: '#dd7200',
@@ -27,6 +30,12 @@ const useStyles = createUseStyles({
         transition: '0.1s',
       },
     },
+  },
+  icon: {
+    marginRight: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
 
@@ -44,7 +53,7 @@ const Button = ({ variant, children, style, onClick, icon }: Props): ReactElemen
   return (
     <Typography variant="button" style={style}>
       <div className={classes.common} onClick={onClick}>
-        {icon}
+        {icon ? <div className={classes.icon}>{icon}</div> : null}
         {children}
       </div>
     </Typography>

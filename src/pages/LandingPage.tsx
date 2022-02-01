@@ -50,7 +50,7 @@ const LandingPage = (): ReactElement => {
             style={{ flexBasis: 100, flexGrow: 1, marginRight: 8 }}
             variant="primary"
             onClick={() => navigate(ROUTES.SHARE)}
-            icon={<UploadLine size={14} style={{ marginRight: 10 }} />}
+            icon={<UploadLine />}
           >
             {text.landingPage.shareAction}
           </Button>
@@ -58,7 +58,7 @@ const LandingPage = (): ReactElement => {
             style={{ flexBasis: 100, flexGrow: 1 }}
             variant="primary"
             onClick={() => navigate(ROUTES.ACCESS)}
-            icon={<DownloadLine size={14} style={{ marginRight: 10 }} />}
+            icon={<DownloadLine />}
           >
             {text.landingPage.accessAction}
           </Button>
