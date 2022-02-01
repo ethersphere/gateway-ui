@@ -12,7 +12,7 @@ const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
 const randomBee = new Bee(BEE_HOSTS[randomIndex])
 
 interface ContextInterface {
-  upload: (files: SwarmFile[], metadata: Metadata, preview?: Blob) => Promise<Reference>
+  upload: (files: SwarmFile[], metadata: Metadata, preview?: Blob) => Promise<Reference> | never
   getMetadata: (hash: Reference | string) => Promise<{
     metadata: Metadata
     preview?: string
@@ -47,7 +47,8 @@ function hashToIndex(hash: Reference | string) {
 export function Provider({ children }: Props): ReactElement {
   const upload = async (files: SwarmFile[], metadata: Metadata, preview?: Blob) => {
     const fls = files.map(packageFile) // Apart from packaging, this is needed to not modify the original files array as it can trigger effects
-    const indexDocument = files.length === 1 ? files[0].name : detectIndexHtml(files) || undefined
+    const indexDocument =
+      files.length === 1 ? unescape(encodeURIComponent(files[0].name)) : detectIndexHtml(files) || undefined
     const lastModified = files[0].lastModified
 
     // We want to store only some metadata
@@ -73,15 +74,19 @@ export function Provider({ children }: Props): ReactElement {
       fls.push(previewFile)
     }
 
-    const { reference } = await randomBee.uploadFiles(POSTAGE_STAMP, fls, { indexDocument })
-    const hashIndex = hashToIndex(reference)
+    try {
+      const { reference } = await randomBee.uploadFiles(POSTAGE_STAMP, fls, { indexDocument })
+      const hashIndex = hashToIndex(reference)
 
-    if (hashIndex !== randomIndex) {
-      const bee = new Bee(BEE_HOSTS[hashIndex])
-      await bee.uploadFiles(POSTAGE_STAMP, fls, { indexDocument })
+      if (hashIndex !== randomIndex) {
+        const bee = new Bee(BEE_HOSTS[hashIndex])
+        await bee.uploadFiles(POSTAGE_STAMP, fls, { indexDocument })
+      }
+
+      return reference
+    } catch (e) {
+      throw e
     }
-
-    return reference
   }
 
   const download = async (hash: Reference | string, entries: Record<string, string>, metadata?: Metadata) => {
