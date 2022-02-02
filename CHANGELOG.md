@@ -1,5 +1,19 @@
 # Changelog
 
+### [0.2.1](https://www.github.com/ethersphere/gateway/compare/v0.2.0...v0.2.1) (2022-02-02)
+
+
+### Bug Fixes
+
+* check filesize on upload and disable the upload action with corresponding error ([#181](https://www.github.com/ethersphere/gateway/issues/181)) ([b7aca21](https://www.github.com/ethersphere/gateway/commit/b7aca2120580f08a0693c04258c1d4dd37d39861))
+* crawl directories recursively on drop and return all the files ([#184](https://www.github.com/ethersphere/gateway/issues/184)) ([4fb9b21](https://www.github.com/ethersphere/gateway/commit/4fb9b2190a1aa14383649d3e440da0bc22ac6997))
+* drag and drop mix of files and folders ([#178](https://www.github.com/ethersphere/gateway/issues/178)) ([519dd76](https://www.github.com/ethersphere/gateway/commit/519dd76a32228e40a4b22b804a13f7b8a7c9b59c))
+* handle non iso-8859-1 in the index document name ([#200](https://www.github.com/ethersphere/gateway/issues/200)) ([b5b189f](https://www.github.com/ethersphere/gateway/commit/b5b189fa2fd11ae8f59fac456c01f435285a4904))
+* relative link to terms and condition to work on bzz.link ([#197](https://www.github.com/ethersphere/gateway/issues/197)) ([efdc89e](https://www.github.com/ethersphere/gateway/commit/efdc89e78a392d5c46f49e7b35c6dc9678c36725))
+* stroke width of the back and close buttons ([#196](https://www.github.com/ethersphere/gateway/issues/196)) ([48a2ca4](https://www.github.com/ethersphere/gateway/commit/48a2ca4097febf810b4b0da43040b68005503466))
+* unknown folder name for multiple files not having same root folder ([#179](https://www.github.com/ethersphere/gateway/issues/179)) ([bb51c30](https://www.github.com/ethersphere/gateway/commit/bb51c30aaab82290cc7edeb08b32f761f7f2b7ce))
+* uploading same single image now gives same swarm reference hash ([#168](https://www.github.com/ethersphere/gateway/issues/168)) ([e717842](https://www.github.com/ethersphere/gateway/commit/e71784210d2943bf69fb92fda07fb09bfac9c618))
+
 ## [0.2.0](https://www.github.com/ethersphere/gateway/compare/v0.1.0...v0.2.0) (2021-12-21)
 
 
