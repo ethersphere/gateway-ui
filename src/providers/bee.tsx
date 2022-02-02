@@ -47,8 +47,10 @@ function hashToIndex(hash: Reference | string) {
 export function Provider({ children }: Props): ReactElement {
   const upload = async (files: SwarmFile[], metadata: Metadata, preview?: Blob) => {
     const fls = files.map(packageFile) // Apart from packaging, this is needed to not modify the original files array as it can trigger effects
-    const indexDocument =
-      files.length === 1 ? unescape(encodeURIComponent(files[0].name)) : detectIndexHtml(files) || undefined
+    let indexDocument = files.length === 1 ? files[0].name : detectIndexHtml(files) || undefined
+
+    // TODO: Remove once this is fixed in bee-js https://github.com/ethersphere/bee-js/issues/531
+    if (indexDocument) indexDocument = unescape(encodeURIComponent(indexDocument))
     const lastModified = files[0].lastModified
 
     // We want to store only some metadata
