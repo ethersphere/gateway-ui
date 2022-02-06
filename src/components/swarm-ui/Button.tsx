@@ -45,13 +45,14 @@ interface Props {
   icon?: ReactElement
   style?: CSSProperties
   onClick?: () => void
+  className?: string
 }
 
-const Button = ({ variant, children, style, onClick, icon }: Props): ReactElement => {
+const Button = ({ variant, children, style, onClick, icon, className }: Props): ReactElement => {
   const classes = useStyles()
 
   return (
-    <Typography variant="button" style={style}>
+    <Typography variant="button" style={style} className={className}>
       <div className={classes.common} onClick={onClick}>
         {icon ? <div className={classes.icon}>{icon}</div> : null}
         {children}

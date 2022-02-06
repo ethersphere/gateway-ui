@@ -46,9 +46,10 @@ interface Props {
   size?: 'small' | 'medium' | 'large'
   children?: ReactNode
   style?: CSSProperties
+  className?: string
 }
 
-const Typography = ({ variant, children, style, size }: Props): ReactElement => {
+const Typography = ({ variant, children, style, size, className }: Props): ReactElement => {
   const classes = useStyles()
 
   let variantClass = classes.body
@@ -65,7 +66,7 @@ const Typography = ({ variant, children, style, size }: Props): ReactElement => 
   else if (size === 'large') sizeClass = classes.sizeLarge
 
   return (
-    <span style={style} className={`${classes.common} ${variantClass} ${sizeClass}`}>
+    <span style={style} className={`${classes.common} ${variantClass} ${sizeClass} ${className}`}>
       {children}
     </span>
   )

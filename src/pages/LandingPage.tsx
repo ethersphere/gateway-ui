@@ -1,13 +1,11 @@
 import { ReactElement } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Divider from '@material-ui/core/Divider'
-import { ArrowDown, ArrowUp } from 'react-feather'
 import { UploadLine, DownloadLine } from '../components/swarm-ui/icons'
-import Link from '@material-ui/core/Link'
 import { useNavigate } from 'react-router-dom'
 import * as ROUTES from '../Routes'
 
-import { Typography, Button } from '../components/swarm-ui'
+import { Typography, Button, Link } from '../components/swarm-ui'
 
 import Layout from '../components/Layout'
 import Logo from '../components/Logo'
@@ -76,14 +74,7 @@ const LandingPage = (): ReactElement => {
             if (internal) action = { onClick: () => navigate(link) }
 
             return (
-              <Link
-                key={label}
-                className={classes.spreadItems}
-                color="inherit"
-                underline="always"
-                target="blank"
-                {...action}
-              >
+              <Link key={label} className={classes.spreadItems} target="blank" {...action}>
                 {label}
               </Link>
             )
