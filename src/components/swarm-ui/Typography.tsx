@@ -31,6 +31,7 @@ const useStyles = createUseStyles({
   link: {
     fontSize: 14,
     textDecoration: 'underline',
+    color: '#6c6c6c',
   },
   sizeSmall: {
     fontSize: 14,
