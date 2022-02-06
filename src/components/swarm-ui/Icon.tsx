@@ -1,14 +1,12 @@
-import { createStyles, makeStyles } from '@material-ui/core'
+import { createUseStyles } from 'react-jss'
 import type { ReactElement } from 'react'
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      height: '100%',
-      width: '100%',
-    },
-  }),
-)
+const useStyles = createUseStyles({
+  root: {
+    height: '100%',
+    width: '100%',
+  },
+})
 
 interface Props {
   children: ReactElement

@@ -1,6 +1,6 @@
 import type { ReactElement, ReactNode } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
+import { Typography } from '../components/swarm-ui'
 
 interface Props {
   children: ReactNode
@@ -68,7 +68,7 @@ export default function Header({ children, leftAction, rightAction }: Props): Re
     <div className={classes.root}>
       <div className={classes.float}>
         <div className={classes.action}>{leftAction}</div>
-        <Typography variant="button">{children}</Typography>
+        <Typography variant="title">{children}</Typography>
         <div className={classes.action}>{rightAction}</div>
       </div>
     </div>

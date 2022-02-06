@@ -1,52 +1,55 @@
-import { createStyles, makeStyles } from '@material-ui/core'
-import type { ReactElement, ReactNode, CSSProperties } from 'react'
+import { createUseStyles } from 'react-jss'
+import type { ReactElement, ReactNode, CSSProperties, ElementType } from 'react'
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    common: {
-      color: '#303030',
-      fontFamily: 'iAWriterQuattroV',
-      fontWeight: 500,
-      fontStretch: 'normal',
-      fontStyle: 'normal',
-    },
-    body: {
-      fontSize: 16,
-    },
-    caption: {
-      color: '#6c6c6c',
-      fontSize: 14,
-      fontStyle: 'italic',
-    },
-    button: {
-      fontSize: 14,
-    },
-    code: {
-      fontFamily: 'iAWriterMonoV',
-      fontSize: 14,
-    },
-    link: {
-      fontSize: 14,
-      textDecoration: 'underline',
-    },
-    sizeSmall: {
-      fontSize: 14,
-    },
-    sizeMedium: {
-      fontSize: 16,
-    },
-    sizeLarge: {
-      fontSize: 18,
-    },
-  }),
-)
+const useStyles = createUseStyles({
+  common: {
+    color: '#303030',
+    fontFamily: 'iAWriterQuattroV',
+    fontWeight: 500,
+    fontStretch: 'normal',
+    fontStyle: 'normal',
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 600,
+  },
+  body: {
+    fontSize: 16,
+  },
+  caption: {
+    color: '#6c6c6c',
+    fontSize: 14,
+    fontStyle: 'italic',
+  },
+  button: {
+    fontSize: 14,
+  },
+  code: {
+    fontFamily: 'iAWriterMonoV',
+    fontSize: 14,
+  },
+  link: {
+    fontSize: 14,
+    textDecoration: 'underline',
+  },
+  sizeSmall: {
+    fontSize: 14,
+  },
+  sizeMedium: {
+    fontSize: 16,
+  },
+  sizeLarge: {
+    fontSize: 18,
+  },
+})
 
 interface Props {
-  variant?: 'body' | 'button' | 'caption' | 'code' | 'link'
+  variant?: 'body' | 'button' | 'caption' | 'code' | 'link' | 'title'
   size?: 'small' | 'medium' | 'large'
   children?: ReactNode
   style?: CSSProperties
   className?: string
+  component?: ElementType
 }
 
 const Typography = ({ variant, children, style, size, className }: Props): ReactElement => {
@@ -58,6 +61,7 @@ const Typography = ({ variant, children, style, size, className }: Props): React
   else if (variant === 'caption') variantClass = classes.caption
   else if (variant === 'code') variantClass = classes.code
   else if (variant === 'link') variantClass = classes.link
+  else if (variant === 'title') variantClass = classes.title
 
   let sizeClass = ''
 

@@ -1,13 +1,14 @@
 import { createUseStyles } from 'react-jss'
-import { ReactElement, ReactNode, CSSProperties, ElementType } from 'react'
-
-import Typography from './Typography'
+import { ReactElement, CSSProperties, ElementType } from 'react'
 
 const useStyles = createUseStyles({
   common: {
     color: '#303030',
     backgroundColor: 'white',
     padding: 12,
+    borderRadius: 16,
+    width: 32,
+    height: 32,
     cursor: 'pointer',
     '-moz-user-select': '-moz-none',
     '-khtml-user-select': 'none',
@@ -18,7 +19,7 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     userSelect: 'none',
     '& svg': {
-      fill: '#dd7200',
+      fill: '#303030',
       transition: '0.1s',
     },
     '&:hover, &:active': {
@@ -32,7 +33,6 @@ const useStyles = createUseStyles({
     },
   },
   icon: {
-    marginRight: 10,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -40,8 +40,6 @@ const useStyles = createUseStyles({
 })
 
 interface Props {
-  variant: 'primary' | 'secondary'
-  children: ReactNode
   icon?: ReactElement
   style?: CSSProperties
   onClick?: () => void
@@ -49,19 +47,16 @@ interface Props {
   component?: ElementType
 }
 
-const Button = ({ variant, children, style, onClick, icon, className, component }: Props): ReactElement => {
+const IconButton = ({ style, onClick, icon, className, component }: Props): ReactElement => {
   const classes = useStyles()
 
   const DefaultComponent: ElementType = component || 'div'
 
   return (
-    <Typography variant="button" style={style} className={className}>
-      <DefaultComponent className={classes.common} onClick={onClick}>
-        {icon ? <div className={classes.icon}>{icon}</div> : null}
-        {children}
-      </DefaultComponent>
-    </Typography>
+    <DefaultComponent className={`${classes.common} ${className}`} onClick={onClick}>
+      {icon ? <div className={classes.icon}>{icon}</div> : null}
+    </DefaultComponent>
   )
 }
 
-export default Button
+export default IconButton

@@ -1,5 +1,5 @@
 import { ReactElement } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import { createUseStyles } from 'react-jss'
 import Divider from '@material-ui/core/Divider'
 import { UploadLine, DownloadLine } from '../components/swarm-ui/icons'
 import { useNavigate } from 'react-router-dom'
@@ -13,20 +13,18 @@ import Header from '../components/Header'
 
 import text from '../translations'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    spread: {
-      display: 'flex',
-      justifyContent: 'center',
-      flexWrap: 'wrap',
-    },
-    spreadItems: {
-      cursor: 'pointer',
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-    },
-  }),
-)
+const useStyles = createUseStyles({
+  spread: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+  },
+  spreadItems: {
+    cursor: 'pointer',
+    marginLeft: 8,
+    marginRight: 8,
+  },
+})
 
 const LandingPage = (): ReactElement => {
   const classes = useStyles()
