@@ -31,6 +31,23 @@ const useStyles = createUseStyles({
       },
     },
   },
+  disabled: {
+    color: '#666',
+    backgroundColor: '#bbb',
+    cursor: 'not-allowed',
+    '& svg': {
+      fill: '#666',
+    },
+    '&:hover, &:active': {
+      color: '#666',
+      backgroundColor: '#bbb',
+      transition: '0.1s',
+      '& svg': {
+        fill: '#666',
+        transition: '0.1s',
+      },
+    },
+  },
   icon: {
     marginRight: 10,
     display: 'flex',
@@ -47,16 +64,21 @@ interface Props {
   onClick?: () => void
   className?: string
   component?: ElementType
+  disabled?: boolean
 }
 
-const Button = ({ variant, children, style, onClick, icon, className, component }: Props): ReactElement => {
+const Button = ({ variant, children, style, onClick, icon, className, component, disabled }: Props): ReactElement => {
   const classes = useStyles()
 
   const DefaultComponent: ElementType = component || 'div'
 
   return (
     <Typography variant="button" style={style} className={className}>
-      <DefaultComponent className={classes.common} onClick={onClick}>
+      <DefaultComponent
+        className={`${classes.common} ${disabled ? classes.disabled : ''}`}
+        onClick={disabled ? undefined : onClick}
+        disabled={disabled}
+      >
         {icon ? <div className={classes.icon}>{icon}</div> : null}
         {children}
       </DefaultComponent>

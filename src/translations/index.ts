@@ -35,13 +35,13 @@ const text = {
   },
 
   uploadFile: {
-    headerFile: 'File',
-    headerWebsite: 'Website',
-    headerFolder: 'Folder',
+    header: 'Preview',
+    typeWebsite: 'Website',
+    typeFolder: 'Folder',
     tagline: 'Please double-check before uploading, there is no undo.',
     disclaimer: 'By uploading you agree to the Swarm Gateway',
     termsAndCondition: 'Terms & Conditions',
-    uploadAction: 'upload',
+    uploadAction: 'Upload',
     uploadingText: 'uploading...',
     uploadError: 'Failed to upload the file. Please try again later.',
     sizeLimitError: `Your upload is over the limit of ${uploadSizeLimit}. Please use your own Bee node to avoid this limitation.`,

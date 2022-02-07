@@ -68,7 +68,6 @@ export default function ShareGeneral(): ReactElement {
       setFiles={setFiles}
       metadata={metadata}
       preview={preview}
-      files={files}
       uploadFile={uploadFile}
       isUploadingFile={isUploadingFile}
     />

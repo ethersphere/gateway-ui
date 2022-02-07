@@ -53,7 +53,7 @@ const IconButton = ({ style, onClick, icon, className, component }: Props): Reac
   const DefaultComponent: ElementType = component || 'div'
 
   return (
-    <DefaultComponent className={`${classes.common} ${className}`} onClick={onClick}>
+    <DefaultComponent className={`${classes.common} ${className}`} style={style} onClick={onClick}>
       {icon ? <div className={classes.icon}>{icon}</div> : null}
     </DefaultComponent>
   )

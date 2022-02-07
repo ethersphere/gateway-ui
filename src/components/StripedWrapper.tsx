@@ -1,8 +1,10 @@
 import { createStyles, makeStyles } from '@material-ui/core'
-import { ReactElement } from 'react'
+import { ReactElement, ReactNode, CSSProperties } from 'react'
 
 interface Props {
-  children: ReactElement | ReactElement[]
+  children: ReactNode
+  style?: CSSProperties
+  className?: string
 }
 
 const useStyles = makeStyles(() =>
@@ -24,8 +26,12 @@ const useStyles = makeStyles(() =>
   }),
 )
 
-export function StripedWrapper({ children }: Props): ReactElement {
+export function StripedWrapper({ children, className, style }: Props): ReactElement {
   const classes = useStyles()
 
-  return <div className={classes.wrapper}>{children}</div>
+  return (
+    <div className={`${classes.wrapper} ${className}`} style={style}>
+      {children}
+    </div>
+  )
 }

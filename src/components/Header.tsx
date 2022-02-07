@@ -12,12 +12,9 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      height: theme.spacing(10),
+      height: 32,
       margin: 0,
       padding: 0,
-      [theme.breakpoints.down('sm')]: {
-        height: theme.spacing(6), // FIXME: The component is actually 4 theme spacing bigger (so spacing(10) ), but the Layout component adds 2x2 theme spacings and this was simplest way to do it
-      },
     },
     float: {
       zIndex: 100,
