@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react'
 import { createUseStyles } from 'react-jss'
-import { Button, Typography, IconButton, Link } from '../../components/swarm-ui'
+import { Button, Typography, Tooltip, IconButton, Link } from '../../components/swarm-ui'
 import { ArrowLeftLine, UploadLine } from '../../components/swarm-ui/icons'
 
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -54,9 +54,6 @@ const SharePage = ({ uploadError, setFiles, preview, uploadFile, isUploadingFile
           </Link>
         </Typography>,
         <Footer key="bottom">
-          {(uploadError || reachedSizeLimit) && (
-            <div>{reachedSizeLimit ? text.uploadFile.sizeLimitError : text.uploadFile.uploadError}</div>
-          )}
           <Button
             variant="primary"
             className={classes.button}
@@ -65,6 +62,9 @@ const SharePage = ({ uploadError, setFiles, preview, uploadFile, isUploadingFile
             icon={isUploadingFile ? <CircularProgress size={24} color="inherit" /> : <UploadLine />}
           >
             {isUploadingFile ? text.uploadFile.uploadingText : text.uploadFile.uploadAction}
+            {(uploadError || reachedSizeLimit) && (
+              <Tooltip>{reachedSizeLimit ? text.uploadFile.sizeLimitError : text.uploadFile.uploadError}</Tooltip>
+            )}
           </Button>
         </Footer>,
       ]}

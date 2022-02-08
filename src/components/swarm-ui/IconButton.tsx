@@ -1,10 +1,12 @@
 import { createUseStyles } from 'react-jss'
 import { ReactElement, CSSProperties, ElementType } from 'react'
 
+import { colors } from './css'
+
 const useStyles = createUseStyles({
   common: {
-    color: '#303030',
-    backgroundColor: 'white',
+    color: colors.text.normal,
+    backgroundColor: colors.white,
     padding: 12,
     borderRadius: 16,
     width: 32,
@@ -19,15 +21,15 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     userSelect: 'none',
     '& svg': {
-      fill: '#303030',
+      fill: colors.text.normal,
       transition: '0.1s',
     },
     '&:hover, &:active': {
-      color: 'white',
-      backgroundColor: '#dd7200',
+      color: colors.white,
+      backgroundColor: colors.swarmOrange,
       transition: '0.1s',
       '& svg': {
-        fill: 'white',
+        fill: colors.white,
         transition: '0.1s',
       },
     },

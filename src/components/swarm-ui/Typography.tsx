@@ -1,9 +1,11 @@
 import { createUseStyles } from 'react-jss'
 import type { ReactElement, ReactNode, CSSProperties, ElementType } from 'react'
 
+import { colors } from './css'
+
 const useStyles = createUseStyles({
   common: {
-    color: '#303030',
+    color: colors.text.normal,
     fontFamily: 'iAWriterQuattroV',
     fontWeight: 500,
     fontStretch: 'normal',
@@ -17,7 +19,7 @@ const useStyles = createUseStyles({
     fontSize: 16,
   },
   caption: {
-    color: '#6c6c6c',
+    color: colors.text.caption,
     fontSize: 14,
     fontStyle: 'italic',
   },
@@ -31,7 +33,7 @@ const useStyles = createUseStyles({
   link: {
     fontSize: 14,
     textDecoration: 'underline',
-    color: '#6c6c6c',
+    color: colors.text.caption,
   },
   sizeSmall: {
     fontSize: 14,
