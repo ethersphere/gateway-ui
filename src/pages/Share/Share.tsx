@@ -1,20 +1,19 @@
-import { ReactElement, useState } from 'react'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
-import IconButton from '@material-ui/core/IconButton'
+import type { ReactElement } from 'react'
+import { createUseStyles } from 'react-jss'
 import { useNavigate } from 'react-router-dom'
-import Button from '@material-ui/core/Button'
-import { ArrowLeft, Clipboard, Check, ExternalLink } from 'react-feather'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
+
+import { Button, Typography, colors } from '../../components/swarm-ui'
+import { DownloadLine, ClipboardLine, EyeLine, EyeOffLine } from '../../components/swarm-ui/icons'
 
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
-import Tabs from '../../components/Tabs'
 import Layout from '../../components/Layout'
+import Logo from '../../components/Logo'
+import { AssetPreview } from '../../components/AssetPreview'
 
 import * as ROUTES from '../../Routes'
 import { BZZ_LINK_DOMAIN, GATEWAY_URL } from '../../constants'
+import { shortenHash, shortenLink } from '../../utils/hash'
 
 import text from '../../translations'
 import { encodeManifestReference } from '@ethersphere/swarm-cid'
@@ -24,15 +23,18 @@ interface Props {
   metadata?: Metadata
 }
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    button: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
+const useStyles = createUseStyles({
+  button: {
+    width: '100%',
+  },
+  center: {
+    display: 'flex',
+    flexDirection: 'column',
+    '& > *:not(:last-child)': {
+      marginBottom: 2,
     },
-  }),
-)
+  },
+})
 
 const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
   const classes = useStyles()
@@ -40,108 +42,71 @@ const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
   const isWebsite = metadata?.isWebsite
 
   const bzzLink = `https://${encodeManifestReference(uploadReference)}.${BZZ_LINK_DOMAIN}/`
-  const linkHeader = isWebsite ? 'Bzz Link' : 'Web link'
   const linkUrl = isWebsite ? bzzLink : `${GATEWAY_URL}${ROUTES.ACCESS_HASH(uploadReference)}`
-
-  const [copiedToClipboard, setCopiedToClipboard] = useState<boolean>(false)
-  const [activeValue, setActiveValue] = useState<string>(uploadReference)
 
   return (
     <Layout
       top={[
-        <Header
-          key="top1"
-          leftAction={
-            <IconButton
-              onClick={() => {
-                navigate(ROUTES.LANDING_PAGE)
-              }}
-            >
-              <ArrowLeft strokeWidth={1} />
-            </IconButton>
-          }
-        >
-          {text.shareHashPage.header}
+        <Header key="top1">
+          <Logo />
         </Header>,
-        <Typography key="top2" variant="subtitle1">
-          {text.shareHashPage.tagline}
+        <Typography key="top2" variant="body">
+          {text.landingPage.tagline}
         </Typography>,
       ]}
       center={[
-        <Tabs
-          key="center1"
-          onChange={reference => {
-            if (reference !== activeValue) {
-              setActiveValue(reference)
-              setCopiedToClipboard(false)
-            }
-          }}
-          values={[
-            {
-              label: linkHeader,
-              component: (
-                <div>
-                  <Paper
-                    square
-                    elevation={0}
-                    style={{ overflowWrap: 'break-word', textAlign: 'left', padding: 16, margin: 4 }}
-                  >
-                    <Typography variant="caption">{linkUrl}</Typography>
-                  </Paper>
-                  {isWebsite && (
-                    <Button
-                      variant="contained"
-                      style={{ margin: 4, width: 'auto' }}
-                      className={classes.button}
-                      href={bzzLink}
-                      target="blank"
-                    >
-                      <ExternalLink strokeWidth={1} />
-                      {text.accessHashPage.openWebsite}
-                      <ExternalLink style={{ opacity: 0 }} />
-                    </Button>
-                  )}
-                </div>
-              ),
-              value: linkUrl,
-            },
-            {
-              label: 'Swarm hash',
-              component: (
-                <Paper
-                  square
-                  elevation={0}
-                  style={{ overflowWrap: 'break-word', textAlign: 'left', padding: 16, margin: 4 }}
-                >
-                  <Typography variant="caption">{uploadReference}</Typography>
-                </Paper>
-              ),
-              value: uploadReference,
-            },
-          ]}
-        />,
+        <div key="c1" className={classes.center}>
+          <div
+            style={{
+              backgroundColor: colors.white,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: 6,
+            }}
+          >
+            <Typography variant="button" style={{ padding: 6 }}>
+              Share link
+            </Typography>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <Button variant="light">{shortenLink(linkUrl)}</Button>
+              <Button variant="light" icon={<ClipboardLine />} />
+            </div>
+          </div>
+          <div
+            style={{
+              backgroundColor: colors.white,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: 6,
+            }}
+          >
+            <Typography variant="button" style={{ padding: 6 }}>
+              Hash
+            </Typography>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <Button variant="light">{shortenHash(uploadReference)}</Button>
+              <Button variant="light" icon={<EyeLine />} />
+            </div>
+          </div>
+          <div>
+            <AssetPreview />
+          </div>
+        </div>,
       ]}
       bottom={[
-        <Typography key="bottom1" variant="body2">
-          {text.shareHashPage.disclaimer}
-        </Typography>,
-        <Footer key="bottom2">
-          <CopyToClipboard text={activeValue}>
-            <Button
-              variant="contained"
-              className={classes.button}
-              size="large"
-              onClick={e => {
-                e.stopPropagation()
-                setCopiedToClipboard(true)
-              }}
-            >
-              {copiedToClipboard ? <Check strokeWidth={1} /> : <Clipboard strokeWidth={1} />}
-              {copiedToClipboard ? text.shareHashPage.copyLinkActionSuccess : text.shareHashPage.copyLinkAction}
-              {/* Needed to properly align icon to the right and label to center */}
-              <Clipboard style={{ opacity: 0 }} />
-            </Button>
-          </CopyToClipboard>
+        <Footer key="bottom1">
+          <Button
+            variant="primary"
+            className={classes.button}
+            icon={<DownloadLine />}
+            onClick={e => {
+              e.stopPropagation()
+            }}
+          >
+            Download
+          </Button>
         </Footer>,
       ]}
     />

@@ -1,5 +1,6 @@
 export const colors = {
   swarmOrange: '#dd7200',
+  lightOrange: '#fcf2e8',
   white: 'white',
   text: {
     normal: '#303030',

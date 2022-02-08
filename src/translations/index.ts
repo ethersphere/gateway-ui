@@ -48,7 +48,7 @@ const text = {
   },
 
   shareHashPage: {
-    header: 'share',
+    header: 'Share',
     tagline: 'Share your file with a simple web link, or a Swarm hash.',
     tabWebLink: 'web link',
     tabSwarmHash: 'swarm hash',

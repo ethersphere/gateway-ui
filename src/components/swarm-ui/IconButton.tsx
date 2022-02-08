@@ -1,5 +1,5 @@
 import { createUseStyles } from 'react-jss'
-import { ReactElement, CSSProperties, ElementType } from 'react'
+import type { ReactElement, CSSProperties, ElementType, MouseEventHandler } from 'react'
 
 import { colors } from './css'
 
@@ -44,7 +44,7 @@ const useStyles = createUseStyles({
 interface Props {
   icon?: ReactElement
   style?: CSSProperties
-  onClick?: () => void
+  onClick?: MouseEventHandler
   className?: string
   component?: ElementType
 }

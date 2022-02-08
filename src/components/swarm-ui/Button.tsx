@@ -1,5 +1,5 @@
 import { createUseStyles } from 'react-jss'
-import { ReactElement, ReactNode, CSSProperties, ElementType } from 'react'
+import type { ReactElement, ReactNode, CSSProperties, ElementType, MouseEventHandler } from 'react'
 
 import Typography from './Typography'
 import { colors } from './css'
@@ -31,6 +31,28 @@ const useStyles = createUseStyles({
         transition: '0.1s',
       },
     },
+    '& > *:not(:last-child)': {
+      marginRight: 10,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  },
+  light: {
+    color: colors.text.normal,
+    backgroundColor: colors.white,
+    padding: 8,
+    cursor: 'pointer',
+    '& svg': {
+      fill: colors.text.normal,
+    },
+    '&:hover, &:active': {
+      backgroundColor: colors.lightOrange,
+      color: colors.swarmOrange,
+      '& svg': {
+        fill: colors.swarmOrange,
+      },
+    },
   },
   disabled: {
     color: colors.text.normal,
@@ -42,27 +64,19 @@ const useStyles = createUseStyles({
     '&:hover, &:active': {
       color: colors.text.normal,
       backgroundColor: colors.surface.lightGray,
-      transition: '0.1s',
       '& svg': {
         fill: colors.text.normal,
-        transition: '0.1s',
       },
     },
-  },
-  icon: {
-    marginRight: 10,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 })
 
 interface Props {
-  variant: 'primary' | 'secondary'
-  children: ReactNode
+  variant: 'primary' | 'secondary' | 'light'
+  children?: ReactNode
   icon?: ReactElement
   style?: CSSProperties
-  onClick?: () => void
+  onClick?: MouseEventHandler
   className?: string
   component?: ElementType
   disabled?: boolean
@@ -73,15 +87,19 @@ const Button = ({ variant, children, style, onClick, icon, className, component,
 
   const DefaultComponent: ElementType = component || 'div'
 
+  let variantClass = ''
+
+  if (variant === 'light') variantClass = classes.light
+
   return (
-    <Typography variant="button" style={style} className={className}>
+    <Typography variant={variant === 'light' ? 'code' : 'button'} style={style} className={className}>
       <DefaultComponent
-        className={`${classes.common} ${disabled ? classes.disabled : ''}`}
+        className={`${classes.common} ${variantClass} ${disabled ? classes.disabled : ''}`}
         onClick={disabled ? undefined : onClick}
         disabled={disabled}
       >
-        {icon ? <div className={classes.icon}>{icon}</div> : null}
-        {children}
+        {icon}
+        {children ? <span>{children}</span> : null}
       </DefaultComponent>
     </Typography>
   )
