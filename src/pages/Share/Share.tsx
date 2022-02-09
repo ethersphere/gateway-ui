@@ -2,18 +2,19 @@ import type { ReactElement } from 'react'
 import { createUseStyles } from 'react-jss'
 import { useNavigate } from 'react-router-dom'
 
-import { Button, Typography, colors } from '../../components/swarm-ui'
-import { DownloadLine, ClipboardLine, EyeLine, EyeOffLine } from '../../components/swarm-ui/icons'
+import { Button, Typography } from '../../components/swarm-ui'
+import { DownloadLine } from '../../components/swarm-ui/icons'
 
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import Layout from '../../components/Layout'
 import Logo from '../../components/Logo'
 import { AssetPreview } from '../../components/AssetPreview'
+import Row from '../../components/Row'
+import RowHash from '../../components/RowHash'
 
 import * as ROUTES from '../../Routes'
 import { BZZ_LINK_DOMAIN, GATEWAY_URL } from '../../constants'
-import { shortenHash, shortenLink } from '../../utils/hash'
 
 import text from '../../translations'
 import { encodeManifestReference } from '@ethersphere/swarm-cid'
@@ -28,6 +29,7 @@ const useStyles = createUseStyles({
     width: '100%',
   },
   center: {
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     '& > *:not(:last-child)': {
@@ -56,40 +58,8 @@ const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
       ]}
       center={[
         <div key="c1" className={classes.center}>
-          <div
-            style={{
-              backgroundColor: colors.white,
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: 6,
-            }}
-          >
-            <Typography variant="button" style={{ padding: 6 }}>
-              Share link
-            </Typography>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <Button variant="light">{shortenLink(linkUrl)}</Button>
-              <Button variant="light" icon={<ClipboardLine />} />
-            </div>
-          </div>
-          <div
-            style={{
-              backgroundColor: colors.white,
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: 6,
-            }}
-          >
-            <Typography variant="button" style={{ padding: 6 }}>
-              Hash
-            </Typography>
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              <Button variant="light">{shortenHash(uploadReference)}</Button>
-              <Button variant="light" icon={<EyeLine />} />
-            </div>
-          </div>
+          <Row value={linkUrl} label="Share link" />
+          <RowHash hash={uploadReference} label="Hash" />
           <div>
             <AssetPreview />
           </div>

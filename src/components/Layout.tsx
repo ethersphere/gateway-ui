@@ -26,10 +26,6 @@ const useStyles = createUseStyles({
   section: {
     width: '100%',
   },
-  margin: {
-    marginTop: 32,
-    marginBottom: 32,
-  },
 })
 
 interface Props {
@@ -44,27 +40,13 @@ export default function Layout({ top, center, bottom }: Props): ReactElement {
   return (
     <div className={classes.root}>
       <div className={classes.wrapper}>
+        <div className={classes.section}>{top}</div>
         <div className={classes.section}>
-          {top.map((el, i) => (
-            <div key={i} className={classes.margin}>
-              {el}
-            </div>
-          ))}
+          <div style={{ opacity: 0 }}>{top}</div>
+          {center}
+          <div style={{ opacity: 0 }}>{bottom}</div>
         </div>
-        <div className={classes.section}>
-          {center.map((el, i) => (
-            <div key={i} className={classes.margin}>
-              {el}
-            </div>
-          ))}
-        </div>
-        <div className={classes.section}>
-          {bottom.map((el, i) => (
-            <div key={i} className={classes.margin}>
-              {el}
-            </div>
-          ))}
-        </div>
+        <div className={classes.section}>{bottom}</div>
       </div>
     </div>
   )
