@@ -59,11 +59,11 @@ const text = {
   },
 
   accessPage: {
-    header: 'access',
-    tagline: 'The easiest way to share & access files on the Swarm network.',
-    disclaimer: 'Please note that there’s no guarantee for a file availability on the network.',
-    textfieldPlaceholder: 'paste swarm hash here',
-    findAction: 'find',
+    header: 'Access',
+    disclaimer:
+      'You can use a Swarm hash (64 or 128 hex characters), an ethereum link (.eth) or a bzz link (.bzz.link).',
+    textfieldPlaceholder: 'Paste here...',
+    findAction: 'Find',
     backAction: 'back',
     hashLengthWarning: 'Should be 64 or 128 hex characters',
   },

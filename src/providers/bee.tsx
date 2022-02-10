@@ -1,4 +1,4 @@
-import { createContext, ReactChild, ReactElement } from 'react'
+import { createContext, useState, ReactChild, ReactElement } from 'react'
 import { Bee, Data, Reference } from '@ethersphere/bee-js'
 import { ManifestJs } from '@ethersphere/manifest-js'
 import { saveAs } from 'file-saver'
@@ -45,6 +45,9 @@ function hashToIndex(hash: Reference | string) {
 }
 
 export function Provider({ children }: Props): ReactElement {
+  const [metadata, setMetadata] = useState<Metadata | undefined>(undefined)
+  const [preview, setPreview] = useState<string | undefined>(undefined)
+
   const upload = async (files: SwarmFile[], metadata: Metadata, preview?: Blob) => {
     const fls = files.map(packageFile) // Apart from packaging, this is needed to not modify the original files array as it can trigger effects
     let indexDocument = files.length === 1 ? files[0].name : detectIndexHtml(files) || undefined

@@ -9,6 +9,7 @@ import DragDropLine from './DragDropLine'
 import EyeLine from './EyeLine'
 import EyeOffLine from './EyeOffLine'
 import ClipboardLine from './ClipboardLine'
+import SearchLine from './SearchLine'
 
 export interface IconProps extends SVGAttributes<SVGElement> {
   size?: string | number
@@ -27,4 +28,5 @@ export {
   EyeLine,
   EyeOffLine,
   ClipboardLine,
+  SearchLine,
 }

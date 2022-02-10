@@ -3,8 +3,8 @@ import { createUseStyles } from 'react-jss'
 import copy from 'copy-to-clipboard'
 
 import { Button, Typography, colors } from '../components/swarm-ui'
-import { DownloadLine, ClipboardLine, EyeLine, EyeOffLine } from '../components/swarm-ui/icons'
-import { shortenHash, shortenLink } from '../utils/hash'
+import { EyeLine, EyeOffLine } from '../components/swarm-ui/icons'
+import { shortenHash } from '../utils/hash'
 
 interface Props {
   hash: string

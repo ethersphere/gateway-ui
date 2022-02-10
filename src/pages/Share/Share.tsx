@@ -1,6 +1,5 @@
 import type { ReactElement } from 'react'
 import { createUseStyles } from 'react-jss'
-import { useNavigate } from 'react-router-dom'
 
 import { Button, Typography } from '../../components/swarm-ui'
 import { DownloadLine } from '../../components/swarm-ui/icons'
@@ -40,7 +39,6 @@ const useStyles = createUseStyles({
 
 const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
   const classes = useStyles()
-  const navigate = useNavigate()
   const isWebsite = metadata?.isWebsite
 
   const bzzLink = `https://${encodeManifestReference(uploadReference)}.${BZZ_LINK_DOMAIN}/`
@@ -58,7 +56,7 @@ const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
       ]}
       center={[
         <div key="c1" className={classes.center}>
-          <Row value={linkUrl} label="Share link" />
+          <Row value={isWebsite ? bzzLink : linkUrl} label={'Share link'} />
           <RowHash hash={uploadReference} label="Hash" />
           <div>
             <AssetPreview />
