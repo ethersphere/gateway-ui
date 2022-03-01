@@ -1,6 +1,6 @@
 import { Reference } from '@ethersphere/bee-js'
 
-export const BEE_HOSTS: string[] = process.env.REACT_APP_BEE_HOSTS?.split(',') || ['http://localhost:1633']
+export const BEE_HOST: string = process.env.REACT_APP_BEE_HOST || 'http://localhost:1633'
 export const POSTAGE_STAMP =
   (process.env.REACT_APP_POSTAGE_STAMP as Reference | undefined) ||
   ('0000000000000000000000000000000000000000000000000000000000000000' as Reference)
