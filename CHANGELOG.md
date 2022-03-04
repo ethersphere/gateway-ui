@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.2.2](https://www.github.com/ethersphere/gateway-ui/compare/v0.2.1...v0.2.2) (2022-03-04)
+
+
+### Bug Fixes
+
+* direct download url can now be set at build time ([#219](https://www.github.com/ethersphere/gateway-ui/issues/219)) ([af5c3a3](https://www.github.com/ethersphere/gateway-ui/commit/af5c3a3f49585bb1e775719a0acb7dcedccb34a3))
+
 ### [0.2.1](https://www.github.com/ethersphere/gateway/compare/v0.2.0...v0.2.1) (2022-02-02)
 
 
