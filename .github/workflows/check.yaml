@@ -64,7 +64,6 @@ jobs:
         uses: filoozom/swarm-actions/pr-preview@4bd1150a0bd165cc11906cf2932be29aee7a460c
         with:
           bee-url: https://unlimited.gateway.ethswarm.org
-          preview: 'true'
           token: ${{ secrets.REPO_GHA_PAT }}
           headers: "${{ secrets.GATEWAY_AUTHORIZATION_HEADER }}"
 
