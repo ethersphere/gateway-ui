@@ -1,13 +1,9 @@
 import type { ReactElement } from 'react'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
-import IconButton from '@material-ui/core/IconButton'
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
+import { createUseStyles } from 'react-jss'
+import { Button, Typography, Tooltip, IconButton, Link } from '../../components/swarm-ui'
+import { ArrowLeftLine, UploadLine } from '../../components/swarm-ui/icons'
 
-import { ArrowUp, X } from 'react-feather'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import Tooltip from '@material-ui/core/Tooltip'
-import Link from '@material-ui/core/Link'
 
 import { UPLOAD_SIZE_LIMIT } from '../../constants'
 import Header from '../../components/Header'
@@ -19,19 +15,14 @@ import * as ROUTES from '../../Routes'
 
 import text from '../../translations'
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    button: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
-  }),
-)
+const useStyles = createUseStyles({
+  button: {
+    width: '100%',
+  },
+})
 
 interface Props {
   setFiles: (files: SwarmFile[]) => void
-  files: SwarmFile[]
   preview?: string
   uploadFile: () => void
   isUploadingFile: boolean
@@ -39,72 +30,42 @@ interface Props {
   metadata?: Metadata
 }
 
-const SharePage = ({
-  uploadError,
-  setFiles,
-  files,
-  preview,
-  uploadFile,
-  isUploadingFile,
-  metadata,
-}: Props): ReactElement => {
+const SharePage = ({ uploadError, setFiles, preview, uploadFile, isUploadingFile, metadata }: Props): ReactElement => {
   const classes = useStyles()
-
-  let header = text.uploadFile.headerFile
-
-  if (files.length > 1) header = text.uploadFile.headerFolder
-
-  if (metadata?.isWebsite) header = text.uploadFile.headerWebsite
 
   const reachedSizeLimit = Boolean(metadata && metadata?.size > UPLOAD_SIZE_LIMIT)
 
   return (
     <Layout
       top={[
-        <Header
-          key="top1"
-          rightAction={
-            <IconButton onClick={() => setFiles([])}>
-              <X strokeWidth={1} />
-            </IconButton>
-          }
-        >
-          {header}
+        <Header key="top1" leftAction={<IconButton onClick={() => setFiles([])} icon={<ArrowLeftLine />} />}>
+          {text.uploadFile.header}
         </Header>,
-        <Typography key="top2" variant="body1">
+        <Typography key="top2" variant="body">
           {text.uploadFile.tagline}
         </Typography>,
       ]}
       center={[<AssetPreview key="center" previewUri={preview} metadata={metadata} />]}
       bottom={[
-        <Typography key="top2" variant="body1">
+        <Typography key="top2" variant="body">
           {text.uploadFile.disclaimer}{' '}
-          <Link href={ROUTES.TERMS_AND_CONDITIONS} color="inherit" underline="always" target="blank">
+          <Link href={ROUTES.TERMS_AND_CONDITIONS} target="blank">
             {text.uploadFile.termsAndCondition}.
           </Link>
         </Typography>,
         <Footer key="bottom">
-          <Tooltip
-            title={reachedSizeLimit ? text.uploadFile.sizeLimitError : text.uploadFile.uploadError}
-            placement="top"
-            open={uploadError || reachedSizeLimit}
-            arrow
-            disableFocusListener
-            disableHoverListener
-            disableTouchListener
+          <Button
+            variant="primary"
+            className={classes.button}
+            onClick={uploadFile}
+            disabled={reachedSizeLimit}
+            icon={isUploadingFile ? <CircularProgress size={24} color="inherit" /> : <UploadLine />}
           >
-            <Button
-              variant="contained"
-              className={classes.button}
-              onClick={uploadFile}
-              disabled={reachedSizeLimit}
-              size="large"
-            >
-              {isUploadingFile ? <CircularProgress size={24} color="inherit" /> : <ArrowUp strokeWidth={1} />}
-              {isUploadingFile ? text.uploadFile.uploadingText : text.uploadFile.uploadAction}
-              <ArrowUp style={{ opacity: 0 }} />
-            </Button>
-          </Tooltip>
+            {isUploadingFile ? text.uploadFile.uploadingText : text.uploadFile.uploadAction}
+            {(uploadError || reachedSizeLimit) && (
+              <Tooltip>{reachedSizeLimit ? text.uploadFile.sizeLimitError : text.uploadFile.uploadError}</Tooltip>
+            )}
+          </Button>
         </Footer>,
       ]}
     />

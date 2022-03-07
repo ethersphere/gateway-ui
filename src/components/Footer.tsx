@@ -1,6 +1,5 @@
 import type { ReactElement, ReactNode } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
 
 interface Props {
   children: ReactNode
@@ -10,10 +9,9 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      height: theme.spacing(11),
-      [theme.breakpoints.down('sm')]: {
-        height: theme.spacing(7),
-      },
+      height: 32,
+      margin: 0,
+      padding: 64,
     },
     float: {
       zIndex: 100,
@@ -21,6 +19,11 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'fixed',
       bottom: 0,
       left: 0,
+      margin: 0,
+      padding: 64,
+      paddingTop: theme.spacing(6),
+      paddingLeft: theme.spacing(6),
+      paddingRight: theme.spacing(6),
       '&::after': {
         content: '""',
         width: '100%',
@@ -34,14 +37,6 @@ const useStyles = makeStyles((theme: Theme) =>
         zIndex: -1,
       },
     },
-    content: {
-      width: '100%',
-      padding: theme.spacing(2),
-      paddingBottom: theme.spacing(6),
-      [theme.breakpoints.down('sm')]: {
-        paddingBottom: theme.spacing(2),
-      },
-    },
   }),
 )
 
@@ -51,9 +46,26 @@ export default function Footer({ children }: Props): ReactElement {
   return (
     <div className={classes.root}>
       <div className={classes.float}>
-        <Container maxWidth="sm" className={classes.content}>
-          <>{children}</>
-        </Container>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexGrow: 1,
+              width: 640,
+            }}
+          >
+            {children}
+          </div>
+        </div>
       </div>
     </div>
   )

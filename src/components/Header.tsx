@@ -1,6 +1,6 @@
 import type { ReactElement, ReactNode } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
+import { Typography } from '../components/swarm-ui'
 
 interface Props {
   children: ReactNode
@@ -12,12 +12,9 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: '100%',
-      height: theme.spacing(10),
+      height: 32,
       margin: 0,
       padding: 0,
-      [theme.breakpoints.down('sm')]: {
-        height: theme.spacing(6), // FIXME: The component is actually 4 theme spacing bigger (so spacing(10) ), but the Layout component adds 2x2 theme spacings and this was simplest way to do it
-      },
     },
     float: {
       zIndex: 100,
@@ -68,7 +65,7 @@ export default function Header({ children, leftAction, rightAction }: Props): Re
     <div className={classes.root}>
       <div className={classes.float}>
         <div className={classes.action}>{leftAction}</div>
-        <Typography variant="button">{children}</Typography>
+        <Typography variant="title">{children}</Typography>
         <div className={classes.action}>{rightAction}</div>
       </div>
     </div>

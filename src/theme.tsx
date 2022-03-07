@@ -167,14 +167,14 @@ export const theme = createMuiTheme({
   },
   typography: {
     button: {
-      fontFamily: '"IBM Plex Mono", monospace',
+      fontFamily: 'iAWriterQuattroV',
       fontWeight: 500,
       fontStretch: 'normal',
       fontStyle: 'normal',
-      color: '#242424',
+      color: '#303030',
     },
     caption: {
-      fontFamily: '"IBM Plex Mono", monospace',
+      fontFamily: 'iAWriterMonoV, monospace',
       fontWeight: 500,
       fontSize: '1rem',
       fontStretch: 'normal',
@@ -194,7 +194,9 @@ export const theme = createMuiTheme({
       color: '#999999',
       fontWeight: 400,
     },
-    fontFamily: ['Work Sans', 'Montserrat', 'Nunito', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'].join(','),
+    fontFamily: ['iAWriterQuattroV', 'Montserrat', 'Nunito', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'].join(
+      ',',
+    ),
   },
 })
 

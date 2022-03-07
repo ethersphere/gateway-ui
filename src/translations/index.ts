@@ -8,8 +8,8 @@ const text = {
   // Main landng page
   landingPage: {
     tagline: 'The easiest way to share & access files on the Swarm network.',
-    shareAction: 'share',
-    accessAction: 'access',
+    shareAction: 'Share',
+    accessAction: 'Access',
     disclaimer:
       'The Swarm Gateway is graciously provided by the Swarm Foundation. This service is under development and provided for testing purposes only. For unlimited use of the Swarm network consider running your own node.',
     links: [
@@ -23,10 +23,10 @@ const text = {
 
   /** Access flow **/
   addFile: {
-    header: 'share',
-    tagline: 'Use the buttons below, or drag and drop, to select files you would like to share on the Swarm network.',
-    addFileAction: 'add a file',
-    addFolderAction: 'add a folder or website',
+    header: 'Select',
+    tagline: 'Select a file or a folder you would like to share on the Swarm network.',
+    addFileAction: 'Select file',
+    addFolderAction: 'Select folder or website',
     disclaimer: `Maximum upload size is ${uploadSizeLimit}. To upload a website make sure that your folder contains an "index.html" file.`,
 
     // Drag & drop overlay
@@ -35,20 +35,20 @@ const text = {
   },
 
   uploadFile: {
-    headerFile: 'File',
-    headerWebsite: 'Website',
-    headerFolder: 'Folder',
+    header: 'Preview',
+    typeWebsite: 'Website',
+    typeFolder: 'Folder',
     tagline: 'Please double-check before uploading, there is no undo.',
     disclaimer: 'By uploading you agree to the Swarm Gateway',
     termsAndCondition: 'Terms & Conditions',
-    uploadAction: 'upload',
+    uploadAction: 'Upload',
     uploadingText: 'uploading...',
     uploadError: 'Failed to upload the file. Please try again later.',
     sizeLimitError: `Your upload is over the limit of ${uploadSizeLimit}. Please use your own Bee node to avoid this limitation.`,
   },
 
   shareHashPage: {
-    header: 'share',
+    header: 'Share',
     tagline: 'Share your file with a simple web link, or a Swarm hash.',
     tabWebLink: 'web link',
     tabSwarmHash: 'swarm hash',
@@ -59,11 +59,11 @@ const text = {
   },
 
   accessPage: {
-    header: 'access',
-    tagline: 'The easiest way to share & access files on the Swarm network.',
-    disclaimer: 'Please note that there’s no guarantee for a file availability on the network.',
-    textfieldPlaceholder: 'paste swarm hash here',
-    findAction: 'find',
+    header: 'Access',
+    disclaimer:
+      'You can use a Swarm hash (64 or 128 hex characters), an ethereum link (.eth) or a bzz link (.bzz.link).',
+    textfieldPlaceholder: 'Paste here...',
+    findAction: 'Find',
     backAction: 'back',
     hashLengthWarning: 'Should be 64 or 128 hex characters',
   },
