@@ -61,7 +61,7 @@ jobs:
         run: npm run build
 
       - name: Create preview
-        uses: filoozom/swarm-actions/pr-preview@a324799d680f01a0fbc9552afe3a3dd7bbadeb09
+        uses: filoozom/swarm-actions/pr-preview@v0
         with:
           bee-url: https://unlimited.gateway.ethswarm.org
           token: ${{ secrets.REPO_GHA_PAT }}
