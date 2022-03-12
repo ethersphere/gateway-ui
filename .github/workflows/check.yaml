@@ -61,13 +61,15 @@ jobs:
         run: npm run build
 
       - name: Create preview
-        uses: filoozom/swarm-actions/pr-preview@v0
+        uses: ethersphere/swarm-actions/pr-preview@v0
         with:
           bee-url: https://unlimited.gateway.ethswarm.org
           token: ${{ secrets.REPO_GHA_PAT }}
           headers: "${{ secrets.GATEWAY_AUTHORIZATION_HEADER }}"
 
       - name: Upload to testnet
-        uses: ethersphere/beeload-action@v1
+        uses: ethersphere/upload-dir@v0
         with:
+          index-document: index.html
+          dir: ./build
           bee-url: https://api.gateway.testnet.ethswarm.org
