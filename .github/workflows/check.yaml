@@ -70,6 +70,7 @@ jobs:
 
       - name: Upload to testnet
         uses: ethersphere/swarm-actions/upload-dir@v0
+        continue-on-error: true
         with:
           index-document: index.html
           error-document: index.html
