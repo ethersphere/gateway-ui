@@ -7,6 +7,7 @@ import { ArrowLeft, Clipboard, Check, ExternalLink } from 'react-feather'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { QRCodeSVG } from 'qrcode.react'
 
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
@@ -18,6 +19,7 @@ import { BZZ_LINK_DOMAIN, GATEWAY_URL } from '../../constants'
 
 import text from '../../translations'
 import { encodeManifestReference } from '@ethersphere/swarm-cid'
+import { theme } from '../../theme'
 
 interface Props {
   uploadReference: string
@@ -101,6 +103,7 @@ const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
                       <ExternalLink style={{ opacity: 0 }} />
                     </Button>
                   )}
+                  <QRCodeSVG value={linkUrl} bgColor={theme.palette.background.default} />
                 </div>
               ),
               value: linkUrl,
