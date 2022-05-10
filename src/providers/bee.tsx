@@ -76,12 +76,12 @@ export function Provider({ children }: Props): ReactElement {
       fls.push(previewFile)
     }
 
-    const { reference } = await randomBee.uploadFiles(POSTAGE_STAMP, fls, { indexDocument })
+    const { reference } = await randomBee.uploadFiles(POSTAGE_STAMP, fls, { indexDocument, deferred: false })
     const hashIndex = hashToIndex(reference)
 
     if (hashIndex !== randomIndex) {
       const bee = new Bee(BEE_HOSTS[hashIndex])
-      await bee.uploadFiles(POSTAGE_STAMP, fls, { indexDocument })
+      await bee.uploadFiles(POSTAGE_STAMP, fls, { indexDocument, deferred: false })
     }
 
     return reference
