@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      REACT_APP_BEE_HOSTS: 'https://api.gateway.ethswarm.org/'
+      REACT_APP_BEE_HOSTS: 'https://gateway-proxy-bee-0-0.gateway.ethswarm.org/,https://gateway-proxy-bee-1-0.gateway.ethswarm.org/,https://gateway-proxy-bee-2-0.gateway.ethswarm.org/,https://gateway-proxy-bee-3-0.gateway.ethswarm.org/,https://gateway-proxy-bee-4-0.gateway.ethswarm.org/,https://gateway-proxy-bee-5-0.gateway.ethswarm.org/,https://gateway-proxy-bee-6-0.gateway.ethswarm.org/,https://gateway-proxy-bee-7-0.gateway.ethswarm.org/,https://gateway-proxy-bee-8-0.gateway.ethswarm.org/,https://gateway-proxy-bee-9-0.gateway.ethswarm.org/'
 
     strategy:
       matrix:
