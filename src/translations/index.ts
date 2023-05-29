@@ -41,6 +41,7 @@ const text = {
     tagline: 'Please double-check before uploading, there is no undo.',
     disclaimer: 'By uploading you agree to the Swarm Gateway',
     termsAndCondition: 'Terms & Conditions',
+    makePublic: 'Make this file public?',
     uploadAction: 'upload',
     uploadingText: 'uploading...',
     uploadError: 'Failed to upload the file. Please try again later.',
