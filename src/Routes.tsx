@@ -2,11 +2,21 @@ import type { ReactElement } from 'react'
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
 
 // pages
-import { Access, AccessHash, LandingPage, Share, Page404, TermsAndConditions, RedirectToDownload } from './pages'
+import {
+  Access,
+  AccessHash,
+  Browse,
+  LandingPage,
+  Share,
+  Page404,
+  TermsAndConditions,
+  RedirectToDownload,
+} from './pages'
 
 export const LANDING_PAGE = '/'
 export const ACCESS = '/access'
 export const ACCESS_HASH = (hash = ':hash'): string => `/access/${hash}`
+export const BROWSE = '/browse'
 export const SHARE = '/share'
 export const TERMS_AND_CONDITIONS = '/termsandconditions'
 
@@ -18,6 +28,7 @@ const BaseRouter = (): ReactElement => (
     <Routes>
       <Route path={LANDING_PAGE} element={<LandingPage />} />
       <Route path={SHARE} element={<Share />} />
+      <Route path={BROWSE} element={<Browse />} />
       <Route path={ACCESS} element={<Access />} />
       <Route path={ACCESS_HASH()} element={<AccessHash />} />
       <Route path={TERMS_AND_CONDITIONS} element={<TermsAndConditions />} />

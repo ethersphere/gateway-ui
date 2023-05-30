@@ -48,6 +48,13 @@ The Gateway runs in development mode on [http://localhost:3030/](http://localhos
 - `REACT_APP_POSTAGE_STAMP` - Postage stamp batch ID to be used for uploading (defaults to `00000...00000`
 - `REACT_APP_GATEWAY_URL` - URL on which the gateway is hosted (defaults to current window location)
 - `REACT_APP_DIRECT_DOWNLOAD_URL` - URL for a direct download of asset, used for redirecting ENS requests (defaults to `https://api.gateway.ethswarm.org/bzz/`)
+- `REACT_APP_POD_USERNAME` - FairOS username (of account that owns the pod)
+- `REACT_APP_POD_PASSWORD` - FairOS user Password
+- `REACT_APP_POD_NAME` - FairOS Pod name
+- `REACT_APP_FAIROS_HOSTV1` - URL to the FairOS host (version 1)
+- `REACT_APP_FAIROS_HOSTV2` - URL to the FairOS host (version 2)
+- `REACT_APP_KV_TABLENAME` - Name of the key-value FairOS store used to store publicly uploaded gateway data
+- `REACT_APP_KEY_STORE_NAME` - Key used to index the descriptions of publicly uploaded files
 
 ## Contribute
 

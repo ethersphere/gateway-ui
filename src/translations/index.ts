@@ -10,6 +10,7 @@ const text = {
     tagline: 'The easiest way to share & access files on the Swarm network.',
     shareAction: 'share',
     accessAction: 'access',
+    browseAction: 'browse',
     disclaimer:
       'The Swarm Gateway is graciously provided by the Swarm Foundation. This service is under development and provided for testing purposes only. For unlimited use of the Swarm network consider running your own node.',
     links: [
@@ -41,6 +42,7 @@ const text = {
     tagline: 'Please double-check before uploading, there is no undo.',
     disclaimer: 'By uploading you agree to the Swarm Gateway',
     termsAndCondition: 'Terms & Conditions',
+    makePublic: 'Make this file public?',
     uploadAction: 'upload',
     uploadingText: 'uploading...',
     uploadError: 'Failed to upload the file. Please try again later.',
@@ -66,6 +68,14 @@ const text = {
     findAction: 'find',
     backAction: 'back',
     hashLengthWarning: 'Should be 64 or 128 hex characters',
+  },
+
+  browsePage: {
+    header: 'browse',
+    tagline: 'Browse publicly uploaded files on Swarm',
+    disclaimer: 'Please note that there’s no guarantee for a file availability on the network.',
+    findAction: 'find',
+    backAction: 'back',
   },
 
   page404: {

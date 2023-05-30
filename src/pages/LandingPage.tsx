@@ -66,6 +66,18 @@ const LandingPage = (): ReactElement => {
           className={classes.button}
           size="large"
           variant="contained"
+          onClick={() => navigate(ROUTES.BROWSE)}
+        >
+          <ArrowDown strokeWidth={1} />
+          {text.landingPage.browseAction}
+          {/* Needed to properly align icon to the right and label to center */}
+          <ArrowDown style={{ opacity: 0 }} />
+        </Button>,
+        <Button
+          key="center2"
+          className={classes.button}
+          size="large"
+          variant="contained"
           onClick={() => navigate(ROUTES.ACCESS)}
         >
           <ArrowDown strokeWidth={1} />

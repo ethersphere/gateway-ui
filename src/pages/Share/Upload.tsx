@@ -2,6 +2,7 @@ import type { ReactElement } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
+import InputBase from '@material-ui/core/InputBase'
 import Typography from '@material-ui/core/Typography'
 
 import { ArrowUp, X } from 'react-feather'
@@ -32,6 +33,10 @@ const useStyles = makeStyles(() =>
 interface Props {
   setFiles: (files: SwarmFile[]) => void
   files: SwarmFile[]
+  setPublic: (prev: boolean) => void
+  toMakePublic: boolean
+  publicName: string
+  setPublicName: (name: string) => void
   preview?: string
   uploadFile: () => void
   isUploadingFile: boolean
@@ -41,6 +46,10 @@ interface Props {
 
 const SharePage = ({
   uploadError,
+  setPublic,
+  toMakePublic,
+  publicName,
+  setPublicName,
   setFiles,
   files,
   preview,
@@ -75,7 +84,27 @@ const SharePage = ({
           {text.uploadFile.tagline}
         </Typography>,
       ]}
-      center={[<AssetPreview key="center" previewUri={preview} metadata={metadata} />]}
+      center={[
+        <AssetPreview key="center" previewUri={preview} metadata={metadata} />,
+        <Typography key="top2" variant="body1">
+          <label>
+            <span>{text.uploadFile.makePublic}</span>
+            <input type="checkbox" checked={toMakePublic} onChange={() => setPublic(!toMakePublic)} />
+          </label>
+        </Typography>,
+        {
+          ...(toMakePublic ? (
+            <div key="bottom">
+              <label>
+                <span>Describe your file</span>
+                <InputBase type="text" value={publicName} onChange={e => setPublicName(e.target.value)} />
+              </label>
+            </div>
+          ) : (
+            <></>
+          )),
+        },
+      ]}
       bottom={[
         <Typography key="top2" variant="body1">
           {text.uploadFile.disclaimer}{' '}

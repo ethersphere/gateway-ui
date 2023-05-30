@@ -4,12 +4,16 @@ import SharePage from './Share'
 import AddFile from './AddFile'
 import Upload from './Upload'
 
+import { saveHash } from '../../providers/fairos'
+
 import { Context } from '../../providers/bee'
 import { getMetadata } from '../../utils/file'
 import { resize } from '../../utils/image'
 import { PREVIEW_DIMENSIONS } from '../../constants'
 
 export default function ShareGeneral(): ReactElement {
+  const [publicName, setPublicName] = useState('')
+  const [toMakePublic, setPublic] = useState<boolean>(false)
   const [files, setFiles] = useState<SwarmFile[]>([])
   const [uploadReference, setUploadReference] = useState('')
   const [isUploadingFile, setIsUploadingFile] = useState<boolean>(false)
@@ -40,7 +44,7 @@ export default function ShareGeneral(): ReactElement {
         URL.revokeObjectURL(preview)
       }
     }
-  }, [files]) //eslint-disable-line react-hooks/exhaustive-deps
+  }, [files, toMakePublic]) //eslint-disable-line react-hooks/exhaustive-deps
 
   const uploadFile = () => {
     if (files.length === 0 || !metadata) return
@@ -50,10 +54,20 @@ export default function ShareGeneral(): ReactElement {
 
     upload(files, metadata, previewBlob)
       .then(hash => {
-        setUploadReference(hash)
+        console.log('got hash:', hash) // eslint-disable-line no-console
+
+        if (toMakePublic) {
+          console.log('will make public') // eslint-disable-line no-console
+
+          return saveHash(publicName, hash).then(() => {
+            console.log('seetting hash') // eslint-disable-line no-console
+            setUploadReference(hash)
+          })
+        } else setUploadReference(hash)
       })
       .catch(() => setUploadError(true)) // eslint-disable-line
       .finally(() => {
+        console.log('finally') // eslint-disable-line
         setIsUploadingFile(false)
       })
   }
@@ -65,6 +79,10 @@ export default function ShareGeneral(): ReactElement {
   return (
     <Upload
       uploadError={uploadError}
+      setPublic={setPublic}
+      toMakePublic={toMakePublic}
+      publicName={publicName}
+      setPublicName={setPublicName}
       setFiles={setFiles}
       metadata={metadata}
       preview={preview}
