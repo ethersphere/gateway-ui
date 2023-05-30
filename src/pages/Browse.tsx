@@ -1,13 +1,12 @@
 import { ReactElement, useState, useEffect } from 'react'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+// import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import { useNavigate } from 'react-router-dom'
-import Button from '@material-ui/core/Button'
-import { ArrowLeft, CornerUpLeft, Search } from 'react-feather'
+import { ArrowLeft } from 'react-feather'
 import Typography from '@material-ui/core/Typography'
-import { Utils } from '@ethersphere/bee-js'
+import Link from '@material-ui/core/Link'
 
-import { fetchKVs } from '../providers/fairos'
+import { fetchKey, fetchKeys } from '../providers/fairos'
 
 import Header from '../components/Header'
 import Footer from '../components/Footer'
@@ -17,6 +16,7 @@ import * as ROUTES from '../Routes'
 
 import text from '../translations'
 
+/*
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
@@ -29,23 +29,49 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   }),
 )
+*/
+
+function retrieveHash(
+  name: string,
+  oldKeys: { [key: string]: string | undefined },
+  setList: (val: { [key: string]: string | undefined }) => void,
+) {
+  return fetchKey(name).then(res => {
+    const allKeys = { ...oldKeys, [name]: res }
+    setList(allKeys)
+
+    return allKeys
+  })
+}
 
 export default function BrowsePage(): ReactElement {
-  const classes = useStyles()
   const navigate = useNavigate()
 
-  const [hash, setHash] = useState<string>('')
-  const [list, setList] = useState<{ [key: string]: string }>({})
-  const [hashError, setHashError] = useState<boolean>(false)
+  const [list, setList] = useState<{ [key: string]: string | undefined }>({})
+  const [hashToRetrieve, setHashToRetrieve] = useState<string>('')
 
   useEffect(() => {
-    if (!hash || Utils.isHexString(hash, 64) || Utils.isHexString(hash, 128)) setHashError(false)
-    else setHashError(true)
+    if (Object.keys(list).length === 0) {
+      fetchKeys().then(res => {
+        const listObj: { [key: string]: string | undefined } = {}
 
-    fetchKVs().then(res => {
-      setList(res)
-    })
-  }, [hash, list])
+        res.forEach(key => {
+          listObj[key] = undefined
+        })
+
+        setList(listObj)
+      })
+    }
+  }, [list])
+
+  useEffect(() => {
+    if (hashToRetrieve.length >= 1) {
+      retrieveHash(hashToRetrieve, list, setList).then(res => {
+        setList(res)
+        navigate(ROUTES.ACCESS_HASH(res[hashToRetrieve]))
+      })
+    }
+  }, [hashToRetrieve])
 
   return (
     <Layout
@@ -70,47 +96,22 @@ export default function BrowsePage(): ReactElement {
       ]}
       center={[
         <div key="center1">
-          <ul>
-            {Object.keys(list).map(name => (
-              <li key={name}>
-                <a href={ROUTES.ACCESS_HASH(list[name])}>{name}</a>
-              </li>
-            ))}
-          </ul>
-
-          <Button
-            variant="contained"
-            key="center2"
-            className={classes.button}
-            size="small"
-            style={{ marginTop: 2, paddingLeft: 16, paddingRight: 16, opacity: hash ? 1 : 0 }}
-            onClick={() => setHash('')}
-          >
-            <CornerUpLeft />
-            {text.browsePage.backAction}
-            <CornerUpLeft style={{ opacity: 0 }} />
-          </Button>
+          {Object.keys(list).map(name => (
+            <Typography key={'center-' + name} variant="body1">
+              {list[name] ? (
+                <Link href={ROUTES.ACCESS_HASH(list[name])}>{name}</Link>
+              ) : (
+                <Link onClick={() => setHashToRetrieve(name)}>{name}</Link>
+              )}
+            </Typography>
+          ))}
         </div>,
       ]}
       bottom={[
         <Footer key="bottom1">
-          <div>
-            {hash && (
-              <Button
-                variant="contained"
-                className={classes.button}
-                disabled={hashError}
-                onClick={() => navigate(ROUTES.ACCESS_HASH(hash))}
-                size="large"
-              >
-                <Search strokeWidth={1} />
-                {text.browsePage.findAction}
-                <Search style={{ opacity: 0 }} />
-              </Button>
-            )}
-          </div>
+          <div></div>
         </Footer>,
-        <Typography key="bottom2" variant="body2" style={{ opacity: hash ? 0 : 1 }}>
+        <Typography key="bottom2" variant="body2" style={{ opacity: 1 }}>
           {text.browsePage.disclaimer}
         </Typography>,
       ]}

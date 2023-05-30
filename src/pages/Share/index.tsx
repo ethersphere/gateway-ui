@@ -54,14 +54,20 @@ export default function ShareGeneral(): ReactElement {
 
     upload(files, metadata, previewBlob)
       .then(hash => {
-        setUploadReference(hash)
+        console.log('got hash:', hash) // eslint-disable-line no-console
 
         if (toMakePublic) {
-          saveHash(publicName, hash)
-        }
+          console.log('will make public') // eslint-disable-line no-console
+
+          return saveHash(publicName, hash).then(() => {
+            console.log('seetting hash') // eslint-disable-line no-console
+            setUploadReference(hash)
+          })
+        } else setUploadReference(hash)
       })
       .catch(() => setUploadError(true)) // eslint-disable-line
       .finally(() => {
+        console.log('finally') // eslint-disable-line
         setIsUploadingFile(false)
       })
   }

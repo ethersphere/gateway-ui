@@ -52,6 +52,9 @@ The Gateway runs in development mode on [http://localhost:3030/](http://localhos
 - `REACT_APP_POD_PASSWORD` - FairOS user Password
 - `REACT_APP_POD_NAME` - FairOS Pod name
 - `REACT_APP_FAIROS_HOSTV1` - URL to the FairOS host (version 1)
+- `REACT_APP_FAIROS_HOSTV2` - URL to the FairOS host (version 2)
+- `REACT_APP_KV_TABLENAME` - Name of the key-value FairOS store used to store publicly uploaded gateway data
+- `REACT_APP_KEY_STORE_NAME` - Key used to index the descriptions of publicly uploaded files
 
 ## Contribute
 

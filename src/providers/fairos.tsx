@@ -1,9 +1,13 @@
-const tableName = process.env.REACT_APP_KV_TABLENAME ?? 'swarmgateway-kvs'
-const podName: string = process.env.REACT_APP_POD_NAME ?? 'swarmgateway'
-const username: string = process.env.REACT_APP_POD_USERNAME ?? 'username'
-const password: string = process.env.REACT_APP_POD_PASSWORD ?? 'password'
-const hostv1 = process.env.REACT_APP_HOSTV1
-const hostv2 = process.env.REACT_APP_HOSTV2
+import { KEY_STORE_NAME, KV_TABLE, POD_NAME, POD_USERNAME, POD_PASSWORD, POD_HOSTV1, POD_HOSTV2 } from '../constants'
+
+const tableName = KV_TABLE
+const podName: string = POD_NAME
+const username: string = POD_USERNAME
+const password: string = POD_PASSWORD
+const hostv1 = POD_HOSTV1
+const hostv2 = POD_HOSTV2
+
+const keyStoreName = KEY_STORE_NAME
 
 type JSONValue = string | number | boolean | null | JSONValue[] | { [key: string]: JSONValue }
 
@@ -43,8 +47,6 @@ function fetchApi(url: string, method: string, data?: JSONObject, version = 'v1'
   const host = version === 'v1' ? hostv1 : hostv2
 
   return fetch(host + url, options).then(res => {
-    console.log('Res:', res) // eslint-disable-line no-console
-
     if (res.ok) {
       return res.json()
     } else {
@@ -53,13 +55,6 @@ function fetchApi(url: string, method: string, data?: JSONObject, version = 'v1'
       })
     }
   })
-  /*
-  .then(res => {
-    console.log('json Res:', res) // eslint-disable-line no-console
-
-    return res
-  })
-   */
 }
 
 function login() {
@@ -94,45 +89,37 @@ function checkKVsExists(): Promise<boolean> {
       }
     })
     .catch(e => {
-      console.log('error getting KV', e) // eslint-disable-line no-console
-
       return false
     })
 }
 
-function addKV(key: string, value: string) {
+function addKV(key: string, value: string): Promise<boolean> {
   const data = { podName, tableName, key, value }
 
   return checkKVsExists().then(res => {
     if (res) {
-      return fetchApi('/kv/entry/put', 'POST', data)
+      return fetchApi('/kv/entry/put', 'POST', data).then(() => true)
     } else {
-      return createKV().then(() => {
-        addKV(key, value)
-      })
+      return createKV().then(() => addKV(key, value))
     }
   })
 }
 
-export function fetchKVs(): Promise<{ [k: string]: string }> {
-  const ans: { [k: string]: string } = {
-    'Name 1': 'bladofw',
-    'Name 2': 'ovjiow',
-  }
+export function fetchKey(key: string): Promise<string> {
+  const data = { podName, tableName, key, format: 'string' }
 
-  return login().then(() => Promise.resolve(ans))
-}
-
-function fetchKey(key: string): Promise<string> {
-  const data = { podName, tableName, key }
-
-  return checkKVsExists().then(res => {
-    if (res) {
-      return fetchApi('/kv/entry/get?' + new URLSearchParams(data), 'GET')
-    } else {
-      return createKV().then(() => fetchKey(key))
-    }
-  })
+  return checkKVsExists()
+    .then(response => {
+      if (response) {
+        return fetchApi('/kv/entry/get-data?' + new URLSearchParams(data), 'GET').then(res => {
+          if (res.values) return res.values
+          else return false
+        })
+      } else {
+        return createKV().then(() => fetchKey(key))
+      }
+    })
+    .catch(err => false)
 }
 
 export function checkKeyExists(name: string): Promise<boolean> {
@@ -143,12 +130,28 @@ export function checkKeyExists(name: string): Promise<boolean> {
   })
 }
 
-export function saveHash(name: string, hash: string) {
-  return checkKeyExists(name).then(res => {
-    if (res) {
-      throw new Error('Name already exists. Choose a different name')
-    } else {
-      addKV(name, hash)
+export function fetchKeys(): Promise<string[]> {
+  return fetchKey(keyStoreName).then(res => {
+    try {
+      const keys = JSON.parse(res)
+
+      if (Array.isArray(keys)) return keys
+      else {
+        return []
+      }
+    } catch (e) {
+      return []
+    }
+  })
+}
+
+export function saveHash(name: string, hash: string): Promise<boolean> {
+  return fetchKeys().then(keys => {
+    if (keys.includes(name)) throw new Error("Name '" + name + "' already exists. Choose a different name")
+    else {
+      const newKeys = JSON.stringify([...keys, name])
+
+      return addKV(name, hash).then(() => addKV(keyStoreName, newKeys))
     }
   })
 }
