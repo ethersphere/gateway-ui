@@ -2,6 +2,7 @@ import type { ReactElement } from 'react'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
+import InputBase from '@material-ui/core/InputBase'
 import Typography from '@material-ui/core/Typography'
 
 import { ArrowUp, X } from 'react-feather'
@@ -96,7 +97,7 @@ const SharePage = ({
             <div key="bottom">
               <label>
                 <span>Describe your file</span>
-                <input type="text" value={publicName} onChange={e => setPublicName(e.target.value)} />
+                <InputBase type="text" value={publicName} onChange={e => setPublicName(e.target.value)} />
               </label>
             </div>
           ) : (

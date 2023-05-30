@@ -1,6 +1,9 @@
-const tableName = 'swarmgateway-kvs'
-const podName: string = process.env.REACT_APP_PODNAME ?? 'swarmgateway'
+const tableName = process.env.REACT_APP_KV_TABLENAME ?? 'swarmgateway-kvs'
+const podName: string = process.env.REACT_APP_POD_NAME ?? 'swarmgateway'
+const username: string = process.env.REACT_APP_POD_USERNAME ?? 'username'
+const password: string = process.env.REACT_APP_POD_PASSWORD ?? 'password'
 const hostv1 = process.env.REACT_APP_HOSTV1
+const hostv2 = process.env.REACT_APP_HOSTV2
 
 type JSONValue = string | number | boolean | null | JSONValue[] | { [key: string]: JSONValue }
 
@@ -8,7 +11,7 @@ interface JSONObject {
   [k: string]: JSONValue
 }
 
-function fetchApi(url: string, method: string, data?: JSONObject) {
+function fetchApi(url: string, method: string, data?: JSONObject, version = 'v1') {
   type fetchOptions = {
     method: string
     headers: {
@@ -37,9 +40,35 @@ function fetchApi(url: string, method: string, data?: JSONObject) {
     options.body = JSON.stringify(data)
   }
 
-  return fetch(hostv1 + url, options).then(res => {
-    return res.json()
+  const host = version === 'v1' ? hostv1 : hostv2
+
+  return fetch(host + url, options).then(res => {
+    console.log('Res:', res) // eslint-disable-line no-console
+
+    if (res.ok) {
+      return res.json()
+    } else {
+      return res.json().then(error => {
+        throw error
+      })
+    }
   })
+  /*
+  .then(res => {
+    console.log('json Res:', res) // eslint-disable-line no-console
+
+    return res
+  })
+   */
+}
+
+function login() {
+  const data = {
+    username,
+    password,
+  }
+
+  return fetchApi('/user/login', 'POST', data, 'v2')
 }
 
 function createKV() {
@@ -49,19 +78,26 @@ function createKV() {
     indexType: 'string',
   }
 
-  return fetchApi('/kv/new', 'POST', data)
+  return login().then(() => fetchApi('/kv/new', 'POST', data))
 }
 
 function checkKVsExists(): Promise<boolean> {
   const data = { podName, tableName }
 
-  return fetchApi('/kv/open', 'POST', data).then(res => {
-    if (res) {
-      return true
-    } else {
+  return login()
+    .then(() => fetchApi('/kv/open', 'POST', data))
+    .then(res => {
+      if (res) {
+        return true
+      } else {
+        return false
+      }
+    })
+    .catch(e => {
+      console.log('error getting KV', e) // eslint-disable-line no-console
+
       return false
-    }
-  })
+    })
 }
 
 function addKV(key: string, value: string) {
@@ -76,6 +112,15 @@ function addKV(key: string, value: string) {
       })
     }
   })
+}
+
+export function fetchKVs(): Promise<{ [k: string]: string }> {
+  const ans: { [k: string]: string } = {
+    'Name 1': 'bladofw',
+    'Name 2': 'ovjiow',
+  }
+
+  return login().then(() => Promise.resolve(ans))
 }
 
 function fetchKey(key: string): Promise<string> {
