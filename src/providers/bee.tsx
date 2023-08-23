@@ -1,12 +1,12 @@
-import { createContext, ReactChild, ReactElement } from 'react'
 import { Bee, Data, Reference } from '@ethersphere/bee-js'
-import { ManifestJs } from '@ethersphere/manifest-js'
 import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
+import { createContext, ReactChild, ReactElement } from 'react'
 
 import { BEE_HOSTS, META_FILE_NAME, POSTAGE_STAMP, PREVIEW_FILE_NAME } from '../constants'
-import { packageFile } from '../utils/SwarmFile'
 import { detectIndexHtml } from '../utils/file'
+import { ManifestJs } from '../utils/manifest'
+import { packageFile } from '../utils/SwarmFile'
 
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
 const randomBee = new Bee(BEE_HOSTS[randomIndex])

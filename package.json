@@ -2,12 +2,12 @@
   "name": "gateway",
   "version": "0.2.2",
   "dependencies": {
-    "@ethersphere/bee-js": "3.3.3",
-    "@ethersphere/manifest-js": "1.2.0",
+    "@ethersphere/bee-js": "^6.2.0",
     "@ethersphere/swarm-cid": "^0.1.0",
     "@material-ui/core": "^4.12.3",
     "file-saver": "^2.0.5",
     "jszip": "^3.7.1",
+    "mantaray-js": "^1.0.3",
     "react": "^17.0.2",
     "react-copy-to-clipboard": "^5.0.4",
     "react-dom": "^17.0.2",
@@ -57,5 +57,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    }
   }
 }
