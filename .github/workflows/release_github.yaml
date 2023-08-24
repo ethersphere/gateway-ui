@@ -16,5 +16,5 @@ jobs:
         with:
           token: ${{ secrets.GHA_PAT_ADVANCED }}
           release-type: node
-          package-name: bee-dashboard
+          package-name: gateway-ui
           bump-minor-pre-major: true
