@@ -1,6 +1,6 @@
 {
   "name": "gateway",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "dependencies": {
     "@ethersphere/bee-js": "^6.2.0",
     "@ethersphere/swarm-cid": "^0.1.0",
