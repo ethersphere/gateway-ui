@@ -1,5 +1,5 @@
 import { Box, Grid, Typography } from '@material-ui/core'
-import { ReactElement } from 'react'
+import { ReactElement, useMemo } from 'react'
 import { File, Folder, Monitor } from 'react-feather'
 import { AssetIcon } from './AssetIcon'
 import { FitImage } from './FitImage'
@@ -8,6 +8,7 @@ import { shortenHash } from '../utils/hash'
 import { PREVIEW_DIMENSIONS } from '../constants'
 
 import text from '../translations'
+import { FitVideo } from './FitVideo'
 
 interface Props {
   assetName?: string
@@ -17,24 +18,45 @@ interface Props {
 
 // TODO: add optional prop for indexDocument when it is already known (e.g. downloading a manifest)
 
-export function AssetPreview({ previewUri, metadata }: Props): ReactElement {
-  let previewComponent = <File />
-  let type = mimeToKind(metadata?.type)
+/* eslint-disable react/display-name */
+const getPreviewComponent = (previewUri?: string, metadata?: Metadata) => {
+  if (metadata?.isVideo) {
+    return () => <FitVideo src={previewUri} />
+  }
+
+  if (metadata?.isImage) {
+    return () => <FitImage alt="Upload Preview" src={previewUri} />
+  }
 
   if (metadata?.isWebsite) {
-    previewComponent = <Monitor />
-    type = text.uploadFile.headerWebsite
-  } else if (metadata?.type === 'folder') {
-    previewComponent = <Folder />
-    type = text.uploadFile.headerFolder
+    return () => <AssetIcon icon={<Monitor />} />
   }
+
+  if (metadata?.type === 'folder') {
+    return () => <AssetIcon icon={<Folder />} />
+  }
+
+  return () => <AssetIcon icon={<File />} />
+}
+
+const getType = (metadata?: Metadata) => {
+  if (metadata?.isWebsite) return text.uploadFile.headerWebsite
+
+  if (metadata?.type === 'folder') return text.uploadFile.headerFolder
+
+  return mimeToKind(metadata?.type)
+}
+
+export function AssetPreview({ previewUri, metadata }: Props): ReactElement {
+  const PreviewAssetComponent = useMemo(() => getPreviewComponent(previewUri, metadata), [metadata, previewUri])
+  const type = useMemo(() => getType(metadata), [metadata])
 
   return (
     <Box mb={0.25}>
       <Box bgcolor="background.paper">
         <Grid container direction="row">
           <div style={{ width: PREVIEW_DIMENSIONS.maxWidth, height: PREVIEW_DIMENSIONS.maxHeight }}>
-            {previewUri ? <FitImage alt="Upload Preview" src={previewUri} /> : <AssetIcon icon={previewComponent} />}
+            <PreviewAssetComponent />
           </div>
           <Box p={2} textAlign="left">
             {metadata?.hash && <Typography>Swarm Hash: {shortenHash(metadata.hash)}</Typography>}

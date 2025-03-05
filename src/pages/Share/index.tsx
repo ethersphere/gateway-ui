@@ -14,33 +14,43 @@ export default function ShareGeneral(): ReactElement {
   const [uploadReference, setUploadReference] = useState('')
   const [isUploadingFile, setIsUploadingFile] = useState<boolean>(false)
   const [uploadError, setUploadError] = useState<boolean>(false)
-  const [preview, setPreview] = useState<string | undefined>(undefined)
+  const [previewUri, setPreviewUri] = useState<string | undefined>(undefined)
   const [previewBlob, setPreviewBlob] = useState<Blob | undefined>(undefined)
   const [metadata, setMetadata] = useState<Metadata | undefined>()
   const { upload } = useContext(Context)
 
   useEffect(() => {
-    setMetadata(getMetadata(files))
+    const metadata = getMetadata(files)
+    setMetadata(metadata)
 
-    if (preview) {
-      URL.revokeObjectURL(preview) // Clear the preview from memory
-      setPreview(undefined)
+    if (previewUri) {
+      URL.revokeObjectURL(previewUri) // Clear the preview from memory
+      setPreviewUri(undefined)
       setPreviewBlob(undefined)
     }
 
-    if (files.length !== 1 || !files[0].type.startsWith('image')) return
+    if (files.length !== 1) return
 
-    resize(files[0], PREVIEW_DIMENSIONS.maxWidth, PREVIEW_DIMENSIONS.maxHeight).then(blob => {
-      setPreview(URL.createObjectURL(blob)) // NOTE: Until it is cleared with URL.revokeObjectURL, the file stays allocated in memory
-      setPreviewBlob(blob)
-    })
+    if (metadata.isVideo) {
+      const videoFile = files[0]
+      const videoBlob = new Blob([videoFile], { type: videoFile.type })
+      setPreviewUri(URL.createObjectURL(videoBlob))
+      setPreviewBlob(videoBlob)
+    }
+
+    if (metadata.isImage) {
+      resize(files[0], PREVIEW_DIMENSIONS.maxWidth, PREVIEW_DIMENSIONS.maxHeight).then(blob => {
+        setPreviewUri(URL.createObjectURL(blob)) // NOTE: Until it is cleared with URL.revokeObjectURL, the file stays allocated in memory
+        setPreviewBlob(blob)
+      })
+    }
 
     return () => {
-      if (preview) {
-        URL.revokeObjectURL(preview)
+      if (previewUri) {
+        URL.revokeObjectURL(previewUri)
       }
     }
-  }, [files]) //eslint-disable-line react-hooks/exhaustive-deps
+  }, [files]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const uploadFile = () => {
     if (files.length === 0 || !metadata) return
@@ -67,7 +77,7 @@ export default function ShareGeneral(): ReactElement {
       uploadError={uploadError}
       setFiles={setFiles}
       metadata={metadata}
-      preview={preview}
+      preview={previewUri}
       files={files}
       uploadFile={uploadFile}
       isUploadingFile={isUploadingFile}

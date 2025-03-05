@@ -1,5 +1,7 @@
 import { DragEvent } from 'react'
 import { convertSwarmFile } from './SwarmFile'
+import { isSupportedVideoType } from './video'
+import { isSupportedImageType } from './image'
 
 const indexHtmls = ['index.html', 'index.htm']
 
@@ -31,12 +33,14 @@ export function detectIndexHtml(files: SwarmFile[]): string | false {
 
 export function getMetadata(files: SwarmFile[]): Metadata {
   const size = files.reduce((total, item) => total + item.size, 0)
-  const isWebsite = Boolean(detectIndexHtml(files))
   const name = getAssetNameFromFiles(files)
   const type = files.length === 1 ? files[0].type : 'folder'
   const count = files.length
+  const isWebsite = Boolean(detectIndexHtml(files))
+  const isVideo = isSupportedVideoType(type)
+  const isImage = isSupportedImageType(type)
 
-  return { size, name, type, isWebsite, count }
+  return { size, name, type, isWebsite, count, isVideo, isImage }
 }
 
 export function getAssetNameFromFiles(files: SwarmFile[]): string {

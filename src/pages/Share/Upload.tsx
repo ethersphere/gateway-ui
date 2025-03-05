@@ -56,7 +56,7 @@ const SharePage = ({
 
   if (metadata?.isWebsite) header = text.uploadFile.headerWebsite
 
-  const reachedSizeLimit = Boolean(metadata && metadata?.size > UPLOAD_SIZE_LIMIT)
+  const reachedSizeLimit = Boolean(metadata?.size && metadata.size > UPLOAD_SIZE_LIMIT)
 
   return (
     <Layout

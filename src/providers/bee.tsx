@@ -3,7 +3,7 @@ import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 import { createContext, ReactChild, ReactElement } from 'react'
 
-import { BEE_HOSTS, META_FILE_NAME, POSTAGE_STAMP, PREVIEW_FILE_NAME } from '../constants'
+import { BEE_HOSTS, META_FILE_NAME, POSTAGE_STAMP } from '../constants'
 import { detectIndexHtml } from '../utils/file'
 import { ManifestJs } from '../utils/manifest'
 import { packageFile } from '../utils/SwarmFile'
@@ -45,36 +45,20 @@ function hashToIndex(hash: Reference | string) {
 }
 
 export function Provider({ children }: Props): ReactElement {
-  const upload = async (files: SwarmFile[], metadata: Metadata, preview?: Blob) => {
+  const upload = async (files: SwarmFile[], metadata: Metadata) => {
     const fls = files.map(packageFile) // Apart from packaging, this is needed to not modify the original files array as it can trigger effects
     let indexDocument = files.length === 1 ? files[0].name : detectIndexHtml(files) || undefined
 
     // TODO: Remove once this is fixed in bee-js https://github.com/ethersphere/bee-js/issues/531
     if (indexDocument) indexDocument = unescape(encodeURIComponent(indexDocument))
+
     const lastModified = files[0].lastModified
-
-    // We want to store only some metadata
-    const mtd: SwarmMetadata = {
-      name: metadata.name,
-      size: metadata.size,
-    }
-
-    // Type of the file only makes sense for a single file
-    if (files.length === 1) mtd.type = metadata.type
-
     fls.push(
-      new File([JSON.stringify(mtd)], META_FILE_NAME, {
+      new File([JSON.stringify(metadata)], META_FILE_NAME, {
         type: 'application/json',
         lastModified,
       }),
     )
-
-    if (preview) {
-      const previewFile = new File([preview], PREVIEW_FILE_NAME, {
-        lastModified,
-      })
-      fls.push(previewFile)
-    }
 
     const { reference } = await randomBee.uploadFiles(POSTAGE_STAMP, fls, { indexDocument })
     const hashIndex = hashToIndex(reference)
@@ -110,51 +94,48 @@ export function Provider({ children }: Props): ReactElement {
     preview?: string
     entries: Record<string, string>
   }> => {
-    let metadata: Metadata | undefined = { size: 0, type: 'unknown', name: hash, isWebsite: false }
+    let metadata: Metadata | undefined
     let entries: Record<string, string> = {}
-    let preview
+    let indexDocument: string | null = null
+    let preview: string | undefined
 
     const hashIndex = hashToIndex(hash)
     const bee = new Bee(BEE_HOSTS[hashIndex])
-
-    try {
-      const mtdt = await bee.downloadFile(hash, META_FILE_NAME)
-      metadata = { ...metadata, ...(JSON.parse(mtdt.data.text()) as Metadata) }
-    } catch (e) {} // eslint-disable-line no-empty
 
     try {
       const manifestJs = new ManifestJs(bee)
       const isManifest = await manifestJs.isManifest(hash)
 
       if (!isManifest) throw Error('The specified hash does not contain valid content.')
-      entries = await manifestJs.getHashes(hash)
 
-      const indexDocument = await manifestJs.getIndexDocumentPath(hash)
-
-      metadata.isWebsite = Boolean(indexDocument && /.*\.html?$/i.test(indexDocument)) // only html documents can be websites
-
-      preview = getPreview(entries, hash)
-
-      // Erase the files added by the gateway
-      delete entries[META_FILE_NAME]
-      delete entries[PREVIEW_FILE_NAME]
-
-      metadata.count = Object.keys(entries).length
-
-      if (metadata.count > 1) metadata.type = 'folder'
+      entries = await manifestJs.getHashes(hash, { exclude: [META_FILE_NAME] })
+      indexDocument = await manifestJs.getIndexDocumentPath(hash)
     } catch (e) {} // eslint-disable-line no-empty
 
-    metadata.hash = hash
+    try {
+      const remoteMetadata = await bee.downloadFile(hash, META_FILE_NAME)
+      const formattedMetadata = JSON.parse(remoteMetadata.data.text()) as Metadata
+
+      if (formattedMetadata.isVideo || formattedMetadata.isImage) {
+        preview = `${BEE_HOSTS[hashIndex]}/bzz/${hash}`
+      }
+
+      metadata = { ...formattedMetadata, hash }
+    } catch (e) {
+      const count = Object.keys(entries).length
+      metadata = {
+        hash,
+        type: count > 1 ? 'folder' : 'unknown',
+        name: hash,
+        count,
+        isWebsite: Boolean(indexDocument && /.*\.html?$/i.test(indexDocument)),
+        isVideo: Boolean(indexDocument && /.*\.(mp4|webm|ogg|mp3|ogg|wav)$/i.test(indexDocument)),
+        isImage: Boolean(indexDocument && /.*\.(jpg|jpeg|png|gif|webp|svg)$/i.test(indexDocument)),
+        // naive assumption based on indexDocument, we don't want to donwload the whole manifest
+      }
+    }
 
     return { metadata, preview, entries }
-  }
-
-  const getPreview = (entries: Record<string, string>, hash: Reference | string): string | undefined => {
-    if (!entries[PREVIEW_FILE_NAME]) return
-
-    const hashIndex = hashToIndex(hash)
-
-    return `${BEE_HOSTS[hashIndex]}/bzz/${hash}/${PREVIEW_FILE_NAME}`
   }
 
   const getChunk = (hash: Reference | string): Promise<Data> => {

@@ -5,8 +5,7 @@ export const POSTAGE_STAMP =
   (process.env.REACT_APP_POSTAGE_STAMP as Reference | undefined) ||
   ('0000000000000000000000000000000000000000000000000000000000000000' as Reference)
 
-export const META_FILE_NAME = '.swarmgatewaymeta.json'
-export const PREVIEW_FILE_NAME = '.swarmgatewaypreview.jpeg'
+export const META_FILE_NAME = 'metadata'
 export const PREVIEW_DIMENSIONS = { maxWidth: 250, maxHeight: 175 }
 
 const url = window.location.origin
