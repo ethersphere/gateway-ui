@@ -110,7 +110,7 @@ export default function AccessPage(): ReactElement {
           >
             <InputBase
               className={classes.button}
-              placeholder="Paste Swarm Hash Here"
+              placeholder={text.accessPage.textfieldPlaceholder}
               onChange={event => setHash(recognizeSwarmHash(event.target.value))}
               value={hash}
               multiline

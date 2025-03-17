@@ -62,7 +62,7 @@ const text = {
     header: 'access',
     tagline: 'The easiest way to share & access files on the Swarm network.',
     disclaimer: 'Please note that there’s no guarantee for a file availability on the network.',
-    textfieldPlaceholder: 'paste swarm hash here',
+    textfieldPlaceholder: 'Paste Swarm Hash Here',
     findAction: 'find',
     backAction: 'back',
     hashLengthWarning: 'Should be 64 or 128 hex characters',
