@@ -6,7 +6,6 @@
     "@emotion/styled": "^11.0.0",
     "@ethersphere/bee-js": "^12.0.0",
     "@mui/material": "^6.0.0",
-    "cafe-utility": "^33.9.0",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
     "react": "^19.2.5",
@@ -29,6 +28,7 @@
   "scripts": {
     "start": "vite",
     "build": "vite build --base=./",
+    "check": "tsc --noEmit",
     "depcheck": "depcheck ."
   }
 }
