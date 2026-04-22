@@ -55,7 +55,7 @@ export function AssetPreview({ previewUri, metadata }: Props): ReactElement {
     <Box mb={0.25}>
       <Box bgcolor="background.paper">
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-          <div style={{ width: PREVIEW_DIMENSIONS.maxWidth, height: PREVIEW_DIMENSIONS.maxHeight }}>
+          <div style={{ width: PREVIEW_DIMENSIONS.maxWidth, height: PREVIEW_DIMENSIONS.maxHeight, color: '#999999' }}>
             <PreviewAssetComponent />
           </div>
           <Box p={2} textAlign="left">

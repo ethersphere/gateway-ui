@@ -54,7 +54,7 @@ const LandingPage = (): ReactElement => {
             return (
               <Link
                 key={label}
-                sx={{ mx: 1, cursor: 'pointer' }}
+                sx={{ mx: 1, cursor: 'pointer', color: '#999999', fontSize: 'smaller' }}
                 color="inherit"
                 underline="always"
                 target="blank"

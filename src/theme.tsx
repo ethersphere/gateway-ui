@@ -70,6 +70,7 @@ export const theme = createTheme({
         }),
         contained: ({ theme }) => ({
           backgroundColor: 'white',
+          color: 'rgba(0, 0, 0, 0.87)',
           boxShadow: 'none',
           '& svg': {
             stroke: theme.palette.primary.main,
