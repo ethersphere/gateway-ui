@@ -1,7 +1,7 @@
 import { Bee, MantarayNode, Reference } from '@ethersphere/bee-js'
 import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
-import { createContext, ReactChild, ReactElement } from 'react'
+import { createContext, ReactElement, ReactNode } from 'react'
 import { BEE_HOSTS, META_FILE_NAME, POSTAGE_STAMP } from '../constants'
 import { detectIndexHtml } from '../utils/file'
 import { packageFile } from '../utils/SwarmFile'
@@ -33,7 +33,7 @@ export const Context = createContext<ContextInterface>(initialValues)
 export const Consumer = Context.Consumer
 
 interface Props {
-  children: ReactChild
+  children: ReactNode
 }
 
 function hashToIndex(hash: Reference | string) {
