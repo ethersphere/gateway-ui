@@ -1,5 +1,5 @@
-import CssBaseline from '@material-ui/core/CssBaseline'
-import { ThemeProvider } from '@material-ui/core/styles'
+import CssBaseline from '@mui/material/CssBaseline'
+import { ThemeProvider } from '@mui/material/styles'
 import type { ReactElement } from 'react'
 
 import Routes from './Routes'

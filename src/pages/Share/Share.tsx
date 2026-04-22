@@ -1,9 +1,8 @@
 import { Reference } from '@ethersphere/bee-js'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
-import Paper from '@material-ui/core/Paper'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
 import { ReactElement, useState } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { ArrowLeft, Check, Clipboard, ExternalLink } from 'react-feather'
@@ -21,18 +20,9 @@ interface Props {
   metadata?: Metadata
 }
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    button: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
-  }),
-)
+const buttonStyle = { width: '100%', display: 'flex', justifyContent: 'space-between' }
 
 const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
-  const classes = useStyles()
   const navigate = useNavigate()
   const isWebsite = metadata?.isWebsite
 
@@ -89,7 +79,7 @@ const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
                     <Button
                       variant="contained"
                       style={{ margin: 4, width: 'auto' }}
-                      className={classes.button}
+                      sx={buttonStyle}
                       href={bzzLink}
                       target="blank"
                     >
@@ -126,7 +116,7 @@ const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
           <CopyToClipboard text={activeValue}>
             <Button
               variant="contained"
-              className={classes.button}
+              sx={buttonStyle}
               size="large"
               onClick={e => {
                 e.stopPropagation()

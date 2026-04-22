@@ -1,53 +1,24 @@
-import { ReactElement, useState, DragEvent, useRef, useEffect } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import IconButton from '@material-ui/core/IconButton'
-import Button from '@material-ui/core/Button'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import Typography from '@mui/material/Typography'
+import { DragEvent, ReactElement, useEffect, useRef, useState } from 'react'
 import { ArrowLeft, Plus } from 'react-feather'
 import { useNavigate } from 'react-router-dom'
-import Typography from '@material-ui/core/Typography'
-
+import * as ROUTES from '../../Routes'
 import Header from '../../components/Header'
 import Layout from '../../components/Layout'
 import TermsAndConditionsPopup from '../../components/TermsAndConditionsPopup'
+import text from '../../translations'
 import { convertSwarmFile } from '../../utils/SwarmFile'
 import { handleDrop } from '../../utils/file'
-
-import * as ROUTES from '../../Routes'
-import text from '../../translations'
 
 interface Props {
   setFiles: (files: SwarmFile[]) => void
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    button: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
-    dragOverlay: {
-      width: '100vw',
-      height: '100vh',
-      backgroundColor: theme.palette.primary.main,
-      zIndex: 150,
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      flexDirection: 'column',
-    },
-    dragOverlayChildren: {
-      margin: theme.spacing(2),
-      color: 'white',
-    },
-  }),
-)
+const buttonStyle = { width: '100%', display: 'flex', justifyContent: 'space-between' }
 
 export default function Upload({ setFiles }: Props): ReactElement {
-  const classes = useStyles()
   const ref = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
   const [isDragging, setIsDragging] = useState<boolean>(false)
@@ -102,11 +73,26 @@ export default function Upload({ setFiles }: Props): ReactElement {
     <div onDragOver={onDragOver} onDrop={onDrop}>
       <>
         {isDragging && (
-          <div onDragLeave={onDragLeave} className={classes.dragOverlay}>
-            <Typography className={classes.dragOverlayChildren} variant="button">
+          <div
+            onDragLeave={onDragLeave}
+            style={{
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: '#dd7200',
+              zIndex: 150,
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+            }}
+          >
+            <Typography sx={{ m: 2, color: 'white' }} variant="button">
               {text.addFile.dragHeader}
             </Typography>
-            <Typography variant="body1" className={classes.dragOverlayChildren}>
+            <Typography variant="body1" sx={{ m: 2, color: 'white' }}>
               {text.addFile.dragTagline}
             </Typography>
           </div>
@@ -129,7 +115,7 @@ export default function Upload({ setFiles }: Props): ReactElement {
           </Typography>,
         ]}
         center={[
-          <Button variant="contained" key="center1" component="label" size="large" className={classes.button}>
+          <Button variant="contained" key="center1" component="label" size="large" sx={buttonStyle}>
             <Plus strokeWidth={1} />
             {text.addFile.addFileAction}
             <input
@@ -142,7 +128,7 @@ export default function Upload({ setFiles }: Props): ReactElement {
             />
             <Plus style={{ opacity: 0 }} />
           </Button>,
-          <Button variant="contained" key="center2" component="label" size="large" className={classes.button}>
+          <Button variant="contained" key="center2" component="label" size="large" sx={buttonStyle}>
             <Plus strokeWidth={1} />
             {text.addFile.addFolderAction}
             <input

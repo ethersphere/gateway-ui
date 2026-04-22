@@ -1,35 +1,20 @@
 import { Reference } from '@ethersphere/bee-js'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
-import InputBase from '@material-ui/core/InputBase'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
-import Tooltip from '@material-ui/core/Tooltip'
-import Typography from '@material-ui/core/Typography'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import InputBase from '@mui/material/InputBase'
+import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
 import { ReactElement, useEffect, useState } from 'react'
 import { ArrowLeft, CornerUpLeft, Search } from 'react-feather'
 import { useNavigate } from 'react-router-dom'
-
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Layout from '../components/Layout'
-
-import * as ROUTES from '../Routes'
-
 import { BZZ_LINK_DOMAIN } from '../constants'
+import * as ROUTES from '../Routes'
 import text from '../translations'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    button: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
-    footerReservedSpace: {
-      height: theme.spacing(10), // Filler space so that the layout of the page does not change as users write text
-    },
-  }),
-)
+const buttonStyle = { width: '100%', display: 'flex', justifyContent: 'space-between' }
 
 function extractSwarmHash(string: string): string | undefined {
   const matches = string.match(/[a-f0-9]{64,128}/i)
@@ -60,7 +45,6 @@ function recognizeSwarmHash(value: string): string {
 }
 
 export default function AccessPage(): ReactElement {
-  const classes = useStyles()
   const navigate = useNavigate()
 
   const [hash, setHash] = useState<string>('')
@@ -107,7 +91,7 @@ export default function AccessPage(): ReactElement {
             disableTouchListener
           >
             <InputBase
-              className={classes.button}
+              sx={buttonStyle}
               placeholder="Paste Swarm Hash Here"
               onChange={event => setHash(recognizeSwarmHash(event.target.value))}
               value={hash}
@@ -118,7 +102,7 @@ export default function AccessPage(): ReactElement {
           <Button
             variant="contained"
             key="center2"
-            className={classes.button}
+            sx={buttonStyle}
             size="small"
             style={{ marginTop: 2, paddingLeft: 16, paddingRight: 16, opacity: hash ? 1 : 0 }}
             onClick={() => setHash('')}
@@ -135,7 +119,7 @@ export default function AccessPage(): ReactElement {
             {hash && (
               <Button
                 variant="contained"
-                className={classes.button}
+                sx={buttonStyle}
                 disabled={hashError}
                 onClick={() => navigate(ROUTES.ACCESS_HASH(hash))}
                 size="large"

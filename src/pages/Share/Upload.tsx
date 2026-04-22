@@ -1,33 +1,20 @@
+import Button from '@mui/material/Button'
+import CircularProgress from '@mui/material/CircularProgress'
+import IconButton from '@mui/material/IconButton'
+import Link from '@mui/material/Link'
+import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
 import type { ReactElement } from 'react'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
-import IconButton from '@material-ui/core/IconButton'
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-
 import { ArrowUp, X } from 'react-feather'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import Tooltip from '@material-ui/core/Tooltip'
-import Link from '@material-ui/core/Link'
-
-import { UPLOAD_SIZE_LIMIT } from '../../constants'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
 import { AssetPreview } from '../../components/AssetPreview'
+import Footer from '../../components/Footer'
+import Header from '../../components/Header'
 import Layout from '../../components/Layout'
-
+import { UPLOAD_SIZE_LIMIT } from '../../constants'
 import * as ROUTES from '../../Routes'
-
 import text from '../../translations'
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    button: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
-  }),
-)
+const buttonStyle = { width: '100%', display: 'flex', justifyContent: 'space-between' }
 
 interface Props {
   setFiles: (files: SwarmFile[]) => void
@@ -48,8 +35,6 @@ const SharePage = ({
   isUploadingFile,
   metadata,
 }: Props): ReactElement => {
-  const classes = useStyles()
-
   let header = text.uploadFile.headerFile
 
   if (files.length > 1) header = text.uploadFile.headerFolder
@@ -93,13 +78,7 @@ const SharePage = ({
             disableHoverListener
             disableTouchListener
           >
-            <Button
-              variant="contained"
-              className={classes.button}
-              onClick={uploadFile}
-              disabled={reachedSizeLimit}
-              size="large"
-            >
+            <Button variant="contained" sx={buttonStyle} onClick={uploadFile} disabled={reachedSizeLimit} size="large">
               {isUploadingFile ? <CircularProgress size={24} color="inherit" /> : <ArrowUp strokeWidth={1} />}
               {isUploadingFile ? text.uploadFile.uploadingText : text.uploadFile.uploadAction}
               <ArrowUp style={{ opacity: 0 }} />
