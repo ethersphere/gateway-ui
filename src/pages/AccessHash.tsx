@@ -1,22 +1,20 @@
-import { ReactElement, useState, useContext, useEffect } from 'react'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
-import { useParams } from 'react-router-dom'
+import { Reference } from '@ethersphere/bee-js'
 import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-import { RefreshCw, ArrowDown, ExternalLink } from 'react-feather'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { Utils } from '@ethersphere/bee-js'
-import { encodeManifestReference } from '@ethersphere/swarm-cid'
-
-import Header from '../components/Header'
-import Footer from '../components/Footer'
-import Logo from '../components/Logo'
+import { createStyles, makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import { ReactElement, useContext, useEffect, useState } from 'react'
+import { ArrowDown, ExternalLink, RefreshCw } from 'react-feather'
+import { useParams } from 'react-router-dom'
 import { AssetPreview } from '../components/AssetPreview'
-import Layout from '../components/Layout'
 import FileNotFound from '../components/FileNotFound'
-import UnknownFile from '../components/UnknownFile'
-import LoadingFile from '../components/LoadingFile'
+import Footer from '../components/Footer'
+import Header from '../components/Header'
 import InvalidSwarmHash from '../components/InvalidSwarmHash'
+import Layout from '../components/Layout'
+import LoadingFile from '../components/LoadingFile'
+import Logo from '../components/Logo'
+import UnknownFile from '../components/UnknownFile'
 import { BZZ_LINK_DOMAIN } from '../constants'
 
 import { Context } from '../providers/bee'
@@ -37,7 +35,7 @@ const SharePage = (): ReactElement => {
   const classes = useStyles()
 
   const { hash } = useParams<{ hash: string }>()
-  const bzzLink = `https://${encodeManifestReference(hash!)}.${BZZ_LINK_DOMAIN}/` //eslint-disable-line
+  const bzzLink = `https://${new Reference(hash!).toCid('manifest')}.${BZZ_LINK_DOMAIN}/` //eslint-disable-line
   const { getMetadata, getChunk, download } = useContext(Context)
   const [entries, setEntries] = useState<Record<string, string>>({})
   const [metadata, setMetadata] = useState<Metadata | undefined>()
@@ -48,7 +46,7 @@ const SharePage = (): ReactElement => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!(Utils.isHexString(hash, 64) || Utils.isHexString(hash, 128))) {
+    if (!hash || !Reference.isValid(hash)) {
       setErrorMsg('Not a valid Swarm Reference')
       setIsLoading(false)
 

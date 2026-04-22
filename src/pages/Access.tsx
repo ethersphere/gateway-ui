@@ -1,23 +1,22 @@
-import { ReactElement, useState, useEffect } from 'react'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
-import IconButton from '@material-ui/core/IconButton'
-import { useNavigate } from 'react-router-dom'
+import { Reference } from '@ethersphere/bee-js'
 import Button from '@material-ui/core/Button'
-import { ArrowLeft, CornerUpLeft, Search } from 'react-feather'
-import Tooltip from '@material-ui/core/Tooltip'
+import IconButton from '@material-ui/core/IconButton'
 import InputBase from '@material-ui/core/InputBase'
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
-import { Utils } from '@ethersphere/bee-js'
-import { decodeCid } from '@ethersphere/swarm-cid'
+import { ReactElement, useEffect, useState } from 'react'
+import { ArrowLeft, CornerUpLeft, Search } from 'react-feather'
+import { useNavigate } from 'react-router-dom'
 
-import Header from '../components/Header'
 import Footer from '../components/Footer'
+import Header from '../components/Header'
 import Layout from '../components/Layout'
 
 import * as ROUTES from '../Routes'
 
-import text from '../translations'
 import { BZZ_LINK_DOMAIN } from '../constants'
+import text from '../translations'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,13 +47,9 @@ function extractSwarmCid(s: string): string | undefined {
 
   const cid = matches[1]
   try {
-    const decodeResult = decodeCid(cid)
+    const decodeResult = new Reference(cid)
 
-    if (!decodeResult.type) {
-      return
-    }
-
-    return decodeResult.reference
+    return decodeResult.toHex()
   } catch (e) {
     return
   }
@@ -72,9 +67,12 @@ export default function AccessPage(): ReactElement {
   const [hashError, setHashError] = useState<boolean>(false)
 
   useEffect(() => {
-    if (!hash || Utils.isHexString(hash, 64) || Utils.isHexString(hash, 128)) setHashError(false)
-    else setHashError(true)
-  }, [hash])
+    if (!hash || Reference.isValid(hash)) {
+      setHashError(false)
+    } else {
+      setHashError(true)
+    }
+  }, [hash, setHashError])
 
   return (
     <Layout

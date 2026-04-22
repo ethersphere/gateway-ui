@@ -1,5 +1,5 @@
-import { createMuiTheme, Theme } from '@material-ui/core/styles'
 import { orange } from '@material-ui/core/colors'
+import { createMuiTheme, Theme } from '@material-ui/core/styles'
 
 // Overwriting default components styles
 const componentsOverrides = (theme: Theme) => ({
