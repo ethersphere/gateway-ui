@@ -5,6 +5,9 @@ import { defineConfig } from 'vite'
 const beeProxyTarget = process.env.BEE_PROXY_TARGET
 
 export default defineConfig({
+  build: {
+    outDir: 'build',
+  },
   server: {
     proxy: beeProxyTarget
       ? {
