@@ -37,7 +37,7 @@ jobs:
 
       - name: Install npm deps
         if: steps.cache-npm.outputs.cache-hit != 'true'
-        run: npm ci
+        run: npm install
 
       - name: Run tests
         run: npm run test

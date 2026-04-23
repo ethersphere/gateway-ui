@@ -28,7 +28,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      ## Try getting the node modules from cache, if failed npm ci
       - uses: actions/cache@v4
         id: cache-npm
         with:
@@ -39,7 +38,8 @@ jobs:
             ${{ runner.OS }}-node-${{ matrix.node-version }}-
 
       - name: Install npm deps
-        run: npm ci
+        if: steps.cache-npm.outputs.cache-hit != 'true'
+        run: npm install
 
       - name: Commit linting
         uses: wagoid/commitlint-github-action@v6
