@@ -44,10 +44,8 @@ jobs:
       - name: Commit linting
         uses: wagoid/commitlint-github-action@v6
 
-      - name: Code linting
-        run: npm run lint:check
-        env:
-          CI: true
+      - name: Check
+        run: npm run check
 
       - name: Dependency check
         run: npm run depcheck
