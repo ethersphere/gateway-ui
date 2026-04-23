@@ -21,5 +21,6 @@ export function packageFile(file: SwarmFile): FilePath {
     slice: file.slice,
     text: file.text,
     arrayBuffer: async () => await file.arrayBuffer(), // This is needed for successful upload and can not simply be { arrayBuffer: file.arrayBuffer }
-  }
+    bytes: async () => new Uint8Array(await file.arrayBuffer()),
+  } as unknown as FilePath
 }
