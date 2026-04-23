@@ -16,11 +16,14 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^16.0.0",
+    "@playwright/test": "^1.59.1",
     "@types/file-saver": "^2.0.5",
     "@types/jest": "^27.4.0",
+    "@types/node": "^25.6.0",
     "@types/react-copy-to-clipboard": "^5.0.2",
     "@types/react-dom": "^19.2.3",
     "depcheck": "^1.4.7",
+    "dotenv": "^17.4.2",
     "prettier": "^2.5.1",
     "typescript": "^5.0.0",
     "vite": "^8.0.9"
@@ -29,6 +32,9 @@
     "start": "vite",
     "build": "vite build --base=./",
     "check": "tsc --noEmit",
-    "depcheck": "depcheck ."
+    "depcheck": "depcheck .",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:video": "playwright test --config playwright.video.config.ts"
   }
 }

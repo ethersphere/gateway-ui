@@ -119,6 +119,7 @@ export default function Upload({ setFiles }: Props): ReactElement {
             <Plus strokeWidth={1} />
             {text.addFile.addFileAction}
             <input
+              data-testid="file-input"
               type="file"
               hidden
               multiple
@@ -132,6 +133,7 @@ export default function Upload({ setFiles }: Props): ReactElement {
             <Plus strokeWidth={1} />
             {text.addFile.addFolderAction}
             <input
+              data-testid="folder-input"
               type="file"
               hidden
               multiple

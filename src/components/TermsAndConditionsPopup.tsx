@@ -92,7 +92,7 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
       bottom={[
         <div key="bottom1" style={{ zIndex: 1000 }}>
           <Footer>
-            <Button variant="contained" sx={buttonStyle} size="large" onClick={handleAgree}>
+            <Button data-testid="agree-button" variant="contained" sx={buttonStyle} size="large" onClick={handleAgree}>
               <Check strokeWidth={1} />
               {text.termsAndConditions.agreeAction}
               <Check style={{ opacity: 0 }} />

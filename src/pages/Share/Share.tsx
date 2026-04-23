@@ -100,7 +100,7 @@ const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
                   elevation={0}
                   style={{ overflowWrap: 'break-word', textAlign: 'left', padding: 16, margin: 4 }}
                 >
-                  <Typography variant="caption">{uploadReference}</Typography>
+                  <Typography data-testid="swarm-hash" variant="caption">{uploadReference}</Typography>
                 </Paper>
               ),
               value: uploadReference,
@@ -115,6 +115,7 @@ const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
         <Footer key="bottom2">
           <CopyToClipboard text={activeValue}>
             <Button
+              data-testid="copy-button"
               variant="contained"
               sx={buttonStyle}
               size="large"

@@ -22,7 +22,9 @@ const buttonStyle = { width: '100%', display: 'flex', justifyContent: 'space-bet
 
 const SharePage = (): ReactElement => {
   const { hash } = useParams<{ hash: string }>()
-  const bzzLink = `https://${new Reference(hash!).toCid('manifest')}.${BZZ_LINK_DOMAIN}/` //eslint-disable-line
+  const bzzLink = Reference.isValid(hash ?? '')
+    ? `https://${new Reference(hash!).toCid('manifest')}.${BZZ_LINK_DOMAIN}/` //eslint-disable-line
+    : ''
   const { getMetadata, getChunk, download } = useContext(Context)
   const [entries, setEntries] = useState<Record<string, string>>({})
   const [metadata, setMetadata] = useState<Metadata | undefined>()
@@ -124,7 +126,7 @@ const SharePage = (): ReactElement => {
         ]}
         bottom={[
           <Footer key="bottom1">
-            <Button variant="contained" sx={buttonStyle} size="large" onClick={handleDownload} disabled={isDownloading}>
+            <Button data-testid="download-button" variant="contained" sx={buttonStyle} size="large" onClick={handleDownload} disabled={isDownloading}>
               {isDownloading ? <CircularProgress size={24} color="inherit" /> : <ArrowDown strokeWidth={1} />}
               {isDownloading ? text.accessHashPage.downloadingAction : text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />
@@ -150,7 +152,7 @@ const SharePage = (): ReactElement => {
         center={[<UnknownFile key="center1" />]}
         bottom={[
           <Footer key="bottom1">
-            <Button variant="contained" sx={buttonStyle} size="large" onClick={handleDownload} disabled={isDownloading}>
+            <Button data-testid="download-button" variant="contained" sx={buttonStyle} size="large" onClick={handleDownload} disabled={isDownloading}>
               {isDownloading ? <CircularProgress size={24} color="inherit" /> : <ArrowDown strokeWidth={1} />}
               {isDownloading ? text.accessHashPage.downloadingAction : text.accessHashPage.downloadAction}
               <ArrowDown style={{ opacity: 0 }} />

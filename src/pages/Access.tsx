@@ -91,6 +91,7 @@ export default function AccessPage(): ReactElement {
             disableTouchListener
           >
             <InputBase
+              inputProps={{ 'data-testid': 'hash-input' }}
               sx={buttonStyle}
               placeholder="Paste Swarm Hash Here"
               onChange={event => setHash(recognizeSwarmHash(event.target.value))}
@@ -118,6 +119,7 @@ export default function AccessPage(): ReactElement {
           <div>
             {hash && (
               <Button
+                data-testid="find-button"
                 variant="contained"
                 sx={buttonStyle}
                 disabled={hashError}

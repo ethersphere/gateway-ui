@@ -27,13 +27,13 @@ const LandingPage = (): ReactElement => {
         </Typography>,
       ]}
       center={[
-        <Button key="center1" sx={buttonStyle} size="large" variant="contained" onClick={() => navigate(ROUTES.SHARE)}>
+        <Button data-testid="share-button" key="center1" sx={buttonStyle} size="large" variant="contained" onClick={() => navigate(ROUTES.SHARE)}>
           <ArrowUp strokeWidth={1} />
           {text.landingPage.shareAction}
           {/* Needed to properly align icon to the right and label to center */}
           <ArrowUp style={{ opacity: 0 }} />
         </Button>,
-        <Button key="center2" sx={buttonStyle} size="large" variant="contained" onClick={() => navigate(ROUTES.ACCESS)}>
+        <Button data-testid="access-button" key="center2" sx={buttonStyle} size="large" variant="contained" onClick={() => navigate(ROUTES.ACCESS)}>
           <ArrowDown strokeWidth={1} />
           {text.landingPage.accessAction}
           {/* Needed to properly align icon to the right and label to center */}
