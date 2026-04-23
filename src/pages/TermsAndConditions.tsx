@@ -1,32 +1,12 @@
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
 import { ReactElement } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
-import Paper from '@material-ui/core/Paper'
-
+import Header from '../components/Header'
 import Layout from '../components/Layout'
 import Logo from '../components/Logo'
-import Header from '../components/Header'
-
 import text from '../translations'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      display: 'flex',
-      flexDirection: 'column',
-      textAlign: 'left',
-      padding: theme.spacing(3),
-    },
-    para: {
-      paddingTop: theme.spacing(1),
-      paddingBottom: theme.spacing(1),
-    },
-  }),
-)
-
 const LandingPage = (): ReactElement => {
-  const classes = useStyles()
-
   return (
     <Layout
       top={[
@@ -35,31 +15,41 @@ const LandingPage = (): ReactElement => {
         </Header>,
       ]}
       center={[
-        <Paper key="center1" className={classes.paper} square elevation={0}>
+        <Paper
+          key="center1"
+          sx={theme => ({
+            display: 'flex',
+            flexDirection: 'column',
+            textAlign: 'left',
+            padding: theme.spacing(3),
+          })}
+          square
+          elevation={0}
+        >
           <Typography key="top2" variant="button">
             {text.termsAndConditionsPage.header}
           </Typography>
-          <Typography className={classes.para}>
-            Welcome to the Swarm Gateway (“<strong>Gateway</strong>”), currently being developed and graciously provided
-            by the Swarm Foundation (“<strong>We</strong>”). Swarm is a peer-to-peer network of nodes that collectively
+          <Typography sx={theme => ({ py: theme.spacing(1) })}>
+            Welcome to the Swarm Gateway ("<strong>Gateway</strong>"), currently being developed and graciously provided
+            by the Swarm Foundation ("<strong>We</strong>"). Swarm is a peer-to-peer network of nodes that collectively
             provide a decentralized storage and communication service. Gateway is currently provided for testing
             purposes only.
           </Typography>
           <Typography>
             <strong>By testing Gateway, you accept the following terms:</strong>
           </Typography>
-          <Typography className={classes.para}>
+          <Typography sx={theme => ({ py: theme.spacing(1) })}>
             We make, at our sole discretion, Gateway available to you at no charge. You may choose to try Gateway at
             your sole discretion. Gateway testing is intended for evaluation purposes only and not for production use.
             It is currently <strong>not</strong> supported.
           </Typography>
-          <Typography className={classes.para}>
+          <Typography sx={theme => ({ py: theme.spacing(1) })}>
             Data storage and transfer through Gateway is <strong>not</strong> encrypted. Data storage through Gateway is
             not guaranteed in time and data may thus disappear, respectively be erased, at any time. Data storage
             through Gateway is decentralized and data can thus be stored in any jurisdiction by any peer user (node
             operator).
           </Typography>
-          <Typography className={classes.para}>
+          <Typography sx={theme => ({ py: theme.spacing(1) })}>
             In addition, for the testing of Gateway, you agree to <strong>not</strong> upload and transfer personal data
             and data that contain legally protected contents (including professional secrets). You agree to{' '}
             <strong>not</strong> use Gateway in a way that threatens the security, integrity or availability of the
@@ -72,7 +62,7 @@ const LandingPage = (): ReactElement => {
             and all persons involved in the provision of Gateway with respect to all claims, demands, liabilities, costs
             and/or expenses resulting from an illegal use of Gateway or its content.
           </Typography>
-          <Typography className={classes.para}>
+          <Typography sx={theme => ({ py: theme.spacing(1) })}>
             You acknowledge that Gateway is <strong>not</strong> free from bugs or errors and that Swarm bears{' '}
             <strong>no</strong> liability for any harm or damage arising out of or in connection with Gateway. We may
             discontinue Gateway at any time at our sole discretion. When testing Gateway, you acknowledge that we
@@ -81,7 +71,7 @@ const LandingPage = (): ReactElement => {
             services any suggestion, enhancement request, recommendation, correction or other feedback provided by you
             relating to the operation of our services.
           </Typography>
-          <Typography className={classes.para}>
+          <Typography sx={theme => ({ py: theme.spacing(1) })}>
             We reserve the right to modify these User Testing Terms and Conditions at any time. These User Testing Terms
             and Conditions are governed by and construed in accordance with Swiss law, without giving effect to its
             conflict of laws provisions. Regular courts and tribunals of the State of Neuchâtel, Switzerland, shall be

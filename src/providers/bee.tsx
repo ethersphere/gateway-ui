@@ -1,11 +1,9 @@
-import { Bee, Data, Reference } from '@ethersphere/bee-js'
+import { Bee, MantarayNode, Reference } from '@ethersphere/bee-js'
 import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
-import { createContext, ReactChild, ReactElement } from 'react'
-
+import { createContext, ReactElement, ReactNode } from 'react'
 import { BEE_HOSTS, META_FILE_NAME, POSTAGE_STAMP } from '../constants'
 import { detectIndexHtml } from '../utils/file'
-import { ManifestJs } from '../utils/manifest'
 import { packageFile } from '../utils/SwarmFile'
 
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
@@ -18,7 +16,7 @@ interface ContextInterface {
     preview?: string
     entries: Record<string, string>
   }>
-  getChunk: (hash: Reference | string) => Promise<Data>
+  getChunk: (hash: Reference | string) => Promise<Uint8Array>
   getDownloadLink: (hash: Reference | string) => string
   download: (hash: Reference | string, entries: Record<string, string>, metadata?: Metadata) => Promise<void>
 }
@@ -35,11 +33,11 @@ export const Context = createContext<ContextInterface>(initialValues)
 export const Consumer = Context.Consumer
 
 interface Props {
-  children: ReactChild
+  children: ReactNode
 }
 
 function hashToIndex(hash: Reference | string) {
-  const n = parseInt(hash.slice(0, 8), 16)
+  const n = parseInt(hash.toString().slice(0, 8), 16)
 
   return n % BEE_HOSTS.length
 }
@@ -80,7 +78,7 @@ export function Provider({ children }: Props): ReactElement {
     } else {
       const zip = new JSZip()
       for (const [path, hash] of Object.entries(entries)) {
-        zip.file(path, await bee.downloadData(hash))
+        zip.file(path, (await bee.downloadData(hash)).toUint8Array())
       }
       const content = await zip.generateAsync({ type: 'blob' })
       saveAs(content, metadata?.name + '.zip')
@@ -103,30 +101,28 @@ export function Provider({ children }: Props): ReactElement {
     const bee = new Bee(BEE_HOSTS[hashIndex])
 
     try {
-      const manifestJs = new ManifestJs(bee)
-      const isManifest = await manifestJs.isManifest(hash)
+      const manifest = await MantarayNode.unmarshal(bee, hash)
+      await manifest.loadRecursively(bee)
 
-      if (!isManifest) throw Error('The specified hash does not contain valid content.')
-
-      entries = await manifestJs.getHashes(hash, { exclude: [META_FILE_NAME] })
-      indexDocument = await manifestJs.getIndexDocumentPath(hash)
+      entries = manifest.collectAndMap()
+      indexDocument = manifest.getDocsMetadata().indexDocument
     } catch (e) {} // eslint-disable-line no-empty
 
     try {
       const remoteMetadata = await bee.downloadFile(hash, META_FILE_NAME)
-      const formattedMetadata = JSON.parse(remoteMetadata.data.text()) as Metadata
+      const formattedMetadata = JSON.parse(remoteMetadata.data.toUtf8()) as Metadata
 
       if (formattedMetadata.isVideo || formattedMetadata.isImage) {
         preview = `${BEE_HOSTS[hashIndex]}/bzz/${hash}`
       }
 
-      metadata = { ...formattedMetadata, hash }
+      metadata = { ...formattedMetadata, hash: hash.toString() }
     } catch (e) {
       const count = Object.keys(entries).length
       metadata = {
-        hash,
+        hash: hash.toString(),
         type: count > 1 ? 'folder' : 'unknown',
-        name: hash,
+        name: hash.toString(),
         count,
         isWebsite: Boolean(indexDocument && /.*\.html?$/i.test(indexDocument)),
         isVideo: Boolean(indexDocument && /.*\.(mp4|webm|ogg|mp3|ogg|wav)$/i.test(indexDocument)),
@@ -138,11 +134,11 @@ export function Provider({ children }: Props): ReactElement {
     return { metadata, preview, entries }
   }
 
-  const getChunk = (hash: Reference | string): Promise<Data> => {
+  const getChunk = (hash: Reference | string): Promise<Uint8Array> => {
     const hashIndex = hashToIndex(hash)
     const bee = new Bee(BEE_HOSTS[hashIndex])
 
-    return bee.downloadData(hash)
+    return bee.downloadChunk(hash)
   }
 
   const getDownloadLink = (hash: Reference | string) => {

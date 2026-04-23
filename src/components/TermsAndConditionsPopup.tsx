@@ -1,59 +1,26 @@
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import Link from '@mui/material/Link'
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
 import type { ReactElement } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
-import { X, Check, CornerUpLeft, ArrowRight } from 'react-feather'
-import Typography from '@material-ui/core/Typography'
-import Paper from '@material-ui/core/Paper'
-import Link from '@material-ui/core/Link'
+import { ArrowRight, Check, CornerUpLeft, X } from 'react-feather'
 import { useNavigate } from 'react-router-dom'
 import * as ROUTES from '../Routes'
 
-import Layout from './Layout'
-import Header from './Header'
 import Footer from './Footer'
+import Header from './Header'
+import Layout from './Layout'
 
 import text from '../translations'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      width: '100%',
-      minHeight: '100vh',
-      zIndex: 1000,
-      backgroundColor: theme.palette.background.default,
-    },
-    button: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
-    ul: {
-      display: 'grid',
-      gridAutoRows: 'auto',
-      gridTemplateColumns: '1rem 1fr',
-      gridTemplateRows: 'min-content',
-      paddingTop: theme.spacing(3),
-      paddingBottom: theme.spacing(3),
-      rowGap: theme.spacing(1),
-      columnGap: theme.spacing(2),
-      textAlign: 'left',
-    },
-    paper: {
-      padding: theme.spacing(3),
-    },
-  }),
-)
+const buttonStyle = { width: '100%', display: 'flex', justifyContent: 'space-between' }
 
 interface Props {
   handleAgree: () => void
 }
 
 export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactElement | null {
-  const classes = useStyles()
   const navigate = useNavigate()
 
   return (
@@ -79,8 +46,20 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
       ]}
       center={[
         <div key="center">
-          <Paper square elevation={0} className={classes.paper}>
-            <div className={classes.ul}>
+          <Paper square elevation={0} sx={theme => ({ padding: theme.spacing(3) })}>
+            <div
+              style={{
+                display: 'grid',
+                gridAutoRows: 'auto',
+                gridTemplateColumns: '1rem 1fr',
+                gridTemplateRows: 'min-content',
+                paddingTop: 24,
+                paddingBottom: 24,
+                rowGap: 8,
+                columnGap: 16,
+                textAlign: 'left',
+              }}
+            >
               {text.termsAndConditions.featuresAndLimitations.map(t => [
                 <Typography key={`${t}-bee`} variant="body1">
                   <ArrowRight strokeWidth={1} />
@@ -99,7 +78,7 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
           </Paper>
           <Button
             variant="contained"
-            className={classes.button}
+            sx={buttonStyle}
             size="small"
             style={{ marginTop: 2, paddingLeft: 16, paddingRight: 16 }}
             onClick={() => navigate(ROUTES.LANDING_PAGE)}
@@ -113,7 +92,7 @@ export default function TermsAndConditionsPopup({ handleAgree }: Props): ReactEl
       bottom={[
         <div key="bottom1" style={{ zIndex: 1000 }}>
           <Footer>
-            <Button variant="contained" className={classes.button} size="large" onClick={handleAgree}>
+            <Button data-testid="agree-button" variant="contained" sx={buttonStyle} size="large" onClick={handleAgree}>
               <Check strokeWidth={1} />
               {text.termsAndConditions.agreeAction}
               <Check style={{ opacity: 0 }} />

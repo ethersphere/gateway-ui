@@ -1,13 +1,11 @@
-import { ReactElement, useEffect, useState, useContext } from 'react'
-
-import SharePage from './Share'
-import AddFile from './AddFile'
-import Upload from './Upload'
-
+import { ReactElement, useContext, useEffect, useState } from 'react'
+import { PREVIEW_DIMENSIONS } from '../../constants'
 import { Context } from '../../providers/bee'
 import { getMetadata } from '../../utils/file'
 import { resize } from '../../utils/image'
-import { PREVIEW_DIMENSIONS } from '../../constants'
+import AddFile from './AddFile'
+import SharePage from './Share'
+import Upload from './Upload'
 
 export default function ShareGeneral(): ReactElement {
   const [files, setFiles] = useState<SwarmFile[]>([])
@@ -60,7 +58,7 @@ export default function ShareGeneral(): ReactElement {
 
     upload(files, metadata, previewBlob)
       .then(hash => {
-        setUploadReference(hash)
+        setUploadReference(hash.toHex())
       })
       .catch(() => setUploadError(true)) // eslint-disable-line
       .finally(() => {

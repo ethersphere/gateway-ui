@@ -1,11 +1,11 @@
-import { Box, Grid, Typography } from '@material-ui/core'
+import { Box, Typography } from '@mui/material'
 import { ReactElement, useMemo } from 'react'
 import { File, Folder, Monitor } from 'react-feather'
-import { AssetIcon } from './AssetIcon'
-import { FitImage } from './FitImage'
+import { PREVIEW_DIMENSIONS } from '../constants'
 import { mimeToKind, shortenBytes } from '../utils'
 import { shortenHash } from '../utils/hash'
-import { PREVIEW_DIMENSIONS } from '../constants'
+import { AssetIcon } from './AssetIcon'
+import { FitImage } from './FitImage'
 
 import text from '../translations'
 import { FitVideo } from './FitVideo'
@@ -54,8 +54,8 @@ export function AssetPreview({ previewUri, metadata }: Props): ReactElement {
   return (
     <Box mb={0.25}>
       <Box bgcolor="background.paper">
-        <Grid container direction="row">
-          <div style={{ width: PREVIEW_DIMENSIONS.maxWidth, height: PREVIEW_DIMENSIONS.maxHeight }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+          <div style={{ width: PREVIEW_DIMENSIONS.maxWidth, height: PREVIEW_DIMENSIONS.maxHeight, color: '#999999' }}>
             <PreviewAssetComponent />
           </div>
           <Box p={2} textAlign="left">
@@ -73,16 +73,16 @@ export function AssetPreview({ previewUri, metadata }: Props): ReactElement {
               </Typography>
             )}
           </Box>
-        </Grid>
+        </Box>
       </Box>
       {metadata?.type === 'folder' && metadata.count && (
         <Box mt={0.25} p={2} bgcolor="background.paper">
-          <Grid container justifyContent="space-between" alignItems="center" direction="row">
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
             <Typography variant="subtitle2">{text.previewDetails.folderContent}</Typography>
             <Typography variant="subtitle2">
               {metadata.count} {text.previewDetails.items}
             </Typography>
-          </Grid>
+          </Box>
         </Box>
       )}
     </Box>

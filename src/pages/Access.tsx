@@ -1,36 +1,20 @@
-import { ReactElement, useState, useEffect } from 'react'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
-import IconButton from '@material-ui/core/IconButton'
-import { useNavigate } from 'react-router-dom'
-import Button from '@material-ui/core/Button'
+import { Reference } from '@ethersphere/bee-js'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import InputBase from '@mui/material/InputBase'
+import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
+import { ReactElement, useEffect, useState } from 'react'
 import { ArrowLeft, CornerUpLeft, Search } from 'react-feather'
-import Tooltip from '@material-ui/core/Tooltip'
-import InputBase from '@material-ui/core/InputBase'
-import Typography from '@material-ui/core/Typography'
-import { Utils } from '@ethersphere/bee-js'
-import { decodeCid } from '@ethersphere/swarm-cid'
-
-import Header from '../components/Header'
+import { useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer'
+import Header from '../components/Header'
 import Layout from '../components/Layout'
-
-import * as ROUTES from '../Routes'
-
-import text from '../translations'
 import { BZZ_LINK_DOMAIN } from '../constants'
+import * as ROUTES from '../Routes'
+import text from '../translations'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    button: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
-    footerReservedSpace: {
-      height: theme.spacing(10), // Filler space so that the layout of the page does not change as users write text
-    },
-  }),
-)
+const buttonStyle = { width: '100%', display: 'flex', justifyContent: 'space-between' }
 
 function extractSwarmHash(string: string): string | undefined {
   const matches = string.match(/[a-f0-9]{64,128}/i)
@@ -48,13 +32,9 @@ function extractSwarmCid(s: string): string | undefined {
 
   const cid = matches[1]
   try {
-    const decodeResult = decodeCid(cid)
+    const decodeResult = new Reference(cid)
 
-    if (!decodeResult.type) {
-      return
-    }
-
-    return decodeResult.reference
+    return decodeResult.toHex()
   } catch (e) {
     return
   }
@@ -65,16 +45,18 @@ function recognizeSwarmHash(value: string): string {
 }
 
 export default function AccessPage(): ReactElement {
-  const classes = useStyles()
   const navigate = useNavigate()
 
   const [hash, setHash] = useState<string>('')
   const [hashError, setHashError] = useState<boolean>(false)
 
   useEffect(() => {
-    if (!hash || Utils.isHexString(hash, 64) || Utils.isHexString(hash, 128)) setHashError(false)
-    else setHashError(true)
-  }, [hash])
+    if (!hash || Reference.isValid(hash)) {
+      setHashError(false)
+    } else {
+      setHashError(true)
+    }
+  }, [hash, setHashError])
 
   return (
     <Layout
@@ -109,7 +91,8 @@ export default function AccessPage(): ReactElement {
             disableTouchListener
           >
             <InputBase
-              className={classes.button}
+              inputProps={{ 'data-testid': 'hash-input' }}
+              sx={buttonStyle}
               placeholder="Paste Swarm Hash Here"
               onChange={event => setHash(recognizeSwarmHash(event.target.value))}
               value={hash}
@@ -120,7 +103,7 @@ export default function AccessPage(): ReactElement {
           <Button
             variant="contained"
             key="center2"
-            className={classes.button}
+            sx={buttonStyle}
             size="small"
             style={{ marginTop: 2, paddingLeft: 16, paddingRight: 16, opacity: hash ? 1 : 0 }}
             onClick={() => setHash('')}
@@ -136,8 +119,9 @@ export default function AccessPage(): ReactElement {
           <div>
             {hash && (
               <Button
+                data-testid="find-button"
                 variant="contained"
-                className={classes.button}
+                sx={buttonStyle}
                 disabled={hashError}
                 onClick={() => navigate(ROUTES.ACCESS_HASH(hash))}
                 size="large"

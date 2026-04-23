@@ -1,8 +1,6 @@
 import type { ReactElement } from 'react'
-import { Routes, Route, BrowserRouter } from 'react-router-dom'
-
-// pages
-import { Access, AccessHash, LandingPage, Share, Page404, TermsAndConditions, RedirectToDownload } from './pages'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Access, AccessHash, LandingPage, Page404, RedirectToDownload, Share, TermsAndConditions } from './pages'
 
 export const LANDING_PAGE = '/'
 export const ACCESS = '/access'

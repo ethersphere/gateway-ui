@@ -1,45 +1,32 @@
+import { Reference } from '@ethersphere/bee-js'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import Paper from '@mui/material/Paper'
+import Typography from '@mui/material/Typography'
 import { ReactElement, useState } from 'react'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
-import IconButton from '@material-ui/core/IconButton'
-import { useNavigate } from 'react-router-dom'
-import Button from '@material-ui/core/Button'
-import { ArrowLeft, Clipboard, Check, ExternalLink } from 'react-feather'
-import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-
-import Header from '../../components/Header'
+import { ArrowLeft, Check, Clipboard, ExternalLink } from 'react-feather'
+import { useNavigate } from 'react-router-dom'
 import Footer from '../../components/Footer'
-import Tabs from '../../components/Tabs'
+import Header from '../../components/Header'
 import Layout from '../../components/Layout'
-
-import * as ROUTES from '../../Routes'
+import Tabs from '../../components/Tabs'
 import { BZZ_LINK_DOMAIN, GATEWAY_URL } from '../../constants'
-
+import * as ROUTES from '../../Routes'
 import text from '../../translations'
-import { encodeManifestReference } from '@ethersphere/swarm-cid'
 
 interface Props {
   uploadReference: string
   metadata?: Metadata
 }
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    button: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
-  }),
-)
+const buttonStyle = { width: '100%', display: 'flex', justifyContent: 'space-between' }
 
 const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
-  const classes = useStyles()
   const navigate = useNavigate()
   const isWebsite = metadata?.isWebsite
 
-  const bzzLink = `https://${encodeManifestReference(uploadReference)}.${BZZ_LINK_DOMAIN}/`
+  const bzzLink = `https://${new Reference(uploadReference).toCid('manifest')}.${BZZ_LINK_DOMAIN}/`
   const linkHeader = isWebsite ? 'Bzz Link' : 'Web link'
   const linkUrl = isWebsite ? bzzLink : `${GATEWAY_URL}${ROUTES.ACCESS_HASH(uploadReference)}`
 
@@ -92,7 +79,7 @@ const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
                     <Button
                       variant="contained"
                       style={{ margin: 4, width: 'auto' }}
-                      className={classes.button}
+                      sx={buttonStyle}
                       href={bzzLink}
                       target="blank"
                     >
@@ -113,7 +100,7 @@ const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
                   elevation={0}
                   style={{ overflowWrap: 'break-word', textAlign: 'left', padding: 16, margin: 4 }}
                 >
-                  <Typography variant="caption">{uploadReference}</Typography>
+                  <Typography data-testid="swarm-hash" variant="caption">{uploadReference}</Typography>
                 </Paper>
               ),
               value: uploadReference,
@@ -128,8 +115,9 @@ const SharePage = ({ uploadReference, metadata }: Props): ReactElement => {
         <Footer key="bottom2">
           <CopyToClipboard text={activeValue}>
             <Button
+              data-testid="copy-button"
               variant="contained"
-              className={classes.button}
+              sx={buttonStyle}
               size="large"
               onClick={e => {
                 e.stopPropagation()

@@ -1,9 +1,9 @@
 import Access from './Access'
 import AccessHash from './AccessHash'
 import LandingPage from './LandingPage'
-import Share from './Share'
 import Page404 from './Page404'
-import TermsAndConditions from './TermsAndConditions'
 import RedirectToDownload from './RedirectToDownload'
+import Share from './Share'
+import TermsAndConditions from './TermsAndConditions'
 
-export { Access, AccessHash, LandingPage, Share, Page404, TermsAndConditions, RedirectToDownload }
+export { Access, AccessHash, LandingPage, Page404, RedirectToDownload, Share, TermsAndConditions }

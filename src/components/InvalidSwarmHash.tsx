@@ -1,5 +1,5 @@
+import Typography from '@mui/material/Typography'
 import type { ReactElement } from 'react'
-import Typography from '@material-ui/core/Typography'
 import { AlertOctagon } from 'react-feather'
 import text from '../translations'
 import LayoutContent from './LayoutContent'

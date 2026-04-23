@@ -1,7 +1,7 @@
 import { DragEvent } from 'react'
+import { isSupportedImageType } from './image'
 import { convertSwarmFile } from './SwarmFile'
 import { isSupportedVideoType } from './video'
-import { isSupportedImageType } from './image'
 
 const indexHtmls = ['index.html', 'index.htm']
 
