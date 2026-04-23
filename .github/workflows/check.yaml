@@ -17,19 +17,18 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [20.x]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
-      ## Try getting the node modules from cache, if failed npm ci
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         id: cache-npm
         with:
           path: node_modules
@@ -39,15 +38,14 @@ jobs:
             ${{ runner.OS }}-node-${{ matrix.node-version }}-
 
       - name: Install npm deps
-        run: npm ci
+        if: steps.cache-npm.outputs.cache-hit != 'true'
+        run: npm install
 
       - name: Commit linting
-        uses: wagoid/commitlint-github-action@v2
+        uses: wagoid/commitlint-github-action@v6
 
-      - name: Code linting
-        run: npm run lint:check
-        env:
-          CI: true
+      - name: Check
+        run: npm run check
 
       - name: Dependency check
         run: npm run depcheck

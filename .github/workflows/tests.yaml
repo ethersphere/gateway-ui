@@ -12,21 +12,24 @@ jobs:
   tests:
     runs-on: ubuntu-latest
 
+    env:
+      BEE_NODE_URL: ${{ secrets.BEE_NODE_URL }}
+
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [20.x]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
       ## Try getting the node modules from cache, if failed npm ci
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         id: cache-npm
         with:
           path: node_modules
@@ -37,7 +40,10 @@ jobs:
 
       - name: Install npm deps
         if: steps.cache-npm.outputs.cache-hit != 'true'
-        run: npm ci
+        run: npm install
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
 
       - name: Run tests
         run: npm run test
