@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.0.0](https://github.com/ethersphere/gateway-ui/compare/v0.3.0...v1.0.0) (2026-04-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* modernize project ([#394](https://github.com/ethersphere/gateway-ui/issues/394))
+
+### Features
+
+* modernize project ([#394](https://github.com/ethersphere/gateway-ui/issues/394)) ([7fe8142](https://github.com/ethersphere/gateway-ui/commit/7fe814268c1e8886ec58dcbd440b03fcd5347403))
+* vod display ([#391](https://github.com/ethersphere/gateway-ui/issues/391)) ([cbd33dc](https://github.com/ethersphere/gateway-ui/commit/cbd33dccc61d67494362c6106e7f565877cec2d4))
+
+
+### Bug Fixes
+
+* fix meta links in index.html ([#400](https://github.com/ethersphere/gateway-ui/issues/400)) ([beec337](https://github.com/ethersphere/gateway-ui/commit/beec337b3268b574ddbcee34ed0e098cdc3333ab))
+
 ## [0.3.0](https://github.com/ethersphere/gateway-ui/compare/v0.2.2...v0.3.0) (2023-08-24)
 
 
