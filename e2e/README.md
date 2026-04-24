@@ -35,6 +35,7 @@ Videos are saved to `test-results-video/<test-name>/video.webm` after `test:vide
 | `access.spec.ts` | Hash input, find button, invalid hash tooltip, not-found page |
 | `upload-types.spec.ts` | AssetPreview on the upload preview screen for image, video, website, folder |
 | `access-types.spec.ts` | AssetPreview on the access/download page for the same four types |
+| `download.spec.ts` | Download button for all five asset types (txt, image, video, website, folder) — asserts JSZip + file-saver produces a correctly named .zip whose contents match the original uploaded files |
 
 ## Test data (`e2e/test-data/`)
 
