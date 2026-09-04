@@ -30,7 +30,7 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build --base=./",
+    "build": "vite build --base=/",
     "check": "tsc --noEmit",
     "depcheck": "depcheck .",
     "test": "playwright test",
